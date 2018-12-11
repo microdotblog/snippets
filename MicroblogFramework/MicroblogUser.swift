@@ -17,11 +17,11 @@ public class MicroblogUser : NSObject
 		self.loadFromDictionary(dictionary)
 	}
 	
-	public var fullName = ""
-	public var userHandle = ""
-	public var pathToUserImage = ""
-	public var pathToWebSite = ""
-	public var userImage : UIImage? = nil
+	@objc public var fullName = ""
+	@objc public var userHandle = ""
+	@objc public var pathToUserImage = ""
+	@objc public var pathToWebSite = ""
+	@objc public var userImage : UIImage? = nil
 }
 
 

@@ -17,12 +17,12 @@ public class MicroblogPost : NSObject
 		self.loadFromDictionary(dictionary)
 	}
 	
-	public var identifier = ""
-	public var owner = MicroblogUser()
-	public var htmlText = ""
-	public var path = ""
-	public var publishedDate : Date?
-	public var replies : [MicroblogPost] = []
+	@objc public var identifier = ""
+	@objc public var owner = MicroblogUser()
+	@objc public var htmlText = ""
+	@objc public var path = ""
+	@objc public var publishedDate : Date?
+	@objc public var replies : [MicroblogPost] = []
 }
 
 
