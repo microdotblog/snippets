@@ -315,6 +315,7 @@ public class MicroblogFramework : NSObject {
 		var bodyText = ""
 		bodyText = self.appendParameter(body: bodyText, name: "name", content: title)
 		bodyText = self.appendParameter(body: bodyText, name: "content", content: content)
+		bodyText = self.appendParameter(body: bodyText, name: "h", content: "entry")
 
 		if let blogUid = self.uid
 		{
