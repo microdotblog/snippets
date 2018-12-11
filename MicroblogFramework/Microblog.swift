@@ -310,19 +310,45 @@ public class MicroblogFramework : NSObject {
 	// MARK: - Post/Reply Interface
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	@objc public func post(title : String, content : String, completion: @escaping(Error?, String?) -> ())
+	@objc public func postText(title : String, content : String, photos : [String], altTags : [String], completion: @escaping(Error?, String?) -> ())
 	{
-		var arguments : [ String : Any ] = [ "type" : ["h-entry"],
-											 "properties" :
-											 [
-												"name" : [ title ],
-												"content" :
-												[
-													["html" : content]
-												],
-												"photo" : [ ]
-											 ]
-										   ]
+		var bodyText = ""
+		bodyText = self.appendParameter(body: bodyText, name: "name", content: title)
+		bodyText = self.appendParameter(body: bodyText, name: "content", content: content)
+
+		if let blogUid = self.uid
+		{
+			bodyText = self.appendParameter(body: bodyText, name: "mp-destination", content: blogUid)
+		}
+
+		for photoPath in photos
+		{
+			bodyText = self.appendParameter(body: bodyText, name: "photo[]", content: photoPath)
+		}
+
+		for altTag in altTags
+		{
+			bodyText = self.appendParameter(body: bodyText, name: "mp-photo-alt[]", content: altTag)
+		}
+
+		let body : Data = bodyText.data(using: .utf8)!
+		let request = self.securePost(path: self.pathForRoute("micropub"), arguments: [:], body: body)
+		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
+			let publishedPath = parsedServerResponse.httpResponse?.allHeaderFields["Location"] as? String
+			completion(parsedServerResponse.httpError, publishedPath)
+		})
+	}
+	
+	@objc public func postHtml(title : String, content : String, completion: @escaping(Error?, String?) -> ())
+	{
+		let properties : [ String : Any ] = [ "name" 	: [ title ],
+											  "content" : [ [ "html" : content ] ],
+											  "photo" 	: [ ]
+											]
+		
+		var arguments : [ String : Any ] = 	[	"type" : ["h-entry"],
+												"properties" : properties
+											]
 		
 		if let blogUid = self.uid
 		{
@@ -331,14 +357,14 @@ public class MicroblogFramework : NSObject {
 		
 		do {
 			let body = try JSONSerialization.data(withJSONObject: arguments, options: .prettyPrinted)
-
+			
 			let request = self.securePost(path: self.pathForRoute("micropub"), arguments: [:], body: body)
 			
 			_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 				let publishedPath = parsedServerResponse.httpResponse?.allHeaderFields["Location"] as? String
 				completion(parsedServerResponse.httpError, publishedPath)
 			})
-
+			
 		}
 		catch {
 		}
@@ -462,7 +488,23 @@ public class MicroblogFramework : NSObject {
 		return request
 	}
 
-
+	private func appendParameter(body : String, name : String, content : String) -> String
+	{
+		var newBody = body
+		if (body.count > 0 && content.count > 0)
+		{
+			newBody += "&"
+		}
+		
+		
+		
+		if (content.count > 0 && name.count > 0)
+		{
+			newBody += "\(name.uuUrlEncoded())=\(content.uuUrlEncoded())"
+		}
+		
+		return newBody
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// MARK: - Image setup helper functions
