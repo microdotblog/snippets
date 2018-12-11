@@ -9,9 +9,8 @@
 import Foundation
 import UUSwift
 
-public class MicroblogUser
+public class MicroblogUser : NSObject
 {
-	public init(){}
 	public convenience init(_ dictionary : [String : Any])
 	{
 		self.init()
@@ -28,7 +27,7 @@ public class MicroblogUser
 
 extension MicroblogUser {
 
-	public func loadUserImage(completion: @escaping()-> ())
+	@objc public func loadUserImage(completion: @escaping()-> ())
 	{
 		if let imageData = UUDataCache.shared.data(for: self.pathToUserImage)
 		{

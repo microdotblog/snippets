@@ -9,9 +9,8 @@
 import Foundation
 import UUSwift
 
-public class MicroblogPost
+public class MicroblogPost : NSObject
 {
-	public init(){}
 	public convenience init(_ dictionary : [String : Any])
 	{
 		self.init()

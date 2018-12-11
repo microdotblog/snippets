@@ -9,17 +9,17 @@
 import Foundation
 import UUSwift
 
-public class MicroblogFramework {
+public class MicroblogFramework : NSObject {
 
-	public static let shared = MicroblogFramework()
+	@objc public static let shared = MicroblogFramework()
 	
-	public func configure(permanentToken : String, blogUid : String?)
+	@objc public func configure(permanentToken : String, blogUid : String?)
 	{
 		self.uid = blogUid
 		self.token = permanentToken
 	}
 	
-	public func setServerPath(_ path : String)
+	@objc public func setServerPath(_ path : String)
 	{
 		self.serverPath = path
 	}
@@ -29,7 +29,7 @@ public class MicroblogFramework {
 	// Sign-in is generally a 2-step process. First, request an email with a temporary token. Then exchange the temporary token for a permanent token
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public func requestUserLoginEmail(email: String, appName : String, redirect: String, completion: @escaping (Error?) -> ())
+	@objc public func requestUserLoginEmail(email: String, appName : String, redirect: String, completion: @escaping (Error?) -> ())
 	{
 		let arguments : [String : String] = [ 	"email" : email,
 												"app_name" : appName,
@@ -40,7 +40,7 @@ public class MicroblogFramework {
 		}
 	}
 	
-	public func requestPermanentTokenFromTemporaryToken(token : String, completion: @escaping(Error?, String?) -> ())
+	@objc public func requestPermanentTokenFromTemporaryToken(token : String, completion: @escaping(Error?, String?) -> ())
 	{
 		let arguments : [String : String] = [ "token" : token ]
 		
@@ -66,7 +66,7 @@ public class MicroblogFramework {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Returns a MicroblogUser for the currently signed-in user
-	public func fetchUserInfo(completion: @escaping(Error?, MicroblogUser?)-> ())
+	@objc public func fetchUserInfo(completion: @escaping(Error?, MicroblogUser?)-> ())
 	{
 		let arguments : [String : String] = [ "token" : token ]
 		let request = self.securePost(path: self.pathForRoute("account/verify"), arguments: arguments)
@@ -86,7 +86,7 @@ public class MicroblogFramework {
 
 	// User configuration pertains to the configuration of the Micro.blog account. For example, if a user has multiple micro.blogs,
 	// fetching the configuration will return the list of configured micro.blogs for the signed-in user.
-	public func fetchUserConfiguration(completion: @escaping(Error?, [String : Any])-> ())
+	@objc public func fetchUserConfiguration(completion: @escaping(Error?, [String : Any])-> ())
 	{
 		let request = self.secureGet(path: self.pathForRoute("micropub?q=config"), arguments: [:])
 		
@@ -136,27 +136,27 @@ public class MicroblogFramework {
 		}
 	}
 	
-	public func fetchUserTimeline(completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchUserTimeline(completion: @escaping(Error?, [MicroblogPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/all"), completion: completion)
 	}
 	
-	public func fetchUserPhotoTimeline(completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchUserPhotoTimeline(completion: @escaping(Error?, [MicroblogPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/photos"), completion: completion)
 	}
 
-	public func fetchUserMentions(completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchUserMentions(completion: @escaping(Error?, [MicroblogPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/mentions"), completion: completion)
 	}
 
-	public func fetchUserFavorites(completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchUserFavorites(completion: @escaping(Error?, [MicroblogPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/favorites"), completion: completion)
 	}
 
-	public func fetchDiscoverTimeline(collection : String? = nil, completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchDiscoverTimeline(collection : String? = nil, completion: @escaping(Error?, [MicroblogPost]) -> ())
 	{
 		if let validCollection = collection
 		{
@@ -169,19 +169,19 @@ public class MicroblogFramework {
 		}
 	}
 
-	public func fetchUserPosts(user : MicroblogUser, completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchUserPosts(user : MicroblogUser, completion: @escaping(Error?, [MicroblogPost]) -> ())
 	{
 		let route = "posts/\(user.userHandle)"
 		self.fetchTimeline(self.pathForRoute(route), completion: completion)
 	}
 	
-	public func fetchConversation(post : MicroblogPost, completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchConversation(post : MicroblogPost, completion: @escaping(Error?, [MicroblogPost]) -> ())
 	{
 		let route = "posts/conversation?id=\(post.identifier)"
 		self.fetchTimeline(self.pathForRoute(route), completion: completion)
 	}
 
-	public func checkForPostsSince(post : MicroblogPost, completion: @escaping(Error?, Int?, TimeInterval?) -> ())
+	@objc public func checkForPostsSince(post : MicroblogPost, completion: @escaping(Error?, NSInteger, TimeInterval) -> ())
 	{
 		let route = "posts/check?since_id=\(post.identifier)"
 		let request = self.secureGet(path: self.pathForRoute(route), arguments: [:])
@@ -198,7 +198,7 @@ public class MicroblogFramework {
 				}
 			}
 
-			completion(parsedServerResponse.httpError, nil, nil)
+			completion(parsedServerResponse.httpError, 0, 0)
 		})
 	}
 
@@ -206,7 +206,7 @@ public class MicroblogFramework {
 	// MARK: - Follow Interface
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public func follow(user : MicroblogUser, completion: @escaping(Error?) -> ())
+	@objc public func follow(user : MicroblogUser, completion: @escaping(Error?) -> ())
 	{
 		let arguments : [ String : String ] = [ "username" : user.userHandle ]
 		
@@ -217,7 +217,7 @@ public class MicroblogFramework {
 		})
 	}
 
-	public func unfollow(user : MicroblogUser, completion: @escaping(Error?) -> ())
+	@objc public func unfollow(user : MicroblogUser, completion: @escaping(Error?) -> ())
 	{
 		let arguments : [ String : String ] = [ "username" : user.userHandle ]
 		
@@ -228,7 +228,7 @@ public class MicroblogFramework {
 		})
 	}
 	
-	public func checkFollowingStatus(user : MicroblogUser, completion: @escaping(Error?, Bool?) -> ())
+	@objc public func checkFollowingStatus(user : MicroblogUser, completion: @escaping(Error?, Bool) -> ())
 	{
 		let route = "users/is_following?username=\(user.userHandle)"
 		let request = self.secureGet(path: self.pathForRoute(route), arguments: [:])
@@ -248,7 +248,7 @@ public class MicroblogFramework {
 		})
 	}
 	
-	public func listFollowers(user : MicroblogUser, completeList : Bool, completion: @escaping(Error?, [MicroblogUser]) -> ())
+	@objc public func listFollowers(user : MicroblogUser, completeList : Bool, completion: @escaping(Error?, [MicroblogUser]) -> ())
 	{
 		var route = "users/following/\(user.userHandle)"
 		if (!completeList)
@@ -283,7 +283,7 @@ public class MicroblogFramework {
 	// MARK: - Favorite Interface
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public func favorite(post : MicroblogPost, completion: @escaping(Error?) -> ())
+	@objc public func favorite(post : MicroblogPost, completion: @escaping(Error?) -> ())
 	{
 		let arguments : [ String : String ] = [ "id" : post.identifier ]
 
@@ -294,7 +294,7 @@ public class MicroblogFramework {
 		})
 	}
 
-	public func unfavorite(post : MicroblogPost, completion: @escaping(Error?) -> ())
+	@objc public func unfavorite(post : MicroblogPost, completion: @escaping(Error?) -> ())
 	{
 		let arguments : [ String : String ] = [ "id" : post.identifier ]
 		let route = "favorites/\(post.identifier)"
@@ -310,25 +310,41 @@ public class MicroblogFramework {
 	// MARK: - Post/Reply Interface
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public func post(title : String, content : String, completion: @escaping(Error?, String?) -> ())
+	@objc public func post(title : String, content : String, completion: @escaping(Error?, String?) -> ())
 	{
-		var arguments : [ String : String ] = [ "name" : title,
-											    "content" : content ]
+		var arguments : [ String : Any ] = [ "type" : ["h-entry"],
+											 "properties" :
+											 [
+												"name" : [ title ],
+												"content" :
+												[
+													["html" : content]
+												],
+												"photo" : [ ]
+											 ]
+										   ]
 		
 		if let blogUid = self.uid
 		{
 			arguments["mp-destination"] = blogUid
 		}
 		
-		let request = self.securePost(path: self.pathForRoute("micropub"), arguments: arguments)
-		
-		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
-			let publishedPath = parsedServerResponse.httpResponse?.allHeaderFields["Location"] as? String
-			completion(parsedServerResponse.httpError, publishedPath)
-		})
+		do {
+			let body = try JSONSerialization.data(withJSONObject: arguments, options: .prettyPrinted)
+
+			let request = self.securePost(path: self.pathForRoute("micropub"), arguments: [:], body: body)
+			
+			_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
+				let publishedPath = parsedServerResponse.httpResponse?.allHeaderFields["Location"] as? String
+				completion(parsedServerResponse.httpError, publishedPath)
+			})
+
+		}
+		catch {
+		}
 	}
 	
-	public func deletePost(post : MicroblogPost, completion: @escaping(Error?) -> ())
+	@objc public func deletePost(post : MicroblogPost, completion: @escaping(Error?) -> ())
 	{
 		let arguments : [ String : String ] = [ "id" : post.identifier ]
 		let route = "posts/\(post.identifier)"
@@ -340,7 +356,7 @@ public class MicroblogFramework {
 		})
 	}
 	
-	public func reply(originalPost : MicroblogPost, content : String, completion: @escaping(Error?) -> ())
+	@objc public func reply(originalPost : MicroblogPost, content : String, completion: @escaping(Error?) -> ())
 	{
 		var arguments : [ String : String ] = [ "id" : originalPost.identifier,
 											    "text" : content ]
@@ -358,7 +374,7 @@ public class MicroblogFramework {
 	}
 	
 	
-	public func uploadImage(image : UIImage, completion: @escaping(Error?, String?)->())
+	@objc public func uploadImage(image : UIImage, completion: @escaping(Error?, String?)->())
 	{
 		var resizedImage = image
 		if image.size.width > 1800
@@ -400,7 +416,7 @@ public class MicroblogFramework {
 		
 	}
 
-	func pathForRoute(_ route : String) -> String
+	private func pathForRoute(_ route : String) -> String
 	{
 		let fullPath : NSString = self.serverPath as NSString
 		return fullPath.appendingPathComponent(route) as String
