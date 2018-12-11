@@ -370,16 +370,47 @@ public class MicroblogFramework : NSObject {
 		}
 	}
 	
-	@objc public func deletePost(post : MicroblogPost, completion: @escaping(Error?) -> ())
+	private func deletePostByUrl(path : String, completion: @escaping(Error?) -> ())
 	{
-		let arguments : [ String : String ] = [ "id" : post.identifier ]
-		let route = "posts/\(post.identifier)"
+		var bodyText = ""
+		bodyText = self.appendParameter(body: bodyText, name: "action", content: "delete")
+		bodyText = self.appendParameter(body: bodyText, name: "url", content: path)
+		if let blogUid = self.uid
+		{
+			bodyText = self.appendParameter(body: bodyText, name: "mp-destination", content: blogUid)
+		}
+
+		let body : Data = bodyText.data(using: .utf8)!
+		let request = self.securePost(path: self.pathForRoute("micropub"), arguments: [:], body: body)
+		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
+			completion(parsedServerResponse.httpError)
+		})
+	}
+	
+	private func deletePostByIdentifier(identifier : String, completion: @escaping(Error?) -> ())
+	{
+		let arguments : [ String : String ] = [ "id" : identifier ]
+		let route = "posts/\(identifier)"
 
 		let request = self.secureDelete(path: self.pathForRoute(route), arguments: arguments)
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			completion(parsedServerResponse.httpError)
 		})
+	}
+	
+	@objc public func deletePost(post : MicroblogPost, completion: @escaping(Error?) -> ())
+	{
+		// There are actually two ways to delete posts. The safer way is if you have the post identifier
+		// The other way is more of the "micropub" way in which you just have the path to the post
+		if (post.identifier.count > 0)
+		{
+			self.deletePostByIdentifier(identifier: post.identifier, completion: completion)
+		}
+		else
+		{
+			self.deletePostByUrl(path: post.path, completion: completion)
+		}
 	}
 	
 	@objc public func reply(originalPost : MicroblogPost, content : String, completion: @escaping(Error?) -> ())
