@@ -16,6 +16,10 @@ Micro.blog framework is available through [CocoaPods](http://cocoapods.org). To 
 pod 'Microblog'
 ```
 
+## Contributing
+
+Please **open pull requests against the `develop` branch**, and add a relevant note to the [`develop` section of the CHANGELOG](https://github.com/microdotblog/snippets/blob/develop/CHANGELOG.md#develop) as part of your pull request.
+
 ## License
 
 The Micro.blog framework is available under the Apache 2.0 license. See [`LICENSE.md`](https://github.com/microdotblog/snippets/blob/develop/LICENSE.md) for more information.
