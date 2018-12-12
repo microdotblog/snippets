@@ -5,6 +5,9 @@ Micro.blog iOS framework
 
 This library requires a deployment target of iOS 10.0 or greater.
 
+### Swift and Objective-C
+This library is written entirely in Swift but has been made compatible with Objective-C calling applications. 
+
 ### Cocoapods
 
 Micro.blog framework is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your `Podfile`:
