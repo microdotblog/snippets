@@ -17,8 +17,8 @@ pod 'Microblog'
 ```
 
 ## Contributing
-
-Please **open pull requests against the `develop` branch**, and add a relevant note to the [`develop` section of the CHANGELOG](https://github.com/microdotblog/snippets/blob/develop/CHANGELOG.md#develop) as part of your pull request.
+and
+Please **open pull requests against the `develop` branch**
 
 ## License
 
