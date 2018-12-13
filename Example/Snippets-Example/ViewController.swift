@@ -220,8 +220,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		if let textToPost = self.postTextField.text
 		{
 			self.postTextField.text = nil
-			
-			MicroblogFramework.shared.post(title: "", content: textToPost) { (error, results) in
+			MicroblogFramework.shared.postText(title: "", content: textToPost, photos: [], altTags: []) { (error, pathToPost) in
 			}
 		}
 	}
