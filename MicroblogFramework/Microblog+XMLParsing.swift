@@ -1,0 +1,394 @@
+//
+//  Microblog+XMLParsing.swift
+//  MicroblogFramework
+//
+//  Created by Jonathan Hays on 12/17/18.
+//  Copyright © 2018 Micro.blog. All rights reserved.
+//
+
+import UIKit
+import UUSwift
+
+class MBXMLRPCParser: NSObject, XMLParserDelegate {
+
+	var responseStack : MBXMLElementStack = MBXMLElementStack()
+	var responseParams : [Any] = []
+	var responseFault : [String : Any]? = nil
+	
+	var currentMemberName : NSMutableString? = nil
+	var finishedMemberName = ""
+	var currentValue : Any? = nil
+	var processingString = false
+
+
+	static func parsedResponseFromData(_ data : Data) -> MBXMLRPCParser {
+		let parser = XMLParser(data: data)
+		let xmlrpc = MBXMLRPCParser()
+		parser.delegate = xmlrpc
+		
+		parser.parse()
+		return xmlrpc
+	}
+
+
+	func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+		
+		if elementName == "params" {
+		}
+		else if elementName == "param" {
+		}
+		else if elementName == "value" {
+		}
+		else if elementName == "array" {
+			self.currentValue = NSMutableArray()
+			self.responseStack.push(self.currentValue!)
+		}
+		else if elementName == "struct" {
+			self.currentValue = NSMutableDictionary()
+			self.responseStack.push(self.currentValue!)
+		}
+		else if elementName == "name" {
+			self.currentMemberName = NSMutableString()
+		}
+		else if elementName == "string" {
+			self.currentValue = NSMutableString()
+			self.processingString = true
+		}
+		else if elementName == "int" {
+			self.currentValue = NSMutableString()
+			self.processingString = true
+		}
+		else if elementName == "i4" {
+			self.currentValue = NSMutableString()
+			self.processingString = true
+		}
+		else if elementName == "boolean" {
+			self.currentValue = NSMutableString()
+			self.processingString = true
+		}
+	}
+
+	func parser(_ parser: XMLParser, foundCharacters string: String) {
+		if let memberName = self.currentMemberName {
+			memberName.append(string)
+			self.currentMemberName = memberName
+		}
+		else if self.processingString {
+			let stringValue = self.currentValue as! NSMutableString
+			stringValue.append(string)
+			self.currentValue = stringValue
+		}
+	}
+
+	func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+
+		if elementName == "param" {
+			self.responseParams.append(self.currentValue!)
+		}
+		else if elementName == "fault" {
+			self.responseFault = self.currentValue as? [String : Any]
+		}
+		else if elementName == "array" {
+			self.currentValue = self.responseStack.pop()!
+		}
+		else if elementName == "struct" {
+			self.currentValue = self.responseStack.pop()!
+		}
+		else if elementName == "value" {
+			if let current_array = self.responseStack.peek() as? NSMutableArray {
+				current_array.add(self.currentValue!)
+			}
+		}
+		else if elementName == "member" {
+			if let current_struct = self.responseStack.peek() as? NSMutableDictionary {
+				current_struct[self.finishedMemberName] = self.currentValue
+			}
+		}
+		else if elementName == "name" {
+			if let memberName = self.currentMemberName {
+				self.finishedMemberName = memberName.trimmingCharacters(in: .whitespacesAndNewlines)
+				self.currentMemberName = nil
+			}
+		}
+		else if elementName == "int" {
+			let string = self.currentValue as! NSMutableString
+			let result = string.trimmingCharacters(in: .whitespacesAndNewlines) as NSString
+			self.currentValue = NSNumber(value: result.integerValue)
+			self.processingString = false
+		}
+		else if elementName == "boolean" {
+			let string = self.currentValue as! NSMutableString
+			let result = string.trimmingCharacters(in: .whitespacesAndNewlines) as NSString
+			self.currentValue = NSNumber(value: result.integerValue)
+			self.processingString = false
+		}
+		else if elementName == "string" {
+			let string = self.currentValue as! NSMutableString
+			let result = string.trimmingCharacters(in: .whitespacesAndNewlines) as NSString
+			self.currentValue = result
+			self.processingString = false
+		}
+
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - MBXMLLinkParser
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+class MBXMLLinkParser: NSObject {
+
+	static func parse(_ data : Data, relValue : String = "") -> [String] {
+		
+		var foundURLs : [String] = []
+		
+		if var string : NSString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
+			var startingPosition : NSRange = string.range(of: "<link", options: .caseInsensitive)
+			while startingPosition.location != NSNotFound {
+				let rel = self.extractTagValue("rel", sourceString: string)
+				if let href = self.extractTagValue("href", sourceString: string) {
+					if (relValue.count == 0 || rel == relValue) {
+						foundURLs.append(href)
+					}
+				}
+				
+				string = string.substring(from: startingPosition.location + startingPosition.length) as NSString
+				startingPosition = string.range(of: "<link", options: .caseInsensitive)
+			}
+			
+		}
+		
+		return foundURLs
+	}
+	
+	static private func extractTagValue(_ tagName : String, sourceString : NSString) -> String?
+	{
+		let string = sourceString as NSString
+		let startingPosition : NSRange = string.range(of: tagName, options: .caseInsensitive)
+		if startingPosition.location != NSNotFound {
+			let substring = string.substring(from: startingPosition.location) as NSString
+			let stringStartPosition = substring.range(of: "\"", options: .caseInsensitive)
+			if stringStartPosition.location != NSNotFound {
+				let valueString = substring.substring(from: stringStartPosition.location + 1) as NSString
+				let endPosition = valueString.range(of: "\"", options: .caseInsensitive)
+				let parsedString = valueString.substring(to: endPosition.location)
+				return parsedString
+			}
+		}
+		
+		return nil
+	}
+
+}
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - MBXMLRPCRequest
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+class MBXMLRPCRequest: NSObject {
+
+	var url : String = ""
+
+	convenience init(url : String)
+	{
+		self.init()
+		self.url = url
+	}
+
+	func getPath(_ path : String, completion: @escaping(UUHttpResponse) -> ()) {
+		var full_url : NSString = self.url as NSString
+		full_url = full_url.appendingPathComponent(path) as NSString
+		let request = UUHttpRequest.getRequest(full_url as String, [:])
+		_ = UUHttpSession.executeRequest(request, completion)
+	}
+	
+	func escapeParam(_ value : String) -> String
+	{
+		var s = value
+		s = s.replacingOccurrences(of: "&", with: "&amp;")
+		s = s.replacingOccurrences(of: "\"", with: "&quot;")
+		s = s.replacingOccurrences(of: "'", with: "&#x27;")
+		s = s.replacingOccurrences(of: ">", with: "&gt;")
+		s = s.replacingOccurrences(of: "<", with: "&lt;")
+
+		return s
+	}
+	
+	func paramString(param : Any) -> String
+	{
+		var requestString = ""
+		
+		if param is MBBoolean {
+			requestString += "<value><boolean>\(param)</boolan></value>"
+		}
+		else if param is NSNumber {
+			requestString += "<value><int>\(param)</int></value>"
+		}
+		else if param is NSString {
+			let stringParam = param as! String
+			let escapedParam = self.escapeParam(stringParam)
+			requestString += "<value><string>\(escapedParam)</string></value>"
+		}
+		else if param is NSDictionary {
+			requestString += "<value><struct>"
+			let dictionary = param as! NSDictionary
+			let keys = dictionary.allKeys
+			for k in keys {
+				if let val = dictionary.object(forKey: k) {
+					requestString += "<member><name>\(k)</name>"
+					requestString += self.paramString(param: val)
+					requestString += "</member>"
+				}
+			}
+			requestString += "</struct></value>"
+		}
+		else if param is NSArray {
+			requestString += "<value><array><data>"
+			let array = param as! NSArray
+			for val : Any in array {
+				requestString += paramString(param: val)
+			}
+			requestString += "</data></array></value>"
+		}
+		else if param is NSData {
+			let d = param as! NSData
+			requestString += "<value><base64>\(d.base64EncodedString(options: .init(rawValue: 0)))</base64></value>"
+		}
+		
+		return requestString
+	}
+	
+	
+	func sendMethod(method : String, params : [Any], completion : @escaping(UUHttpResponse) -> ()) -> UUHttpRequest {
+		var s = "<?xml version =\"1.0\"?>"
+		s += "<methodCall><methodName>\(method)</methodName><params>"
+		
+		for param in params {
+			s += "<param>"
+			s += paramString(param: param)
+			s += "</param>"
+		}
+		
+		s += "</params>"
+		s += "</methodCall>"
+		
+		let d = s.data(using: .utf8)
+		let request = UUHttpRequest.postRequest(self.url, [:], d, "text/xml")
+		request.processMimeTypes = false
+		
+		return UUHttpSession.executeRequest(request, completion)
+	}
+	
+	func processRSD(dictionaryEndpoints : [[String : String]], completion:@escaping(String?, String?) -> ()) {
+		var best_endpoint_url : String? = nil
+		var blog_id : String? = nil
+		
+		for api : Dictionary in dictionaryEndpoints {
+			if api["name"] == "Blogger" {
+				blog_id = api["blogID"]
+				best_endpoint_url = api["apiLink"]
+				break
+			}
+		}
+		
+		completion(best_endpoint_url, blog_id)
+	}
+
+	func discoverEndpointWithCompletion(handler : @escaping(String?, String?) -> ()) {
+		self.getPath("") { (response : UUHttpResponse) in
+			if let data = response.parsedResponse as? Data
+			{
+				let rsd = MBXMLRSDParser.parsedResponseFromData(data)
+				if (rsd.foundEndpoints.count > 0)
+				{
+					self.processRSD(dictionaryEndpoints: rsd.foundEndpoints, completion: handler)
+					return
+				}
+			}
+			
+		}
+		
+		handler(nil, nil)
+	}
+
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - MBXMLRSDParser
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+class MBXMLRSDParser: NSObject, XMLParserDelegate {
+
+	var foundEndpoints : [[String : String]] = []
+
+	static func parsedResponseFromData(_ data : Data) -> MBXMLRSDParser {
+		let parser = XMLParser(data: data)
+		let rsd = MBXMLRSDParser()
+		parser.delegate = rsd
+		
+		parser.parse()
+		return rsd
+	}
+	
+	func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+		if elementName == "api" {
+			self.foundEndpoints.append(attributeDict)
+		}
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - MBXMLElementStack
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+class MBXMLElementStack: NSObject {
+
+	var stackArray : [Any] = []
+
+	func push(_ object : Any) {
+		stackArray.append(object)
+	}
+
+	func pop() -> Any? {
+		let result = self.stackArray.removeLast()
+		return result
+	}
+	
+	func peek() -> Any? {
+		let result = self.stackArray.last
+		return result
+	}
+
+}
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - MBBoolean
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class MBBoolean : NSObject {
+
+	var boolValue = false
+	
+	convenience init(_ bool:Bool)
+	{
+		self.init()
+		self.boolValue = bool
+	}
+	
+	func description() -> String
+	{
+		return "\(self.boolValue)"
+	}
+}

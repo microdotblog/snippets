@@ -437,10 +437,10 @@ public class MicroblogFramework : NSObject {
 		var resizedImage = image
 		if image.size.width > 1800
 		{
-			resizedImage = MicroblogFramework.resizeImage(image: image, targetWidth: 1800.0)
+			resizedImage = resizedImage.uuScaleToWidth(targetWidth: 1800.0)
 		}
 		
-		let imageData = resizedImage.pngData()!
+		let imageData = resizedImage.jpegData(compressionQuality: 0.8)!
 		var formData : Data = Data()
 		let imageName = "file"
 		let boundary = ProcessInfo.processInfo.globallyUniqueString
@@ -527,38 +527,13 @@ public class MicroblogFramework : NSObject {
 		{
 			newBody += "&"
 		}
-		
-		
-		
+
 		if (content.count > 0 && name.count > 0)
 		{
 			newBody += "\(name.uuUrlEncoded())=\(content.uuUrlEncoded())"
 		}
 		
 		return newBody
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// MARK: - Image setup helper functions
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	private static func resizeImage(image: UIImage, targetWidth: CGFloat) -> UIImage {
-	
-		let targetSize = CGSize(width: targetWidth, height: image.size.height * (image.size.width / targetWidth))
-    	let widthRatio  = targetSize.width  / image.size.width
-    	let heightRatio = targetSize.height / image.size.height
-
-    	var newSize: CGSize = CGSize(width: image.size.width * widthRatio,  height: image.size.height * widthRatio)
-    	if (widthRatio > heightRatio) {
-        	newSize = CGSize(width: image.size.width * heightRatio, height: image.size.height * heightRatio)
-    	}
-
-    	UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-    	image.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
-    	let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-    	UIGraphicsEndImageContext()
-
-    	return resizedImage!
 	}
 
 }

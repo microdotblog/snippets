@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C5BD70E321C8242B00FC37AB /* Microblog+XMLRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BD70E221C8242B00FC37AB /* Microblog+XMLRPC.swift */; };
+		C5BD70E621C8515500FC37AB /* Microblog+XMLParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BD70E521C8515500FC37AB /* Microblog+XMLParsing.swift */; };
 		C5F056A421BF19E900E502DF /* MicroblogFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = C5F056A221BF19E900E502DF /* MicroblogFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C5F056AD21BF1ACE00E502DF /* Microblog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056AA21BF1ACE00E502DF /* Microblog.swift */; };
 		C5F056AE21BF1ACE00E502DF /* MicroblogUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056AB21BF1ACE00E502DF /* MicroblogUser.swift */; };
@@ -25,6 +27,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C5BD70E221C8242B00FC37AB /* Microblog+XMLRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Microblog+XMLRPC.swift"; sourceTree = "<group>"; };
+		C5BD70E521C8515500FC37AB /* Microblog+XMLParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Microblog+XMLParsing.swift"; sourceTree = "<group>"; };
 		C5F0569F21BF19E900E502DF /* Microblog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Microblog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5F056A221BF19E900E502DF /* MicroblogFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MicroblogFramework.h; sourceTree = "<group>"; };
 		C5F056A321BF19E900E502DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -70,6 +74,8 @@
 				C5F056AA21BF1ACE00E502DF /* Microblog.swift */,
 				C5F056AC21BF1ACE00E502DF /* MicroblogPost.swift */,
 				C5F056AB21BF1ACE00E502DF /* MicroblogUser.swift */,
+				C5BD70E221C8242B00FC37AB /* Microblog+XMLRPC.swift */,
+				C5BD70E521C8515500FC37AB /* Microblog+XMLParsing.swift */,
 				C5F056A221BF19E900E502DF /* MicroblogFramework.h */,
 				C5F056A321BF19E900E502DF /* Info.plist */,
 			);
@@ -186,6 +192,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5BD70E621C8515500FC37AB /* Microblog+XMLParsing.swift in Sources */,
+				C5BD70E321C8242B00FC37AB /* Microblog+XMLRPC.swift in Sources */,
 				C5F056AD21BF1ACE00E502DF /* Microblog.swift in Sources */,
 				C5F056AF21BF1ACE00E502DF /* MicroblogPost.swift in Sources */,
 				C5F056AE21BF1ACE00E502DF /* MicroblogUser.swift in Sources */,
