@@ -9,29 +9,87 @@
 import UIKit
 import UUSwift
 
-class MBXMLRPCParser: NSObject, XMLParserDelegate {
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - MicroblogXMLLinkParser
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	var responseStack : MBXMLElementStack = MBXMLElementStack()
+
+public class MicroblogXMLLinkParser: NSObject {
+
+	@objc public static func parse(_ data : Data, relValue : String = "") -> [String] {
+		
+		var foundURLs : [String] = []
+		
+		if var string : NSString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
+			var startingPosition : NSRange = string.range(of: "<link", options: .caseInsensitive)
+			while startingPosition.location != NSNotFound {
+				let rel = self.extractTagValue("rel", sourceString: string)
+				if let href = self.extractTagValue("href", sourceString: string) {
+					if (relValue.count == 0 || rel == relValue) {
+						foundURLs.append(href)
+					}
+				}
+				
+				string = string.substring(from: startingPosition.location + startingPosition.length) as NSString
+				startingPosition = string.range(of: "<link", options: .caseInsensitive)
+			}
+			
+		}
+		
+		return foundURLs
+	}
+	
+	static private func extractTagValue(_ tagName : String, sourceString : NSString) -> String?
+	{
+		let string = sourceString as NSString
+		let startingPosition : NSRange = string.range(of: tagName, options: .caseInsensitive)
+		if startingPosition.location != NSNotFound {
+			let substring = string.substring(from: startingPosition.location) as NSString
+			let stringStartPosition = substring.range(of: "\"", options: .caseInsensitive)
+			if stringStartPosition.location != NSNotFound {
+				let valueString = substring.substring(from: stringStartPosition.location + 1) as NSString
+				let endPosition = valueString.range(of: "\"", options: .caseInsensitive)
+				let parsedString = valueString.substring(to: endPosition.location)
+				return parsedString
+			}
+		}
+		
+		return nil
+	}
+
+}
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// MARK: - MicroblogXMLRPCParser
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+public class MicroblogXMLRPCParser: NSObject, XMLParserDelegate {
+
+	@objc static public func parsedResponseFromData(_ data : Data, completion:@escaping([String : Any]?, [Any]) ->()) {
+		let parser = XMLParser(data: data)
+		let xmlrpc = MicroblogXMLRPCParser()
+		parser.delegate = xmlrpc
+		
+		parser.parse()
+	
+		completion(xmlrpc.responseFault, xmlrpc.responseParams)
+	}
+
+
 	var responseParams : [Any] = []
 	var responseFault : [String : Any]? = nil
-	
+
+	var responseStack : MBXMLElementStack = MBXMLElementStack()
 	var currentMemberName : NSMutableString? = nil
 	var finishedMemberName = ""
 	var currentValue : Any? = nil
 	var processingString = false
 
 
-	static func parsedResponseFromData(_ data : Data) -> MBXMLRPCParser {
-		let parser = XMLParser(data: data)
-		let xmlrpc = MBXMLRPCParser()
-		parser.delegate = xmlrpc
-		
-		parser.parse()
-		return xmlrpc
-	}
-
-
-	func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+	private func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
 		
 		if elementName == "params" {
 		}
@@ -68,7 +126,7 @@ class MBXMLRPCParser: NSObject, XMLParserDelegate {
 		}
 	}
 
-	func parser(_ parser: XMLParser, foundCharacters string: String) {
+	private func parser(_ parser: XMLParser, foundCharacters string: String) {
 		if let memberName = self.currentMemberName {
 			memberName.append(string)
 			self.currentMemberName = memberName
@@ -80,7 +138,7 @@ class MBXMLRPCParser: NSObject, XMLParserDelegate {
 		}
 	}
 
-	func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+	private func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
 
 		if elementName == "param" {
 			self.responseParams.append(self.currentValue!)
@@ -132,73 +190,38 @@ class MBXMLRPCParser: NSObject, XMLParserDelegate {
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: - MBXMLLinkParser
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-class MBXMLLinkParser: NSObject {
-
-	static func parse(_ data : Data, relValue : String = "") -> [String] {
-		
-		var foundURLs : [String] = []
-		
-		if var string : NSString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) {
-			var startingPosition : NSRange = string.range(of: "<link", options: .caseInsensitive)
-			while startingPosition.location != NSNotFound {
-				let rel = self.extractTagValue("rel", sourceString: string)
-				if let href = self.extractTagValue("href", sourceString: string) {
-					if (relValue.count == 0 || rel == relValue) {
-						foundURLs.append(href)
-					}
-				}
-				
-				string = string.substring(from: startingPosition.location + startingPosition.length) as NSString
-				startingPosition = string.range(of: "<link", options: .caseInsensitive)
-			}
-			
-		}
-		
-		return foundURLs
-	}
-	
-	static private func extractTagValue(_ tagName : String, sourceString : NSString) -> String?
-	{
-		let string = sourceString as NSString
-		let startingPosition : NSRange = string.range(of: tagName, options: .caseInsensitive)
-		if startingPosition.location != NSNotFound {
-			let substring = string.substring(from: startingPosition.location) as NSString
-			let stringStartPosition = substring.range(of: "\"", options: .caseInsensitive)
-			if stringStartPosition.location != NSNotFound {
-				let valueString = substring.substring(from: stringStartPosition.location + 1) as NSString
-				let endPosition = valueString.range(of: "\"", options: .caseInsensitive)
-				let parsedString = valueString.substring(to: endPosition.location)
-				return parsedString
-			}
-		}
-		
-		return nil
-	}
-
-}
-
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// MARK: - MBXMLRPCRequest
+// MARK: - MicroblogRPCDiscovery
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-class MBXMLRPCRequest: NSObject {
+public class MicroblogRPCDiscovery: NSObject {
 
 	var url : String = ""
 
-	convenience init(url : String)
+	@objc public convenience init(url : String)
 	{
 		self.init()
 		self.url = url
 	}
+
+	@objc public func discoverEndpointWithCompletion(handler : @escaping(String?, String?) -> ()) {
+		self.getPath("") { (response : UUHttpResponse) in
+			if let data = response.parsedResponse as? Data
+			{
+				let rsd = MBXMLRSDParser.parsedResponseFromData(data)
+				if (rsd.foundEndpoints.count > 0)
+				{
+					self.processRSD(dictionaryEndpoints: rsd.foundEndpoints, completion: handler)
+					return
+				}
+			}
+			
+		}
+		
+		handler(nil, nil)
+	}
+
 
 	func getPath(_ path : String, completion: @escaping(UUHttpResponse) -> ()) {
 		var full_url : NSString = self.url as NSString
@@ -297,23 +320,6 @@ class MBXMLRPCRequest: NSObject {
 		}
 		
 		completion(best_endpoint_url, blog_id)
-	}
-
-	func discoverEndpointWithCompletion(handler : @escaping(String?, String?) -> ()) {
-		self.getPath("") { (response : UUHttpResponse) in
-			if let data = response.parsedResponse as? Data
-			{
-				let rsd = MBXMLRSDParser.parsedResponseFromData(data)
-				if (rsd.foundEndpoints.count > 0)
-				{
-					self.processRSD(dictionaryEndpoints: rsd.foundEndpoints, completion: handler)
-					return
-				}
-			}
-			
-		}
-		
-		handler(nil, nil)
 	}
 
 }

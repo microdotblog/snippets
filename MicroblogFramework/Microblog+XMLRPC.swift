@@ -89,6 +89,13 @@ import UUSwift
 
 extension MicroblogFramework {
 
+	@objc public func executeRPC(request : MicroblogXMLRPCRequest, params:[Any], completion: @escaping(Error?,Data?) -> ()) {
+		
+		let xmlRPCRequest = MicroblogRPCDiscovery(url: request.identity.endpoint)
+		_ = xmlRPCRequest.sendMethod(method: request.method, params: params) { (response) in
+			completion(response.httpError, response.rawResponse)
+		}
+	}
 
 	@objc public func editPost(postIdentifier : String,
 							   title : String,
@@ -104,19 +111,21 @@ extension MicroblogFramework {
 													  postFormat: postFormat,
 													  postCategory: postCategory)
 
-		let xmlRPCRequest = MBXMLRPCRequest(url: request.identity.endpoint)
-		_ = xmlRPCRequest.sendMethod(method: request.method, params: params) { (response) in
-			
-			if let data : Data = response.rawResponse {
-				let xmlrpc = MBXMLRPCParser.parsedResponseFromData(data)
-				if xmlrpc.responseFault == nil {
-					let postId : String? = xmlrpc.responseParams.first as? String
-					completion(response.httpError, postId)
-					return
-				}
+		self.executeRPC(request: request, params: params)
+		{ (error, responseData) in
+
+			if let data : Data = responseData {
+				MicroblogXMLRPCParser.parsedResponseFromData(data, completion:
+				{ (responseFault, responseParams) in
+					if responseFault == nil {
+						let postId : String? = responseParams.first as? String
+						completion(error, postId)
+						return
+					}
+				})
 			}
 			
-			completion(response.httpError, nil)
+			completion(error, nil)
 		}
 	}
 
@@ -134,19 +143,19 @@ extension MicroblogFramework {
 													  postFormat: postFormat,
 													  postCategory: postCategory)
 		
-		let xmlRPCRequest = MBXMLRPCRequest(url: request.identity.endpoint)
-		_ = xmlRPCRequest.sendMethod(method: request.method, params: params) { (response) in
-			
-			if let data : Data = response.rawResponse {
-				let xmlrpc = MBXMLRPCParser.parsedResponseFromData(data)
-				if xmlrpc.responseFault == nil {
-					let postId : String? = xmlrpc.responseParams.first as? String
-					completion(response.httpError, postId)
-					return
-				}
+		self.executeRPC(request: request, params: params) { (error, responseData) in
+
+			if let data : Data = responseData {
+				MicroblogXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
+					if responseFault == nil {
+						let postId : String? = responseParams.first as? String
+						completion(error, postId)
+						return
+					}
+				})
 			}
 			
-			completion(response.httpError, nil)
+			completion(error, nil)
 		}
 	}
 	
@@ -168,35 +177,35 @@ extension MicroblogFramework {
 							   request.identity.blogPassword, [ "name" : filename,
 													   "type" : "image/jpeg",
 													   "bits": d! ]]
-		
-		let xmlRPCRequest = MBXMLRPCRequest(url: request.identity.endpoint)
-		_ = xmlRPCRequest.sendMethod(method: request.method, params: params) { (response) in
-			
-			if let data : Data = response.rawResponse {
-				let xmlrpc = MBXMLRPCParser.parsedResponseFromData(data)
-				if xmlrpc.responseFault == nil {
-					var imageUrl : String? = nil
-					var imageIdentifier : String? = nil
+
+		self.executeRPC(request: request, params: params) { (error, responseData) in
+			if let data : Data = responseData {
+				MicroblogXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
+
+					if responseFault == nil {
+						var imageUrl : String? = nil
+						var imageIdentifier : String? = nil
+					
+						if let imageDictionary = responseParams.first as? NSDictionary {
+							imageUrl = imageDictionary.object(forKey: "url") as? String
+							if (imageUrl == nil) {
+								imageUrl = imageDictionary.object(forKey: "link") as? String
+							}
 						
-					if let imageDictionary = xmlrpc.responseParams.first as? NSDictionary {
-						imageUrl = imageDictionary.object(forKey: "url") as? String
-						if (imageUrl == nil) {
-							imageUrl = imageDictionary.object(forKey: "link") as? String
+							imageIdentifier = imageDictionary.object(forKey: "id") as? String
+						
+							if imageUrl != nil && imageIdentifier == nil {
+								imageIdentifier = ""
+							}
 						}
-							
-						imageIdentifier = imageDictionary.object(forKey: "id") as? String
-							
-						if imageUrl != nil && imageIdentifier == nil {
-							imageIdentifier = ""
-						}
+					
+						completion(error, imageUrl, imageIdentifier)
+						return
 					}
-						
-					completion(response.httpError, imageUrl, imageIdentifier)
-					return
-				}
+				})
 			}
 			
-			completion(response.httpError, nil, nil)
+			completion(error, nil, nil)
 		}
 	}
 	
@@ -204,25 +213,24 @@ extension MicroblogFramework {
 
 		let params : [Any] = [ "", postIdentifier, request.identity.blogUsername, request.identity.blogPassword ]
 		
-		let xmlRPCRequest = MBXMLRPCRequest(url: request.identity.endpoint)
-		_ = xmlRPCRequest.sendMethod(method: request.method, params: params) { (response) in
-			
-			if let data : Data = response.rawResponse {
-				let xmlrpc = MBXMLRPCParser.parsedResponseFromData(data)
-				if let fault = xmlrpc.responseFault {
+		self.executeRPC(request: request, params: params) { (error, responseData) in
+			if let data : Data = responseData {
+				MicroblogXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
+					if let fault = responseFault {
 				
-					//Check for a 404 in which case, this post is unpublished so there's no error...
-			 		if let faultCode = fault["faultCode"] as? NSString
-			 		{
-						if faultCode.integerValue == 404 {
-							completion(nil)
-							return
+						//Check for a 404 in which case, this post is unpublished so there's no error...
+			 			if let faultCode = fault["faultCode"] as? NSString
+			 			{
+							if faultCode.integerValue == 404 {
+								completion(nil)
+								return
+							}
 						}
 					}
-				}
+				})
 			}
 		
-			completion(response.httpError)
+			completion(error)
 		}
 	}
 
@@ -234,26 +242,24 @@ extension MicroblogFramework {
 			params.append(["link"])
 		}
 
-		let xmlRPCRequest = MBXMLRPCRequest(url: request.identity.endpoint)
-		_ = xmlRPCRequest.sendMethod(method: request.method, params: params) { (response) in
-			
-			if let data : Data = response.rawResponse {
-				let xmlrpc = MBXMLRPCParser.parsedResponseFromData(data)
-				if let responseDictionary = xmlrpc.responseParams.first as? NSDictionary {
-					var url : String? = responseDictionary.object(forKey: "url") as? String
-					if (url == nil) {
-						url = responseDictionary.object(forKey: "link") as? String
-					}
+		self.executeRPC(request: request, params: params) { (error, responseData) in
+			if let data : Data = responseData {
+				MicroblogXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
+					if let responseDictionary = responseParams.first as? NSDictionary {
+						var url : String? = responseDictionary.object(forKey: "url") as? String
+						if (url == nil) {
+							url = responseDictionary.object(forKey: "link") as? String
+						}
 					
-					completion(response.httpError, url)
-					return
-				}
+						completion(error, url)
+						return
+					}
+				})
 			}
 		
-			completion(response.httpError, nil)
+			completion(error, nil)
 		}
 	}
-	
 	
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
