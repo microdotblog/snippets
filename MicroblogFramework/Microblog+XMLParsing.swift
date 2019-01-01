@@ -24,8 +24,8 @@ public class MicroblogXMLLinkParser: NSObject {
 			var startingPosition : NSRange = string.range(of: "<link", options: .caseInsensitive)
 			while startingPosition.location != NSNotFound {
 				let rel = self.extractTagValue("rel", sourceString: string)
-				if let href = self.extractTagValue("href", sourceString: string) {
-					if (relValue.count == 0 || rel == relValue) {
+				if (relValue.count == 0 || rel == relValue) {
+					if let href = self.extractTagValue("href", sourceString: string) {
 						foundURLs.append(href)
 					}
 				}
@@ -45,10 +45,30 @@ public class MicroblogXMLLinkParser: NSObject {
 		let startingPosition : NSRange = string.range(of: tagName, options: .caseInsensitive)
 		if startingPosition.location != NSNotFound {
 			let substring = string.substring(from: startingPosition.location) as NSString
-			let stringStartPosition = substring.range(of: "\"", options: .caseInsensitive)
+			var stringStartPosition = substring.range(of: "\"", options: .caseInsensitive)
+			let singleQuoteStartPosition = substring.range(of: "'", options: .caseInsensitive)
+			
+			var isSingleQuote = false
+			
+			if (stringStartPosition.location == NSNotFound && singleQuoteStartPosition.location != NSNotFound)
+			{
+				isSingleQuote = true
+				stringStartPosition = singleQuoteStartPosition
+			}
+			else if (singleQuoteStartPosition.location != NSNotFound &&
+					 singleQuoteStartPosition.location < stringStartPosition.location)
+			{
+				isSingleQuote = true
+				stringStartPosition = singleQuoteStartPosition
+			}
+			
 			if stringStartPosition.location != NSNotFound {
 				let valueString = substring.substring(from: stringStartPosition.location + 1) as NSString
-				let endPosition = valueString.range(of: "\"", options: .caseInsensitive)
+				var endPosition = valueString.range(of: "\"", options: .caseInsensitive)
+				if isSingleQuote {
+					endPosition = valueString.range(of: "'", options: .caseInsensitive)
+				}
+				
 				let parsedString = valueString.substring(to: endPosition.location)
 				return parsedString
 			}
@@ -89,7 +109,7 @@ public class MicroblogXMLRPCParser: NSObject, XMLParserDelegate {
 	var processingString = false
 
 
-	private func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+	public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
 		
 		if elementName == "params" {
 		}
@@ -126,7 +146,7 @@ public class MicroblogXMLRPCParser: NSObject, XMLParserDelegate {
 		}
 	}
 
-	private func parser(_ parser: XMLParser, foundCharacters string: String) {
+	public func parser(_ parser: XMLParser, foundCharacters string: String) {
 		if let memberName = self.currentMemberName {
 			memberName.append(string)
 			self.currentMemberName = memberName
@@ -138,7 +158,7 @@ public class MicroblogXMLRPCParser: NSObject, XMLParserDelegate {
 		}
 	}
 
-	private func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+	public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
 
 		if elementName == "param" {
 			self.responseParams.append(self.currentValue!)
@@ -207,7 +227,7 @@ public class MicroblogRPCDiscovery: NSObject {
 
 	@objc public func discoverEndpointWithCompletion(handler : @escaping(String?, String?) -> ()) {
 		self.getPath("") { (response : UUHttpResponse) in
-			if let data = response.parsedResponse as? Data
+			if let data = response.rawResponse
 			{
 				let rsd = MBXMLRSDParser.parsedResponseFromData(data)
 				if (rsd.foundEndpoints.count > 0)
@@ -217,9 +237,8 @@ public class MicroblogRPCDiscovery: NSObject {
 				}
 			}
 			
+			handler(nil, nil)
 		}
-		
-		handler(nil, nil)
 	}
 
 

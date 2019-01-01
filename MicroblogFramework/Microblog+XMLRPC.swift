@@ -122,7 +122,13 @@ extension MicroblogFramework {
 						completion(error, postId)
 						return
 					}
+					else {
+						let error = self.buildCustomErrorFromResponseFault(responseFault!)
+						completion(error, nil)
+					}
 				})
+				
+				return
 			}
 			
 			completion(error, nil)
@@ -152,10 +158,15 @@ extension MicroblogFramework {
 						completion(error, postId)
 						return
 					}
+					else {
+						let error = self.buildCustomErrorFromResponseFault(responseFault!)
+						completion(error, nil)
+					}
 				})
 			}
-			
-			completion(error, nil)
+			else {
+				completion(error, nil)
+			}
 		}
 	}
 	
@@ -198,14 +209,20 @@ extension MicroblogFramework {
 								imageIdentifier = ""
 							}
 						}
+						
 					
 						completion(error, imageUrl, imageIdentifier)
 						return
 					}
+					else {
+						let error = self.buildCustomErrorFromResponseFault(responseFault!)
+						completion(error, nil, nil)
+					}
 				})
 			}
-			
-			completion(error, nil, nil)
+			else {
+				completion(error, nil, nil)
+			}
 		}
 	}
 	
@@ -218,19 +235,21 @@ extension MicroblogFramework {
 				MicroblogXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
 					if let fault = responseFault {
 				
+						let error = self.buildCustomErrorFromResponseFault(fault)
+
 						//Check for a 404 in which case, this post is unpublished so there's no error...
-			 			if let faultCode = fault["faultCode"] as? NSString
-			 			{
-							if faultCode.integerValue == 404 {
-								completion(nil)
-								return
-							}
+						if error.code == 404 {
+							completion(nil)
+							return
 						}
+						
+						completion(error)
 					}
 				})
 			}
-		
-			completion(error)
+			else {
+				completion(error)
+			}
 		}
 	}
 
@@ -256,8 +275,9 @@ extension MicroblogFramework {
 					}
 				})
 			}
-		
-			completion(error, nil)
+			else {
+				completion(error, nil)
+			}
 		}
 	}
 	
@@ -265,6 +285,21 @@ extension MicroblogFramework {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// MARK: - Private
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	private func buildCustomErrorFromResponseFault(_ responseFault : [String : Any]) -> NSError
+	{
+		var error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey:"Unknown error received from XMLRPC request"])
+		
+		if let faultString = responseFault["faultString"] as? String,
+			let faultCode = responseFault["faultCode"] as? Int {
+			let composedString = faultString + "(error: \(faultCode))"
+			
+			error = NSError(domain: faultString, code: Int(faultCode), userInfo: [NSLocalizedDescriptionKey:composedString,
+																				  NSLocalizedFailureReasonErrorKey : composedString])
+		}
+
+		return error
+	}
 	
 	private func buildPostParameters(identity : MicroblogXMLRPCIdentity,
 									 postIdentifier : String?,
