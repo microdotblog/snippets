@@ -7,26 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C55A727021DFEEF000E31A25 /* UUSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55A726F21DFEEF000E31A25 /* UUSwift.framework */; };
 		C5BD70E321C8242B00FC37AB /* Microblog+XMLRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BD70E221C8242B00FC37AB /* Microblog+XMLRPC.swift */; };
 		C5BD70E621C8515500FC37AB /* Microblog+XMLParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BD70E521C8515500FC37AB /* Microblog+XMLParsing.swift */; };
 		C5F056A421BF19E900E502DF /* MicroblogFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = C5F056A221BF19E900E502DF /* MicroblogFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C5F056AD21BF1ACE00E502DF /* Microblog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056AA21BF1ACE00E502DF /* Microblog.swift */; };
 		C5F056AE21BF1ACE00E502DF /* MicroblogUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056AB21BF1ACE00E502DF /* MicroblogUser.swift */; };
 		C5F056AF21BF1ACE00E502DF /* MicroblogPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056AC21BF1ACE00E502DF /* MicroblogPost.swift */; };
-		C5F056B921BF1CB200E502DF /* UUSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5F056B721BF1BBF00E502DF /* UUSwift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		C5F056B621BF1BBF00E502DF /* PBXContainerItemProxy */ = {
+		C55A727621DFEF0500E31A25 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = C5F056B221BF1BBF00E502DF /* UUSwift.xcodeproj */;
+			containerPortal = C55A727121DFEF0500E31A25 /* UUSwift.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = C5CB4E9521B611F0002FE35E;
 			remoteInfo = UUSwift;
 		};
+		C55A727821DFEF0500E31A25 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C55A727121DFEF0500E31A25 /* UUSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C51B99E221DEEAA9007077E0;
+			remoteInfo = UUSwiftMac;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C55A726F21DFEEF000E31A25 /* UUSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UUSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55A727121DFEF0500E31A25 /* UUSwift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UUSwift.xcodeproj; path = MicroblogFramework/UUSwift/UUSwift.xcodeproj; sourceTree = "<group>"; };
 		C5BD70E221C8242B00FC37AB /* Microblog+XMLRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Microblog+XMLRPC.swift"; sourceTree = "<group>"; };
 		C5BD70E521C8515500FC37AB /* Microblog+XMLParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Microblog+XMLParsing.swift"; sourceTree = "<group>"; };
 		C5F0569F21BF19E900E502DF /* Microblog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Microblog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -35,7 +44,6 @@
 		C5F056AA21BF1ACE00E502DF /* Microblog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Microblog.swift; sourceTree = "<group>"; };
 		C5F056AB21BF1ACE00E502DF /* MicroblogUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicroblogUser.swift; sourceTree = "<group>"; };
 		C5F056AC21BF1ACE00E502DF /* MicroblogPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicroblogPost.swift; sourceTree = "<group>"; };
-		C5F056B221BF1BBF00E502DF /* UUSwift.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = UUSwift.xcodeproj; path = MicroblogFramework/UUSwift/UUSwift.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,17 +51,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5F056B921BF1CB200E502DF /* UUSwift.framework in Frameworks */,
+				C55A727021DFEEF000E31A25 /* UUSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C55A727221DFEF0500E31A25 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C55A727721DFEF0500E31A25 /* UUSwift.framework */,
+				C55A727921DFEF0500E31A25 /* UUSwiftMac.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		C5F0569521BF19E900E502DF = {
 			isa = PBXGroup;
 			children = (
-				C5F056B221BF1BBF00E502DF /* UUSwift.xcodeproj */,
+				C55A727121DFEF0500E31A25 /* UUSwift.xcodeproj */,
 				C5F056A121BF19E900E502DF /* MicroblogFramework */,
 				C5F056A021BF19E900E502DF /* Products */,
 				C5F056B821BF1CB200E502DF /* Frameworks */,
@@ -82,17 +99,10 @@
 			path = MicroblogFramework;
 			sourceTree = "<group>";
 		};
-		C5F056B321BF1BBF00E502DF /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C5F056B721BF1BBF00E502DF /* UUSwift.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		C5F056B821BF1CB200E502DF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C55A726F21DFEEF000E31A25 /* UUSwift.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -156,8 +166,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = C5F056B321BF1BBF00E502DF /* Products */;
-					ProjectRef = C5F056B221BF1BBF00E502DF /* UUSwift.xcodeproj */;
+					ProductGroup = C55A727221DFEF0500E31A25 /* Products */;
+					ProjectRef = C55A727121DFEF0500E31A25 /* UUSwift.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -168,11 +178,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		C5F056B721BF1BBF00E502DF /* UUSwift.framework */ = {
+		C55A727721DFEF0500E31A25 /* UUSwift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = UUSwift.framework;
-			remoteRef = C5F056B621BF1BBF00E502DF /* PBXContainerItemProxy */;
+			remoteRef = C55A727621DFEF0500E31A25 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C55A727921DFEF0500E31A25 /* UUSwiftMac.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = UUSwiftMac.framework;
+			remoteRef = C55A727821DFEF0500E31A25 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
