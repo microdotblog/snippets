@@ -13,7 +13,6 @@
 		C55A728E21E0137D00E31A25 /* Microblog+XMLRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BD70E221C8242B00FC37AB /* Microblog+XMLRPC.swift */; };
 		C55A728F21E0138000E31A25 /* Microblog+XMLParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BD70E521C8515500FC37AB /* Microblog+XMLParsing.swift */; };
 		C55A729121E0139500E31A25 /* MicroblogFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = C5F056A221BF19E900E502DF /* MicroblogFramework.h */; };
-		C55A729321E014F500E31A25 /* UUSwiftMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55A729221E014F500E31A25 /* UUSwiftMac.framework */; };
 		C5BD70E321C8242B00FC37AB /* Microblog+XMLRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BD70E221C8242B00FC37AB /* Microblog+XMLRPC.swift */; };
 		C5BD70E621C8515500FC37AB /* Microblog+XMLParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BD70E521C8515500FC37AB /* Microblog+XMLParsing.swift */; };
 		C5CC683021E03F8A00B48D59 /* UUSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5CC682D21E03F7500B48D59 /* UUSwift.framework */; };
@@ -23,6 +22,7 @@
 		C5F056AF21BF1ACE00E502DF /* MicroblogPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056AC21BF1ACE00E502DF /* MicroblogPost.swift */; };
 		C5FE235021E303A700A3BB23 /* LICENSE.md in Resources */ = {isa = PBXBuildFile; fileRef = C5FE234C21E303A700A3BB23 /* LICENSE.md */; };
 		C5FE235121E303A700A3BB23 /* Microblog.podspec in Resources */ = {isa = PBXBuildFile; fileRef = C5FE234F21E303A700A3BB23 /* Microblog.podspec */; };
+		C5FE235221E3D51B00A3BB23 /* UUSwiftMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5CC682F21E03F7500B48D59 /* UUSwiftMac.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +45,6 @@
 /* Begin PBXFileReference section */
 		C55A726F21DFEEF000E31A25 /* UUSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UUSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55A728021E0127C00E31A25 /* MicroblogFrameworkMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MicroblogFrameworkMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C55A729221E014F500E31A25 /* UUSwiftMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UUSwiftMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5BD70E221C8242B00FC37AB /* Microblog+XMLRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Microblog+XMLRPC.swift"; sourceTree = "<group>"; };
 		C5BD70E521C8515500FC37AB /* Microblog+XMLParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Microblog+XMLParsing.swift"; sourceTree = "<group>"; };
 		C5CC682521E03EE800B48D59 /* UUSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UUSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,7 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C55A729321E014F500E31A25 /* UUSwiftMac.framework in Frameworks */,
+				C5FE235221E3D51B00A3BB23 /* UUSwiftMac.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,7 +127,6 @@
 			isa = PBXGroup;
 			children = (
 				C5CC682521E03EE800B48D59 /* UUSwift.framework */,
-				C55A729221E014F500E31A25 /* UUSwiftMac.framework */,
 				C55A726F21DFEEF000E31A25 /* UUSwift.framework */,
 			);
 			name = Frameworks;

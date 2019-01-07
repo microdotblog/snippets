@@ -8,11 +8,11 @@
 
 #if os(macOS)
 import AppKit
-import UUSwiftMac
 #else
 import UIKit
-import UUSwift
 #endif
+
+import UUSwift
 
 
 

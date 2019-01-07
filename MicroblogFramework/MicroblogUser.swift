@@ -8,7 +8,7 @@
 
 #if os(macOS)
 import AppKit
-import UUSwiftMac
+import UUSwift
 public typealias MBImage = NSImage
 #else
 import UIKit
@@ -51,7 +51,7 @@ extension MicroblogUser {
 		UUHttpSession.get(self.pathToUserImage, [:]) { (parsedServerResponse) in
 			if let image = parsedServerResponse.parsedResponse as? MBImage
 			{
-				if let imageData = UIImagePNGRepresentation(image)
+				if let imageData = image.uuPngData()
 				{
 					UUDataCache.shared.set(data: imageData, for: self.pathToUserImage)
 					self.userImage = image

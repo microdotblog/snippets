@@ -8,7 +8,7 @@
 
 #if os(macOS)
 import AppKit
-import UUSwiftMac
+import UUSwift
 #else
 import UIKit
 import UUSwift

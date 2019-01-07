@@ -8,11 +8,11 @@
 
 #if os(macOS)
 import AppKit
-import UUSwiftMac
 #else
 import UIKit
-import UUSwift
 #endif
+
+import UUSwift
 
 
 @objc public class MicroblogXMLRPCIdentity : NSObject {
@@ -187,7 +187,7 @@ extension MicroblogFramework {
 		//	resizedImage = resizedImage.uuScaleToWidth(targetWidth: 1800.0 )
 		//}
 		
-		let d = UIImageJPEGRepresentation(resizedImage, 0.8)
+		let d = resizedImage.uuJpegData(0.8)
 		
 		let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + ".jpg"
 		let params : [Any] = [ request.identity.blogId,

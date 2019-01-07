@@ -8,7 +8,7 @@
 
 #if os(macOS)
 import AppKit
-import UUSwiftMac
+import UUSwift
 #else
 import UIKit
 import UUSwift
@@ -447,7 +447,7 @@ public class MicroblogFramework : NSObject {
 		//	resizedImage = resizedImage.uuScaleToWidth(targetWidth: 1800.0 )
 		//}
 
-		let imageData = UIImageJPEGRepresentation(resizedImage, 0.8)!//resizedImage.jpegData(compressionQuality: 0.8)!
+		let imageData = resizedImage.uuJpegData(0.8)!
 		var formData : Data = Data()
 		let imageName = "file"
 		let boundary = ProcessInfo.processInfo.globallyUniqueString
