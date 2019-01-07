@@ -6,8 +6,14 @@
 //  Copyright © 2018 Jonathan Hays. All rights reserved.
 //
 
+#if os(macOS)
+import AppKit
+import UUSwiftMac
+#else
 import UIKit
 import UUSwift
+#endif
+
 
 public class MicroblogFramework : NSObject {
 
@@ -432,15 +438,16 @@ public class MicroblogFramework : NSObject {
 	}
 	
 	
-	@objc public func uploadImage(image : UIImage, completion: @escaping(Error?, String?)->())
+	@objc public func uploadImage(image : MBImage, completion: @escaping(Error?, String?)->())
 	{
-		var resizedImage = image
-		if image.size.width > 1800
-		{
-			resizedImage = resizedImage.uuScaleToWidth(targetWidth: 1800.0)
-		}
-		
-		let imageData = resizedImage.jpegData(compressionQuality: 0.8)!
+		let resizedImage = image
+		//var resizedImage = image
+		//if image.size.width > 1800.0
+		//{
+		//	resizedImage = resizedImage.uuScaleToWidth(targetWidth: 1800.0 )
+		//}
+
+		let imageData = UIImageJPEGRepresentation(resizedImage, 0.8)!//resizedImage.jpegData(compressionQuality: 0.8)!
 		var formData : Data = Data()
 		let imageName = "file"
 		let boundary = ProcessInfo.processInfo.globallyUniqueString

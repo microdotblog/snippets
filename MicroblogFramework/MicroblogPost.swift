@@ -6,8 +6,14 @@
 //  Copyright © 2018 Jonathan Hays. All rights reserved.
 //
 
-import Foundation
+#if os(macOS)
+import AppKit
+import UUSwiftMac
+#else
+import UIKit
 import UUSwift
+#endif
+
 
 public class MicroblogPost : NSObject
 {

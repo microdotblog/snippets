@@ -6,8 +6,14 @@
 //  Copyright © 2018 Micro.blog. All rights reserved.
 //
 
+#if os(macOS)
+import AppKit
+import UUSwiftMac
+#else
 import UIKit
 import UUSwift
+#endif
+
 
 @objc public class MicroblogXMLRPCIdentity : NSObject {
 
@@ -171,16 +177,17 @@ extension MicroblogFramework {
 	}
 	
 
-	@objc public func uploadImage(image : UIImage, 	request : MicroblogXMLRPCRequest,
+	@objc public func uploadImage(image : MBImage, 	request : MicroblogXMLRPCRequest,
 													completion: @escaping(Error?, String?, String?) -> ())
 	{
-		var resizedImage = image
-		if image.size.width > 1800.0
-		{
-			resizedImage = resizedImage.uuScaleToWidth(targetWidth: 1800.0)
-		}
-
-		let d = resizedImage.jpegData(compressionQuality: 0.8)
+		let resizedImage = image
+		//var resizedImage = image
+		//if image.size.width > 1800.0
+		//{
+		//	resizedImage = resizedImage.uuScaleToWidth(targetWidth: 1800.0 )
+		//}
+		
+		let d = UIImageJPEGRepresentation(resizedImage, 0.8)
 		
 		let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + ".jpg"
 		let params : [Any] = [ request.identity.blogId,

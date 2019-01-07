@@ -6,7 +6,11 @@
 //  Copyright © 2018 Micro.blog. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#if TARGET_OS_IPHONE
+	#import <UIKit/UIKit.h>
+#else
+	#import <Cocoa/Cocoa.h>
+#endif
 
 //! Project version number for MicroblogFramework.
 FOUNDATION_EXPORT double MicroblogFrameworkVersionNumber;

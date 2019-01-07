@@ -6,8 +6,16 @@
 //  Copyright © 2018 Jonathan Hays. All rights reserved.
 //
 
+#if os(macOS)
+import AppKit
+import UUSwiftMac
+public typealias MBImage = NSImage
+#else
 import UIKit
 import UUSwift
+public typealias MBImage = UIImage
+#endif
+
 
 public class MicroblogUser : NSObject
 {
@@ -21,7 +29,7 @@ public class MicroblogUser : NSObject
 	@objc public var userHandle = ""
 	@objc public var pathToUserImage = ""
 	@objc public var pathToWebSite = ""
-	@objc public var userImage : UIImage? = nil
+	@objc public var userImage : MBImage? = nil
 }
 
 
@@ -31,7 +39,7 @@ extension MicroblogUser {
 	{
 		if let imageData = UUDataCache.shared.data(for: self.pathToUserImage)
 		{
-			if let image = UIImage(data: imageData)
+			if let image = MBImage(data: imageData)
 			{
 				self.userImage = image
 				completion()
@@ -41,9 +49,9 @@ extension MicroblogUser {
 
 		// If we have gotten here, then there is no image available to display so we need to fetch it...
 		UUHttpSession.get(self.pathToUserImage, [:]) { (parsedServerResponse) in
-			if let image = parsedServerResponse.parsedResponse as? UIImage
+			if let image = parsedServerResponse.parsedResponse as? MBImage
 			{
-				if let imageData = image.pngData()
+				if let imageData = UIImagePNGRepresentation(image)
 				{
 					UUDataCache.shared.set(data: imageData, for: self.pathToUserImage)
 					self.userImage = image
