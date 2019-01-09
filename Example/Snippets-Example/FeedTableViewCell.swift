@@ -16,24 +16,26 @@ class FeedTableViewCell: UITableViewCell {
 	@IBOutlet var fullName : UILabel!
 	@IBOutlet var userName : UILabel!
 	@IBOutlet var userImage : UIImageView!
-	@IBOutlet var webView : WKWebView!
-	@IBOutlet var webViewHeightConstraint : NSLayoutConstraint!
+	@IBOutlet var textView : UITextView!
 	
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.webView.scrollView.isScrollEnabled = false
         self.selectionStyle = .none
     }
 
-	func configure(_ post : MicroblogPost, _ webViewHeight : CGFloat)
+	func configure(_ dictionary : [String : Any])
 	{
+		let post : MicroblogPost = dictionary["post"] as! MicroblogPost
+		
 		self.fullName.text = nil
 		self.userName.text = nil
 		self.userImage.image = nil
-		self.webViewHeightConstraint.constant = webViewHeight
+		self.textView.text = nil
 
-		let formattedText = "<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no'></header>" + post.htmlText
-		self.webView.loadHTMLString(formattedText, baseURL: nil)
+		let attributedString : NSAttributedString = dictionary["attributedString"] as? NSAttributedString ?? NSAttributedString(string: "")
+		
+		self.textView.attributedText = attributedString
+		
 		self.userName.text = "@\(post.owner.userHandle)"
 		self.fullName.text = post.owner.fullName
 

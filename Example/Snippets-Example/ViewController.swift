@@ -8,9 +8,8 @@
 
 import UIKit
 import Microblog
-import WebKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, WKNavigationDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
 	// User display elements
 	@IBOutlet var userImage : UIImageView!
@@ -28,16 +27,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	
 	// Feed display elements
 	@IBOutlet var tableView : UITableView!
-	var feedItems : [MicroblogPost] = []
-	
-	var webViewHeights : [ CGFloat ] = []
+	var feedItems : [[String : Any]] = []
 
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
 		
 		self.loginPopUpView.layer.cornerRadius = 8.0
-		//self.tableView.register(UINib(nibName: "FeedTableViewCell", bundle: nil), forCellReuseIdentifier: "FeedTableViewCell")
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(handleImageLoadedNotification(_:)), name: NSNotification.Name(rawValue: "UserAvatarImageLoaded"), object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(handleTemporaryTokenReceivedNotification(_:)), name: NSNotification.Name("TemporaryTokenReceivedNotification"), object: nil)
@@ -69,19 +65,144 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		//MicroBlogFramework.shared.fetchConversation(post: post) { (error, items) in
 		
 		MicroblogFramework.shared.fetchDiscoverTimeline(collection: "books") { (error, items) in
-			self.feedItems = items
-					
-			for _ in 0 ... items.count
-			{
-				self.webViewHeights.append(0.0)
+			
+			var parsedItems : [[String : Any]] = []
+			
+			for item in items {
+				var dictionary = self.extractImages(html: item.htmlText)
+				dictionary["post"] = item
+				
+				parsedItems.append(dictionary)
 			}
-					
+			
+			self.feedItems = parsedItems
+			
 			DispatchQueue.main.async {
 				self.tableView.reloadData()
 			}
 		}
 	}
 
+	func extractImages(html : String) -> [String : Any]
+	{
+		var content : NSString = html as NSString
+		var images : [String] = []
+		var dictionary : [String : Any] = [:]
+
+		if content.contains("<img")
+		{
+			var aspectRatio : CGFloat = 0.0
+			
+			while (content.contains("<img"))
+			{
+				var width : CGFloat = 0.0
+				var height : CGFloat = 0.0
+				
+				// Extract the entire image tag...
+				var image : NSString = content.substring(from: content.range(of: "<img").location) as NSString
+
+				if (image.contains("width=") && image.contains("height=")) {
+					var widthString : NSString = image.substring(from: image.range(of: "width=").location + 7) as NSString
+					var heightString: NSString = image.substring(from: image.range(of: "height=").location + 8) as NSString
+
+					widthString = widthString.substring(to: widthString.range(of: "\"").location) as NSString
+					heightString = heightString.substring(to: heightString.range(of: "\"").location) as NSString
+
+					width = CGFloat(widthString.floatValue);
+					height = CGFloat(heightString.floatValue);
+					
+					if (width > 0.0 && height > 0.0)
+					{
+						let currentAspectRatio = height / width
+						if (currentAspectRatio > aspectRatio) {
+							aspectRatio = currentAspectRatio
+						}
+					}
+				}
+				
+				image = image.substring(to: image.range(of: ">").location + 1) as NSString
+
+				let shouldIgnore = image.contains("1em;")
+
+				var replacement : NSString = ""
+
+				if (shouldIgnore)
+				{
+					if image.contains("alt=") {
+						var altTag : NSString = image.substring(from: image.range(of: "alt=").location + 4) as NSString
+						altTag = altTag.substring(from: altTag.range(of: "\"").location + 1) as NSString
+						altTag = altTag.substring(to: altTag.range(of: "\"").location) as NSString
+						replacement = altTag
+					}
+				}
+				
+				// Remove the image tag from the content...
+				content = content.replacingOccurrences(of: image as String, with: replacement as String) as NSString
+
+				// Pull just the actual URL from the image tag...
+				if (!shouldIgnore && image.contains("src=")) {
+					image = image.substring(from: image.range(of: "src=").location + 5) as NSString
+					image = image.substring(to: image.range(of: "\"").location) as NSString
+
+					//Because we are coming from HTML land, we need to be careful with & symbols
+					image = image.replacingOccurrences(of: "&amp;", with: "&") as NSString
+					
+					images.append(image as String)
+				}
+			}
+		}
+		
+		/*
+		// Remove trailing new lines and carriage returns
+		var hasTrailingWhitespace = content.hasSuffix("\n") ||
+									content.hasSuffix("\r") ||
+									content.hasSuffix("<p></p>")
+		
+		while hasTrailingWhitespace {
+
+			if content.hasSuffix("\n") || content.hasSuffix("\r") {
+				content = content.substring(to: content.length - 1) as NSString
+			}
+			else if content.hasSuffix("<p></p>") {
+				content = content.substring(to: content.length - 7) as NSString
+			}
+			
+			hasTrailingWhitespace = content.hasSuffix("\n") ||
+									content.hasSuffix("\r") ||
+									content.hasSuffix("<p></p>")
+		}
+		*/
+		
+		let htmlString = content as String;
+		let htmlData = htmlString.data(using: .utf16, allowLossyConversion: false)!
+		
+		let options : [NSAttributedString.DocumentReadingOptionKey : Any] = [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue]
+		var attributedString = try? NSAttributedString(data: htmlData, options: options, documentAttributes: nil)
+	
+		// After conversion from html, there are occassionally trailing carriage returns
+		if var attribString = attributedString {
+			while attribString.string.hasSuffix("\n") || attribString.string.hasSuffix("\r") {
+				attribString = attribString.attributedSubstring(from: NSRange(location: 0, length: attribString.length - 1))
+			}
+			
+			while attribString.string.hasPrefix("\n") || attribString.string.hasPrefix("\r") {
+				attribString = attribString.attributedSubstring(from: NSRange(location: 1, length: attribString.length - 1))
+			}
+			
+			attributedString = attribString
+		}
+		else {
+			attributedString = NSAttributedString(string:"")
+		}
+		
+		
+		dictionary["attributedString"] = attributedString
+		dictionary["images"] = images
+		dictionary["content"] = content
+		
+		return dictionary
+	}
+	
 	func updateUserConfiguration()
 	{
 		MicroblogFramework.shared.fetchUserInfo { (error, user) in
@@ -141,48 +262,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
     	let cell = tableView.dequeueReusableCell(withIdentifier: "FeedTableViewCell", for: indexPath) as! FeedTableViewCell
-		cell.webView.tag = indexPath.row
-
 		let post = self.feedItems[indexPath.row]
-		cell.webView.navigationDelegate = nil
-
-		let webViewHeight = self.webViewHeights[indexPath.row]
-		if webViewHeight == 0.0
-		{
-			cell.webView.navigationDelegate = self
-		}
-		
-		cell.configure(post, webViewHeight)
+		cell.configure(post)
 		
     	return cell
 	}
 	
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// MARK: - WKNavigationDelegate
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-	func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!)
-	{
-		let index = webView.tag
-
-		if (self.webViewHeights[index] == 0.0)
-		{
-			webView.evaluateJavaScript("Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight)") { (result, error) in
-			
-				if let height = result as? NSNumber
-				{
-					self.webViewHeights[index] = CGFloat(height.floatValue)
-	
-					DispatchQueue.main.async {
-						self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-					}
-				}
-			}
-		}
-	}
-
-
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// MARK: - IBActions
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
