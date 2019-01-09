@@ -21,6 +21,7 @@ class FeedTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.selectionStyle = .none
+		self.userImage.layer.cornerRadius = 8.0
     }
 
 	func configure(_ dictionary : [String : Any])

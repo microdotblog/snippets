@@ -34,6 +34,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		super.viewDidLoad()
 		
 		self.loginPopUpView.layer.cornerRadius = 8.0
+		self.userImage.layer.cornerRadius = 8.0
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(handleImageLoadedNotification(_:)), name: NSNotification.Name(rawValue: "UserAvatarImageLoaded"), object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(handleTemporaryTokenReceivedNotification(_:)), name: NSNotification.Name("TemporaryTokenReceivedNotification"), object: nil)
@@ -178,7 +179,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		
 		let options : [NSAttributedString.DocumentReadingOptionKey : Any] = [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue]
 		var attributedString = try? NSAttributedString(data: htmlData, options: options, documentAttributes: nil)
-	
+		
 		// After conversion from html, there are occassionally trailing carriage returns
 		if var attribString = attributedString {
 			while attribString.string.hasSuffix("\n") || attribString.string.hasSuffix("\r") {
@@ -195,7 +196,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 			attributedString = NSAttributedString(string:"")
 		}
 		
+		let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString!)
+		mutableAttributedString.addAttributes([.font : UIFont(name: "AvenirNext-Regular", size: 14.0) as Any], range: NSRange(location: 0, length: attributedString!.length))
+		attributedString = mutableAttributedString
 		
+
 		dictionary["attributedString"] = attributedString
 		dictionary["images"] = images
 		dictionary["content"] = content
