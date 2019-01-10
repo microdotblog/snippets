@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C5AD83C421E687D600BB2D74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AD83C321E687D600BB2D74 /* AppDelegate.swift */; };
+		C5AD83CB21E687D700BB2D74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5AD83CA21E687D700BB2D74 /* Assets.xcassets */; };
+		C5AD83D821E6882900BB2D74 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056C821BF1D6300E502DF /* ViewController.swift */; };
+		C5AD83D921E6883500BB2D74 /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056DE21BF1EE100E502DF /* FeedTableViewCell.swift */; };
+		C5AD83DA21E6886200BB2D74 /* MicroblogFrameworkTV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5AD83D521E687D700BB2D74 /* MicroblogFrameworkTV.framework */; };
+		C5AD83DC21E6886900BB2D74 /* UUSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5AD83DB21E6886900BB2D74 /* UUSwift.framework */; };
+		C5AD83E121E6BC7300BB2D74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5AD83C721E687D600BB2D74 /* Main.storyboard */; };
 		C5F056C721BF1D6300E502DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056C621BF1D6300E502DF /* AppDelegate.swift */; };
 		C5F056C921BF1D6300E502DF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056C821BF1D6300E502DF /* ViewController.swift */; };
 		C5F056CC21BF1D6300E502DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5F056CA21BF1D6300E502DF /* Main.storyboard */; };
@@ -17,6 +24,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		C5AD83D221E687D700BB2D74 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C5F056E521BF2EE600E502DF /* MicroblogFramework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C55A728021E0127C00E31A25;
+			remoteInfo = MicroblogFrameworkMac;
+		};
+		C5AD83D421E687D700BB2D74 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C5F056E521BF2EE600E502DF /* MicroblogFramework.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C5FE23CB21E56F1600A3BB23;
+			remoteInfo = MicroblogFrameworkTV;
+		};
 		C5F056EA21BF2EE600E502DF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C5F056E521BF2EE600E502DF /* MicroblogFramework.xcodeproj */;
@@ -27,6 +48,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C5AD83C121E687D600BB2D74 /* Snippets-ExampleTV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Snippets-ExampleTV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C5AD83C321E687D600BB2D74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C5AD83C821E687D600BB2D74 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C5AD83CA21E687D700BB2D74 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C5AD83CC21E687D700BB2D74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C5AD83DB21E6886900BB2D74 /* UUSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UUSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5F056C321BF1D6300E502DF /* Snippets-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Snippets-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5F056C621BF1D6300E502DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5F056C821BF1D6300E502DF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -41,6 +68,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		C5AD83BE21E687D600BB2D74 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C5AD83DC21E6886900BB2D74 /* UUSwift.framework in Frameworks */,
+				C5AD83DA21E6886200BB2D74 /* MicroblogFrameworkTV.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C5F056C021BF1D6300E502DF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -52,11 +88,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C5AD83C221E687D600BB2D74 /* Snippets-ExampleTV */ = {
+			isa = PBXGroup;
+			children = (
+				C5AD83C321E687D600BB2D74 /* AppDelegate.swift */,
+				C5AD83C721E687D600BB2D74 /* Main.storyboard */,
+				C5AD83CA21E687D700BB2D74 /* Assets.xcassets */,
+				C5AD83CC21E687D700BB2D74 /* Info.plist */,
+			);
+			path = "Snippets-ExampleTV";
+			sourceTree = "<group>";
+		};
 		C5F056BA21BF1D6300E502DF = {
 			isa = PBXGroup;
 			children = (
 				C5F056E521BF2EE600E502DF /* MicroblogFramework.xcodeproj */,
 				C5F056C521BF1D6300E502DF /* Snippets-Example */,
+				C5AD83C221E687D600BB2D74 /* Snippets-ExampleTV */,
 				C5F056C421BF1D6300E502DF /* Products */,
 				C5F056D921BF1DAF00E502DF /* Frameworks */,
 			);
@@ -66,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				C5F056C321BF1D6300E502DF /* Snippets-Example.app */,
+				C5AD83C121E687D600BB2D74 /* Snippets-ExampleTV.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,6 +136,7 @@
 		C5F056D921BF1DAF00E502DF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C5AD83DB21E6886900BB2D74 /* UUSwift.framework */,
 				C5F056E121BF2C7A00E502DF /* Microblog.framework */,
 				C5F056DA21BF1DAF00E502DF /* MicroblogFramework.framework */,
 			);
@@ -97,6 +147,8 @@
 			isa = PBXGroup;
 			children = (
 				C5F056EB21BF2EE600E502DF /* Microblog.framework */,
+				C5AD83D321E687D700BB2D74 /* MicroblogFrameworkMac.framework */,
+				C5AD83D521E687D700BB2D74 /* MicroblogFrameworkTV.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,6 +156,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		C5AD83C021E687D600BB2D74 /* Snippets-ExampleTV */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C5AD83D621E687D700BB2D74 /* Build configuration list for PBXNativeTarget "Snippets-ExampleTV" */;
+			buildPhases = (
+				C5AD83BD21E687D600BB2D74 /* Sources */,
+				C5AD83BE21E687D600BB2D74 /* Frameworks */,
+				C5AD83BF21E687D600BB2D74 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Snippets-ExampleTV";
+			productName = "Snippets-ExampleTV";
+			productReference = C5AD83C121E687D600BB2D74 /* Snippets-ExampleTV.app */;
+			productType = "com.apple.product-type.application";
+		};
 		C5F056C221BF1D6300E502DF /* Snippets-Example */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C5F056D521BF1D6400E502DF /* Build configuration list for PBXNativeTarget "Snippets-Example" */;
@@ -131,6 +200,9 @@
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = Micro.blog;
 				TargetAttributes = {
+					C5AD83C021E687D600BB2D74 = {
+						CreatedOnToolsVersion = 10.1;
+					};
 					C5F056C221BF1D6300E502DF = {
 						CreatedOnToolsVersion = 10.1;
 					};
@@ -156,11 +228,26 @@
 			projectRoot = "";
 			targets = (
 				C5F056C221BF1D6300E502DF /* Snippets-Example */,
+				C5AD83C021E687D600BB2D74 /* Snippets-ExampleTV */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		C5AD83D321E687D700BB2D74 /* MicroblogFrameworkMac.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MicroblogFrameworkMac.framework;
+			remoteRef = C5AD83D221E687D700BB2D74 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C5AD83D521E687D700BB2D74 /* MicroblogFrameworkTV.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MicroblogFrameworkTV.framework;
+			remoteRef = C5AD83D421E687D700BB2D74 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		C5F056EB21BF2EE600E502DF /* Microblog.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -171,6 +258,15 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		C5AD83BF21E687D600BB2D74 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C5AD83CB21E687D700BB2D74 /* Assets.xcassets in Resources */,
+				C5AD83E121E6BC7300BB2D74 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C5F056C121BF1D6300E502DF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -184,6 +280,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		C5AD83BD21E687D600BB2D74 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C5AD83D821E6882900BB2D74 /* ViewController.swift in Sources */,
+				C5AD83D921E6883500BB2D74 /* FeedTableViewCell.swift in Sources */,
+				C5AD83C421E687D600BB2D74 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C5F056BF21BF1D6300E502DF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -197,6 +303,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		C5AD83C721E687D600BB2D74 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C5AD83C821E687D600BB2D74 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		C5F056CA21BF1D6300E502DF /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -216,6 +330,48 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		C5AD83CD21E687D700BB2D74 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
+				INFOPLIST_FILE = "Snippets-ExampleTV/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "blog.micro.Snippets-ExampleTV";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+			};
+			name = Debug;
+		};
+		C5AD83CE21E687D700BB2D74 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
+				INFOPLIST_FILE = "Snippets-ExampleTV/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "blog.micro.Snippets-ExampleTV";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+			};
+			name = Release;
+		};
 		C5F056D321BF1D6400E502DF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -371,6 +527,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		C5AD83D621E687D700BB2D74 /* Build configuration list for PBXNativeTarget "Snippets-ExampleTV" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C5AD83CD21E687D700BB2D74 /* Debug */,
+				C5AD83CE21E687D700BB2D74 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C5F056BE21BF1D6300E502DF /* Build configuration list for PBXProject "Snippets-Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

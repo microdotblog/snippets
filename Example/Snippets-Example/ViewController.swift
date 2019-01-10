@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UUSwift
 import Microblog
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -280,17 +281,38 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	@IBAction func onLogin()
 	{
 		self.loginErrorLabel.isHidden = true
+		let loginString = self.emailAddressField.text
 		
-		MicroblogFramework.shared.requestUserLoginEmail(email: self.emailAddressField.text!, appName: "SnipIt", redirect: "blog.micro.snipit://login/")
-		{ (err) in
+		if loginString!.contains(".") {
+			MicroblogFramework.shared.requestUserLoginEmail(email: self.emailAddressField.text!, appName: "SnipIt", redirect: "blog.micro.snipit://login/")
+			{ (err) in
 		
-			if let error = err
-			{
-				DispatchQueue.main.async {
-					self.loginErrorLabel.isHidden = false
-					self.loginErrorLabel.text = error.localizedDescription
+				if let error = err
+				{
+					DispatchQueue.main.async {
+						self.loginErrorLabel.isHidden = false
+						self.loginErrorLabel.text = error.localizedDescription
+					}
 				}
 			}
+		}
+		else
+		{
+			MicroblogFramework.shared.requestPermanentTokenFromTemporaryToken(token: loginString!) { (error, token) in
+				if let permanentToken = token
+				{
+					self.savePermanentToken(permanentToken)
+					
+					DispatchQueue.main.async {
+						self.loginPopUpView.isHidden = true
+						self.postView.isHidden = false
+						self.loginPopUpView.isHidden = true
+						self.updateUserTimeline()
+						self.updateUserConfiguration()
+					}
+				}
+			}
+
 		}
 	}
 

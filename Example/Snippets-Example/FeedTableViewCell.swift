@@ -9,7 +9,6 @@
 import UIKit
 import UUSwift
 import Microblog
-import WebKit
 
 class FeedTableViewCell: UITableViewCell {
 
