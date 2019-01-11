@@ -56,7 +56,7 @@
 
 /* Begin PBXFileReference section */
 		C55A726F21DFEEF000E31A25 /* UUSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UUSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C55A728021E0127C00E31A25 /* MicroblogFrameworkMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MicroblogFrameworkMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55A728021E0127C00E31A25 /* Microblog.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Microblog.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5BD70E221C8242B00FC37AB /* Microblog+XMLRPC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Microblog+XMLRPC.swift"; sourceTree = "<group>"; };
 		C5BD70E521C8515500FC37AB /* Microblog+XMLParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Microblog+XMLParsing.swift"; sourceTree = "<group>"; };
 		C5CC682521E03EE800B48D59 /* UUSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UUSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,7 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				C5F0569F21BF19E900E502DF /* Microblog.framework */,
-				C55A728021E0127C00E31A25 /* MicroblogFrameworkMac.framework */,
+				C55A728021E0127C00E31A25 /* Microblog.framework */,
 				C5FE23CB21E56F1600A3BB23 /* Microblog.framework */,
 			);
 			name = Products;
@@ -200,7 +200,7 @@
 			);
 			name = MicroblogFrameworkMac;
 			productName = MicroblogFrameworkMac;
-			productReference = C55A728021E0127C00E31A25 /* MicroblogFrameworkMac.framework */;
+			productReference = C55A728021E0127C00E31A25 /* Microblog.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		C5F0569E21BF19E900E502DF /* MicroblogFramework */ = {
@@ -395,7 +395,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.MicroblogFrameworkMac;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = Microblog;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -422,7 +422,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.MicroblogFrameworkMac;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = Microblog;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -613,6 +613,7 @@
 		C5FE23D121E56F1600A3BB23 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -633,13 +634,14 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 12.1;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Debug;
 		};
 		C5FE23D221E56F1600A3BB23 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -660,7 +662,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 12.1;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Release;
 		};
