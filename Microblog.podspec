@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
 
   	s.homepage         = "https://github.com/riverfold/snippets-example"
   	s.author           = "Micro.blog"
-  	s.license          = { :type => 'Apache 2.0' }
+  	s.license          = { :type => 'MIT' }
   	s.source           = { :git => "https://github.com/riverfold/snippets-example.git", :tag => s.version.to_s }
 
 #s.platform = :ios
