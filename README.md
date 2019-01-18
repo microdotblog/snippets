@@ -20,7 +20,7 @@ This library is written entirely in Swift but has been made compatible with Obje
 The Snippets framework is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your `Podfile`:
 
 ```
-pod 'Snippets'
+pod 'SnippetsFramework'
 ```
 
 ### - Carthage

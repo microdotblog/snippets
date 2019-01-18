@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 	s.dependency 'UUSwift'
 
 	s.subspec 'Core' do |ss|
-    	ss.source_files = 'MicroblogFramework/**/*.{h,m,swift}'
+    	ss.source_files = 'Snippets/**/*.{h,m,swift}'
     	ss.ios.frameworks = 'UIKit', 'Foundation', 'UUSwift'
 		ss.osx.frameworks = 'CoreFoundation', 'UUSwift'
   	end
