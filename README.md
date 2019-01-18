@@ -31,11 +31,6 @@ UUSwift may be installed via [Carthage](https://github.com/Carthage/Carthage). T
 github "microdotblog/snippets"
 ```
 
-
-## Contributing
-and
-Please **open pull requests against the `develop` branch**
-
 ## License
 
 The Snippets framework is available under the MIT license. See [`LICENSE.md`](https://github.com/microdotblog/snippets/blob/develop/LICENSE.md) for more information.
