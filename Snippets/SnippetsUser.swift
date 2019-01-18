@@ -9,11 +9,11 @@
 #if os(macOS)
 import AppKit
 import UUSwift
-public typealias MBImage = NSImage
+public typealias SnippetsImage = NSImage
 #else
 import UIKit
 import UUSwift
-public typealias MBImage = UIImage
+public typealias SnippetsImage = UIImage
 #endif
 
 
@@ -29,7 +29,7 @@ public class SnippetsUser : NSObject
 	@objc public var userHandle = ""
 	@objc public var pathToUserImage = ""
 	@objc public var pathToWebSite = ""
-	@objc public var userImage : MBImage? = nil
+	@objc public var userImage : SnippetsImage? = nil
 }
 
 
@@ -39,7 +39,7 @@ extension SnippetsUser {
 	{
 		if let imageData = UUDataCache.shared.data(for: self.pathToUserImage)
 		{
-			if let image = MBImage(data: imageData)
+			if let image = SnippetsImage(data: imageData)
 			{
 				self.userImage = image
 				completion()
@@ -49,7 +49,7 @@ extension SnippetsUser {
 
 		// If we have gotten here, then there is no image available to display so we need to fetch it...
 		UUHttpSession.get(self.pathToUserImage, [:]) { (parsedServerResponse) in
-			if let image = parsedServerResponse.parsedResponse as? MBImage
+			if let image = parsedServerResponse.parsedResponse as? SnippetsImage
 			{
 				if let imageData = image.uuPngData()
 				{

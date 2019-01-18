@@ -438,7 +438,7 @@ public class Snippets : NSObject {
 	}
 	
 	
-	@objc public func uploadImage(image : MBImage, completion: @escaping(Error?, String?)->())
+	@objc public func uploadImage(image : SnippetsImage, completion: @escaping(Error?, String?)->())
 	{
 		let resizedImage = image
 		//var resizedImage = image

@@ -177,7 +177,7 @@ extension Snippets {
 	}
 	
 
-	@objc public func uploadImage(image : MBImage, 	request : SnippetsXMLRPCRequest,
+	@objc public func uploadImage(image : SnippetsImage, 	request : SnippetsXMLRPCRequest,
 													completion: @escaping(Error?, String?, String?) -> ())
 	{
 		let resizedImage = image
