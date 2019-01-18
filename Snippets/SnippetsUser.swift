@@ -1,6 +1,6 @@
 //
-//  MicroblogUser.swift
-//  MicroblogFramework
+//  SnippetsUser.swift
+//  SnippetsFramework
 //
 //  Created by Jonathan Hays on 10/24/18.
 //  Copyright © 2018 Jonathan Hays. All rights reserved.
@@ -17,7 +17,7 @@ public typealias MBImage = UIImage
 #endif
 
 
-public class MicroblogUser : NSObject
+public class SnippetsUser : NSObject
 {
 	public convenience init(_ dictionary : [String : Any])
 	{
@@ -33,7 +33,7 @@ public class MicroblogUser : NSObject
 }
 
 
-extension MicroblogUser {
+extension SnippetsUser {
 
 	@objc public func loadUserImage(completion: @escaping()-> ())
 	{
@@ -67,9 +67,9 @@ extension MicroblogUser {
 		{
 			self.userHandle = userName
 		}
-		else if let microblogDictionary = authorDictionary["_microblog"] as? [String : Any]
+		else if let SnippetsDictionary = authorDictionary["_Snippets"] as? [String : Any]
 		{
-			if let userName = microblogDictionary["username"] as? String
+			if let userName = SnippetsDictionary["username"] as? String
 			{
 				self.userHandle = userName
 			}

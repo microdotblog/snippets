@@ -8,7 +8,7 @@
 
 import UIKit
 import UUSwift
-import Microblog
+import Snippets
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -43,7 +43,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		// If we have a valid token, we don't need to show the login popup
 		if self.permanentToken() != nil
 		{
-			MicroblogFramework.shared.configure(permanentToken: self.permanentToken()!, blogUid: nil)
+			Snippets.shared.configure(permanentToken: self.permanentToken()!, blogUid: nil)
 			
 			self.postView.isHidden = false
 			self.loginPopUpView.isHidden = true
@@ -54,19 +54,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
 	func updateUserTimeline()
 	{
-		//MicroBlogFramework.shared.fetchUserTimeline { (error, items) in
-		//MicroBlogFramework.shared.fetchUserFavorites { (error, items) in
+		//Snippets.shared.fetchUserTimeline { (error, items) in
+		//Snippets.shared.fetchUserFavorites { (error, items) in
 
 
-		//let user = MicroBlogUser()
+		//let user = SnippetsUser()
 		//user.userHandle = "manton"
-		//MicroBlogFramework.shared.fetchUserPosts(user: user) { (error, items) in
+		//Snippets.shared.fetchUserPosts(user: user) { (error, items) in
 
-		//let post = MicroBlogPost()
+		//let post = SnippetsPost()
 		//post.identifier = "984880"
-		//MicroBlogFramework.shared.fetchConversation(post: post) { (error, items) in
+		//Snippets.shared.fetchConversation(post: post) { (error, items) in
 		
-		MicroblogFramework.shared.fetchDiscoverTimeline(collection: "books") { (error, items) in
+		Snippets.shared.fetchDiscoverTimeline(collection: "books") { (error, items) in
 			
 			var parsedItems : [[String : Any]] = []
 			
@@ -211,7 +211,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	
 	func updateUserConfiguration()
 	{
-		MicroblogFramework.shared.fetchUserInfo { (error, user) in
+		Snippets.shared.fetchUserInfo { (error, user) in
 			
 			DispatchQueue.main.async {
 				self.userName.text = user?.userHandle
@@ -234,7 +234,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	{
 		if let temporaryToken = notification.object as? String
 		{
-			MicroblogFramework.shared.requestPermanentTokenFromTemporaryToken(token: temporaryToken) { (error, token) in
+			Snippets.shared.requestPermanentTokenFromTemporaryToken(token: temporaryToken) { (error, token) in
 				if let permanentToken = token
 				{
 					self.savePermanentToken(permanentToken)
@@ -284,7 +284,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		let loginString = self.emailAddressField.text
 		
 		if loginString!.contains(".") {
-			MicroblogFramework.shared.requestUserLoginEmail(email: self.emailAddressField.text!, appName: "SnipIt", redirect: "blog.micro.snipit://login/")
+			Snippets.shared.requestUserLoginEmail(email: self.emailAddressField.text!, appName: "SnipIt", redirect: "blog.micro.snipit://login/")
 			{ (err) in
 		
 				if let error = err
@@ -298,7 +298,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		}
 		else
 		{
-			MicroblogFramework.shared.requestPermanentTokenFromTemporaryToken(token: loginString!) { (error, token) in
+			Snippets.shared.requestPermanentTokenFromTemporaryToken(token: loginString!) { (error, token) in
 				if let permanentToken = token
 				{
 					self.savePermanentToken(permanentToken)
@@ -321,7 +321,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	{
 		if let image = UIImage(named: "scissors")
 		{
-			MicroblogFramework.shared.uploadImage(image: image) { (error, path) in
+			Snippets.shared.uploadImage(image: image) { (error, path) in
 			}
 		}
 	}
@@ -332,7 +332,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		if let textToPost = self.postTextField.text
 		{
 			self.postTextField.text = nil
-			MicroblogFramework.shared.postText(title: "", content: textToPost, photos: [], altTags: []) { (error, pathToPost) in
+			Snippets.shared.postText(title: "", content: textToPost, photos: [], altTags: []) { (error, pathToPost) in
 			}
 		}
 	}

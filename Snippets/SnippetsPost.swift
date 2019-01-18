@@ -1,6 +1,6 @@
 //
-//  MicroblogPost.swift
-//  MicroblogFramework
+//  SnippetsPost.swift
+//  SnippetsFramework
 //
 //  Created by Jonathan Hays on 10/24/18.
 //  Copyright © 2018 Jonathan Hays. All rights reserved.
@@ -15,7 +15,7 @@ import UUSwift
 #endif
 
 
-public class MicroblogPost : NSObject
+public class SnippetsPost : NSObject
 {
 	public convenience init(_ dictionary : [String : Any])
 	{
@@ -24,15 +24,15 @@ public class MicroblogPost : NSObject
 	}
 	
 	@objc public var identifier = ""
-	@objc public var owner = MicroblogUser()
+	@objc public var owner = SnippetsUser()
 	@objc public var htmlText = ""
 	@objc public var path = ""
 	@objc public var publishedDate : Date?
-	@objc public var replies : [MicroblogPost] = []
+	@objc public var replies : [SnippetsPost] = []
 }
 
 
-extension MicroblogPost {
+extension SnippetsPost {
 
 	func loadFromDictionary(_ dictionary : [String : Any])
 	{

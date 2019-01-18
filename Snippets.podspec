@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
-  	s.name             = "Microblog"
+  	s.name             = "Snippets"
   	s.version          = "0.0.1"
 
   	s.description      = <<-DESC
-                       The Microblog framework enabled drop-in functionality to interact with the Micro.blog platform.
+                       The Snippets framework enables drop-in functionality to interact with the Micro.blog platform.
                        DESC
   	s.summary          = "A Swift library for interacting with the Micro.blog platform"
 

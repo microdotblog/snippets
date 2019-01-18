@@ -1,6 +1,6 @@
 //
-//  Microblog+XMLRPC.swift
-//  MicroblogFramework
+//  Snippets+XMLRPC.swift
+//  SnippetsFramework
 //
 //  Created by Jonathan Hays on 12/17/18.
 //  Copyright © 2018 Micro.blog. All rights reserved.
@@ -15,10 +15,10 @@ import UIKit
 import UUSwift
 
 
-@objc public class MicroblogXMLRPCIdentity : NSObject {
+@objc public class SnippetsXMLRPCIdentity : NSObject {
 
-	@objc static public func create(username : String, password : String, endpoint : String, blogId : String, wordPress : Bool) -> MicroblogXMLRPCIdentity {
-		let identity = MicroblogXMLRPCIdentity()
+	@objc static public func create(username : String, password : String, endpoint : String, blogId : String, wordPress : Bool) -> SnippetsXMLRPCIdentity {
+		let identity = SnippetsXMLRPCIdentity()
 		identity.blogUsername = username
 		identity.blogPassword = password
 		identity.endpoint = endpoint
@@ -39,9 +39,9 @@ import UUSwift
 }
 
 
-@objc public class MicroblogXMLRPCRequest : NSObject {
+@objc public class SnippetsXMLRPCRequest : NSObject {
 
-	@objc static public func publishPostRequest(identity : MicroblogXMLRPCIdentity, existingPost : Bool) -> MicroblogXMLRPCRequest {
+	@objc static public func publishPostRequest(identity : SnippetsXMLRPCIdentity, existingPost : Bool) -> SnippetsXMLRPCRequest {
 	
 		var method = ""
 		if (identity.wordPress && existingPost) {
@@ -57,47 +57,47 @@ import UUSwift
 			method =  "metaWeblog.newPost"
 		}
 
-		return MicroblogXMLRPCRequest(identity : identity, method: method)
+		return SnippetsXMLRPCRequest(identity : identity, method: method)
 	}
 
-	@objc static public func publishPhotoRequest(identity : MicroblogXMLRPCIdentity) -> MicroblogXMLRPCRequest {
+	@objc static public func publishPhotoRequest(identity : SnippetsXMLRPCIdentity) -> SnippetsXMLRPCRequest {
 		let method = "metaWeblog.newMediaObject"
-		return MicroblogXMLRPCRequest(identity: identity, method: method)
+		return SnippetsXMLRPCRequest(identity: identity, method: method)
 	}
 
-	@objc static public func unpublishRequest(identity : MicroblogXMLRPCIdentity) -> MicroblogXMLRPCRequest {
+	@objc static public func unpublishRequest(identity : SnippetsXMLRPCIdentity) -> SnippetsXMLRPCRequest {
 		let method = "metaWeblog.deletePost"
-		return MicroblogXMLRPCRequest(identity : identity, method: method)
+		return SnippetsXMLRPCRequest(identity : identity, method: method)
 	}
 	
-	@objc static public func fetchPostInfoRequest(identity : MicroblogXMLRPCIdentity) -> MicroblogXMLRPCRequest {
+	@objc static public func fetchPostInfoRequest(identity : SnippetsXMLRPCIdentity) -> SnippetsXMLRPCRequest {
 
 		var method = "metaWeblog.getPost"
 		if identity.wordPress {
 			method = "wp.getPost"
 		}
 
-		return MicroblogXMLRPCRequest(identity : identity, method: method)
+		return SnippetsXMLRPCRequest(identity : identity, method: method)
 	}
 
-	@objc public convenience init(identity : MicroblogXMLRPCIdentity, method : String) {
+	@objc public convenience init(identity : SnippetsXMLRPCIdentity, method : String) {
 		self.init()
 
 		self.identity = identity
 		self.method = method
 	}
 
-	var identity : MicroblogXMLRPCIdentity = MicroblogXMLRPCIdentity()
+	var identity : SnippetsXMLRPCIdentity = SnippetsXMLRPCIdentity()
 	var method = ""
 	
 }
 
 
-extension MicroblogFramework {
+extension Snippets {
 
-	@objc public func executeRPC(request : MicroblogXMLRPCRequest, params:[Any], completion: @escaping(Error?,Data?) -> ()) {
+	@objc public func executeRPC(request : SnippetsXMLRPCRequest, params:[Any], completion: @escaping(Error?,Data?) -> ()) {
 		
-		let xmlRPCRequest = MicroblogRPCDiscovery(url: request.identity.endpoint)
+		let xmlRPCRequest = SnippetsRPCDiscovery(url: request.identity.endpoint)
 		_ = xmlRPCRequest.sendMethod(method: request.method, params: params) { (response) in
 			completion(response.httpError, response.rawResponse)
 		}
@@ -108,7 +108,7 @@ extension MicroblogFramework {
 							   content : String,
 							   postFormat : String,
 							   postCategory : String,
-							   request : MicroblogXMLRPCRequest, completion: @escaping(Error?, String?) -> ()) {
+							   request : SnippetsXMLRPCRequest, completion: @escaping(Error?, String?) -> ()) {
 		
 		let params : [Any] = self.buildPostParameters(identity : request.identity,
 													  postIdentifier: postIdentifier,
@@ -121,7 +121,7 @@ extension MicroblogFramework {
 		{ (error, responseData) in
 
 			if let data : Data = responseData {
-				MicroblogXMLRPCParser.parsedResponseFromData(data, completion:
+				SnippetsXMLRPCParser.parsedResponseFromData(data, completion:
 				{ (responseFault, responseParams) in
 					if responseFault == nil {
 						let postId : String? = responseParams.first as? String
@@ -146,7 +146,7 @@ extension MicroblogFramework {
 						   content : String,
 						   postFormat : String,
 						   postCategory : String,
-						   request : MicroblogXMLRPCRequest, completion: @escaping(Error?, String?) -> ()) {
+						   request : SnippetsXMLRPCRequest, completion: @escaping(Error?, String?) -> ()) {
 
 		let params : [Any] = self.buildPostParameters(identity:request.identity,
 													  postIdentifier: nil,
@@ -158,7 +158,7 @@ extension MicroblogFramework {
 		self.executeRPC(request: request, params: params) { (error, responseData) in
 
 			if let data : Data = responseData {
-				MicroblogXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
+				SnippetsXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
 					if responseFault == nil {
 						let postId : String? = responseParams.first as? String
 						completion(error, postId)
@@ -177,7 +177,7 @@ extension MicroblogFramework {
 	}
 	
 
-	@objc public func uploadImage(image : MBImage, 	request : MicroblogXMLRPCRequest,
+	@objc public func uploadImage(image : MBImage, 	request : SnippetsXMLRPCRequest,
 													completion: @escaping(Error?, String?, String?) -> ())
 	{
 		let resizedImage = image
@@ -198,7 +198,7 @@ extension MicroblogFramework {
 
 		self.executeRPC(request: request, params: params) { (error, responseData) in
 			if let data : Data = responseData {
-				MicroblogXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
+				SnippetsXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
 
 					if responseFault == nil {
 						var imageUrl : String? = nil
@@ -233,13 +233,13 @@ extension MicroblogFramework {
 		}
 	}
 	
-	@objc public func unpublish(postIdentifier : String, request : MicroblogXMLRPCRequest, completion: @escaping(Error?) -> ()) {
+	@objc public func unpublish(postIdentifier : String, request : SnippetsXMLRPCRequest, completion: @escaping(Error?) -> ()) {
 
 		let params : [Any] = [ "", postIdentifier, request.identity.blogUsername, request.identity.blogPassword ]
 		
 		self.executeRPC(request: request, params: params) { (error, responseData) in
 			if let data : Data = responseData {
-				MicroblogXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
+				SnippetsXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
 					if let fault = responseFault {
 				
 						let error = self.buildCustomErrorFromResponseFault(fault)
@@ -260,7 +260,7 @@ extension MicroblogFramework {
 		}
 	}
 
-	@objc public func fetchPostURL(postIdentifier : String, request : MicroblogXMLRPCRequest, completion: @escaping(Error?, String?) -> ()) {
+	@objc public func fetchPostURL(postIdentifier : String, request : SnippetsXMLRPCRequest, completion: @escaping(Error?, String?) -> ()) {
 		
 		var params : [Any] = [ postIdentifier, request.identity.blogUsername, request.identity.blogPassword ]
 		if request.identity.wordPress == true {
@@ -270,7 +270,7 @@ extension MicroblogFramework {
 
 		self.executeRPC(request: request, params: params) { (error, responseData) in
 			if let data : Data = responseData {
-				MicroblogXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
+				SnippetsXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
 					if let responseDictionary = responseParams.first as? NSDictionary {
 						var url : String? = responseDictionary.object(forKey: "url") as? String
 						if (url == nil) {
@@ -308,7 +308,7 @@ extension MicroblogFramework {
 		return error
 	}
 	
-	private func buildPostParameters(identity : MicroblogXMLRPCIdentity,
+	private func buildPostParameters(identity : SnippetsXMLRPCIdentity,
 									 postIdentifier : String?,
 									 title : String,
 									 htmlContent : String,

@@ -1,6 +1,6 @@
 //
-//  Microblog.swift
-//  MicroblogFramework
+//  Snippets.swift
+//  Snippets
 //
 //  Created by Jonathan Hays on 10/22/18.
 //  Copyright © 2018 Jonathan Hays. All rights reserved.
@@ -15,9 +15,9 @@ import UUSwift
 #endif
 
 
-public class MicroblogFramework : NSObject {
+public class Snippets : NSObject {
 
-	@objc public static let shared = MicroblogFramework()
+	@objc public static let shared = Snippets()
 	
 	@objc public func configure(permanentToken : String, blogUid : String?)
 	{
@@ -71,8 +71,8 @@ public class MicroblogFramework : NSObject {
 	// MARK: - User Info
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Returns a MicroblogUser for the currently signed-in user
-	@objc public func fetchUserInfo(completion: @escaping(Error?, MicroblogUser?)-> ())
+	// Returns a SnippetsUser for the currently signed-in user
+	@objc public func fetchUserInfo(completion: @escaping(Error?, SnippetsUser?)-> ())
 	{
 		let arguments : [String : String] = [ "token" : token ]
 		let request = self.securePost(path: self.pathForRoute("account/verify"), arguments: arguments)
@@ -80,7 +80,7 @@ public class MicroblogFramework : NSObject {
 		_ = UUHttpSession.executeRequest(request) { (parsedServerResponse) in
 			if let dictionary = parsedServerResponse.parsedResponse as? [String : Any]
 			{
-				let user = MicroblogUser(dictionary)
+				let user = SnippetsUser(dictionary)
 				completion(parsedServerResponse.httpError, user)
 			}
 			else
@@ -115,7 +115,7 @@ public class MicroblogFramework : NSObject {
 	// MARK: - Timeline interface for the signed-in user
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private func fetchTimeline(_ path : String, completion: @escaping(Error?, [MicroblogPost]) -> ())
+	private func fetchTimeline(_ path : String, completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		let request = self.secureGet(path: path, arguments: [:])
 		
@@ -124,11 +124,11 @@ public class MicroblogFramework : NSObject {
 			{
 				if let items = feedDictionary["items"] as? [[String : Any]]
 				{
-					var posts : [ MicroblogPost ] = []
+					var posts : [ SnippetsPost ] = []
 					
 					for dictionary : [String : Any] in items
 					{
-						let post = MicroblogPost(dictionary)
+						let post = SnippetsPost(dictionary)
 						posts.append(post)
 					}
 					
@@ -142,27 +142,27 @@ public class MicroblogFramework : NSObject {
 		}
 	}
 	
-	@objc public func fetchUserTimeline(completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchUserTimeline(completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/all"), completion: completion)
 	}
 	
-	@objc public func fetchUserPhotoTimeline(completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchUserPhotoTimeline(completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/photos"), completion: completion)
 	}
 
-	@objc public func fetchUserMentions(completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchUserMentions(completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/mentions"), completion: completion)
 	}
 
-	@objc public func fetchUserFavorites(completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchUserFavorites(completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/favorites"), completion: completion)
 	}
 
-	@objc public func fetchDiscoverTimeline(collection : String? = nil, completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchDiscoverTimeline(collection : String? = nil, completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		if let validCollection = collection
 		{
@@ -175,19 +175,19 @@ public class MicroblogFramework : NSObject {
 		}
 	}
 
-	@objc public func fetchUserPosts(user : MicroblogUser, completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchUserPosts(user : SnippetsUser, completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		let route = "posts/\(user.userHandle)"
 		self.fetchTimeline(self.pathForRoute(route), completion: completion)
 	}
 	
-	@objc public func fetchConversation(post : MicroblogPost, completion: @escaping(Error?, [MicroblogPost]) -> ())
+	@objc public func fetchConversation(post : SnippetsPost, completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		let route = "posts/conversation?id=\(post.identifier)"
 		self.fetchTimeline(self.pathForRoute(route), completion: completion)
 	}
 
-	@objc public func checkForPostsSince(post : MicroblogPost, completion: @escaping(Error?, NSInteger, TimeInterval) -> ())
+	@objc public func checkForPostsSince(post : SnippetsPost, completion: @escaping(Error?, NSInteger, TimeInterval) -> ())
 	{
 		let route = "posts/check?since_id=\(post.identifier)"
 		let request = self.secureGet(path: self.pathForRoute(route), arguments: [:])
@@ -212,7 +212,7 @@ public class MicroblogFramework : NSObject {
 	// MARK: - Follow Interface
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@objc public func follow(user : MicroblogUser, completion: @escaping(Error?) -> ())
+	@objc public func follow(user : SnippetsUser, completion: @escaping(Error?) -> ())
 	{
 		let arguments : [ String : String ] = [ "username" : user.userHandle ]
 		
@@ -223,7 +223,7 @@ public class MicroblogFramework : NSObject {
 		})
 	}
 
-	@objc public func unfollow(user : MicroblogUser, completion: @escaping(Error?) -> ())
+	@objc public func unfollow(user : SnippetsUser, completion: @escaping(Error?) -> ())
 	{
 		let arguments : [ String : String ] = [ "username" : user.userHandle ]
 		
@@ -234,7 +234,7 @@ public class MicroblogFramework : NSObject {
 		})
 	}
 	
-	@objc public func checkFollowingStatus(user : MicroblogUser, completion: @escaping(Error?, Bool) -> ())
+	@objc public func checkFollowingStatus(user : SnippetsUser, completion: @escaping(Error?, Bool) -> ())
 	{
 		let route = "users/is_following?username=\(user.userHandle)"
 		let request = self.secureGet(path: self.pathForRoute(route), arguments: [:])
@@ -254,7 +254,7 @@ public class MicroblogFramework : NSObject {
 		})
 	}
 	
-	@objc public func listFollowers(user : MicroblogUser, completeList : Bool, completion: @escaping(Error?, [MicroblogUser]) -> ())
+	@objc public func listFollowers(user : SnippetsUser, completeList : Bool, completion: @escaping(Error?, [SnippetsUser]) -> ())
 	{
 		var route = "users/following/\(user.userHandle)"
 		if (!completeList)
@@ -267,11 +267,11 @@ public class MicroblogFramework : NSObject {
 			
 			if let userDictionaryList = parsedServerResponse.parsedResponse as? [[String : Any]]
 			{
-				var userList : [MicroblogUser] = []
+				var userList : [SnippetsUser] = []
 					
 				for userDictionary : [String : Any] in userDictionaryList
 				{
-					let user = MicroblogUser(userDictionary)
+					let user = SnippetsUser(userDictionary)
 					userList.append(user)
 				}
 					
@@ -289,7 +289,7 @@ public class MicroblogFramework : NSObject {
 	// MARK: - Favorite Interface
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@objc public func favorite(post : MicroblogPost, completion: @escaping(Error?) -> ())
+	@objc public func favorite(post : SnippetsPost, completion: @escaping(Error?) -> ())
 	{
 		let arguments : [ String : String ] = [ "id" : post.identifier ]
 
@@ -300,7 +300,7 @@ public class MicroblogFramework : NSObject {
 		})
 	}
 
-	@objc public func unfavorite(post : MicroblogPost, completion: @escaping(Error?) -> ())
+	@objc public func unfavorite(post : SnippetsPost, completion: @escaping(Error?) -> ())
 	{
 		let arguments : [ String : String ] = [ "id" : post.identifier ]
 		let route = "favorites/\(post.identifier)"
@@ -406,7 +406,7 @@ public class MicroblogFramework : NSObject {
 		})
 	}
 	
-	@objc public func deletePost(post : MicroblogPost, completion: @escaping(Error?) -> ())
+	@objc public func deletePost(post : SnippetsPost, completion: @escaping(Error?) -> ())
 	{
 		// There are actually two ways to delete posts. The safer way is if you have the post identifier
 		// The other way is more of the "micropub" way in which you just have the path to the post
@@ -420,7 +420,7 @@ public class MicroblogFramework : NSObject {
 		}
 	}
 	
-	@objc public func reply(originalPost : MicroblogPost, content : String, completion: @escaping(Error?) -> ())
+	@objc public func reply(originalPost : SnippetsPost, content : String, completion: @escaping(Error?) -> ())
 	{
 		var arguments : [ String : String ] = [ "id" : originalPost.identifier,
 											    "text" : content ]

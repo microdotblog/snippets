@@ -8,7 +8,7 @@
 
 import UIKit
 import UUSwift
-import Microblog
+import Snippets
 
 class FeedTableViewCell: UITableViewCell {
 
@@ -25,7 +25,7 @@ class FeedTableViewCell: UITableViewCell {
 
 	func configure(_ dictionary : [String : Any])
 	{
-		let post : MicroblogPost = dictionary["post"] as! MicroblogPost
+		let post : SnippetsPost = dictionary["post"] as! SnippetsPost
 		
 		self.fullName.text = nil
 		self.userName.text = nil
