@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  	s.name             = "Snippets"
+  	s.name             = "SnippetsFramework"
   	s.version          = "0.0.1"
 
   	s.description      = <<-DESC

@@ -64,7 +64,7 @@
 		C52CFA0321F1678E00D52676 /* SnippetsUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnippetsUser.swift; sourceTree = "<group>"; };
 		C52CFA0E21F168DE00D52676 /* Snippets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Snippets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C52CFA2121F169FD00D52676 /* Snippets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Snippets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C52CFA2F21F16A7200D52676 /* Snippets.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Snippets.podspec; sourceTree = "<group>"; };
+		C52CFA2F21F16A7200D52676 /* SnippetsFramework.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SnippetsFramework.podspec; sourceTree = "<group>"; };
 		C52CFA3021F16A7200D52676 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C52CFA3121F16A7200D52676 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -102,7 +102,7 @@
 			children = (
 				C52CFA3121F16A7200D52676 /* LICENSE.md */,
 				C52CFA3021F16A7200D52676 /* README.md */,
-				C52CFA2F21F16A7200D52676 /* Snippets.podspec */,
+				C52CFA2F21F16A7200D52676 /* SnippetsFramework.podspec */,
 				C52CF9ED21F1672F00D52676 /* UUSwift.xcodeproj */,
 				C52CF9E421F1667900D52676 /* Snippets */,
 				C52CF9E321F1667900D52676 /* Products */,
