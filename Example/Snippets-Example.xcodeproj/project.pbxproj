@@ -7,13 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C52CFA4021F16B4800D52676 /* Snippets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52CFA3B21F16B2100D52676 /* Snippets.framework */; };
 		C52CFA4121F16B5F00D52676 /* Snippets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52CFA3F21F16B2100D52676 /* Snippets.framework */; };
 		C5AD83C421E687D600BB2D74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AD83C321E687D600BB2D74 /* AppDelegate.swift */; };
 		C5AD83CB21E687D700BB2D74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5AD83CA21E687D700BB2D74 /* Assets.xcassets */; };
 		C5AD83D821E6882900BB2D74 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056C821BF1D6300E502DF /* ViewController.swift */; };
 		C5AD83D921E6883500BB2D74 /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056DE21BF1EE100E502DF /* FeedTableViewCell.swift */; };
 		C5AD83E121E6BC7300BB2D74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5AD83C721E687D600BB2D74 /* Main.storyboard */; };
+		C5CD1FF121F245FC0024708F /* Snippets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52CFA3B21F16B2100D52676 /* Snippets.framework */; };
+		C5CD1FF221F245FC0024708F /* Snippets.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C52CFA3B21F16B2100D52676 /* Snippets.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C5CD1FF621F246200024708F /* UUSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5AD83DB21E6886900BB2D74 /* UUSwift.framework */; };
+		C5CD1FF721F246200024708F /* UUSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C5AD83DB21E6886900BB2D74 /* UUSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C5F056C721BF1D6300E502DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056C621BF1D6300E502DF /* AppDelegate.swift */; };
 		C5F056C921BF1D6300E502DF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056C821BF1D6300E502DF /* ViewController.swift */; };
 		C5F056CC21BF1D6300E502DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5F056CA21BF1D6300E502DF /* Main.storyboard */; };
@@ -44,7 +47,29 @@
 			remoteGlobalIDString = C52CFA2121F169FD00D52676;
 			remoteInfo = SnippetsTV;
 		};
+		C5CD1FF321F245FC0024708F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C52CFA3321F16B2100D52676 /* Snippets.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C52CF9E121F1667900D52676;
+			remoteInfo = Snippets;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C5CD1FF521F245FC0024708F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C5CD1FF721F246200024708F /* UUSwift.framework in Embed Frameworks */,
+				C5CD1FF221F245FC0024708F /* Snippets.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C52CFA3321F16B2100D52676 /* Snippets.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Snippets.xcodeproj; path = ../Snippets.xcodeproj; sourceTree = "<group>"; };
@@ -78,7 +103,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C52CFA4021F16B4800D52676 /* Snippets.framework in Frameworks */,
+				C5CD1FF621F246200024708F /* UUSwift.framework in Frameworks */,
+				C5CD1FF121F245FC0024708F /* Snippets.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,10 +202,12 @@
 				C5F056BF21BF1D6300E502DF /* Sources */,
 				C5F056C021BF1D6300E502DF /* Frameworks */,
 				C5F056C121BF1D6300E502DF /* Resources */,
+				C5CD1FF521F245FC0024708F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C5CD1FF421F245FC0024708F /* PBXTargetDependency */,
 			);
 			name = "Snippets-Example";
 			productName = "Snippets-Example";
@@ -297,6 +325,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C5CD1FF421F245FC0024708F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Snippets;
+			targetProxy = C5CD1FF321F245FC0024708F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C5AD83C721E687D600BB2D74 /* Main.storyboard */ = {
@@ -487,6 +523,7 @@
 		C5F056D621BF1D6400E502DF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
@@ -506,6 +543,7 @@
 		C5F056D721BF1D6400E502DF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3F9MDJ6K4E;

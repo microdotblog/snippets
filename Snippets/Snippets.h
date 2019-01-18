@@ -5,6 +5,7 @@
 //  Created by Jonathan Hays on 1/17/19.
 //  Copyright © 2019 Micro.blog, LLC. All rights reserved.
 //
+#import <Foundation/Foundation.h>
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
