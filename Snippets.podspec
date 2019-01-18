@@ -7,10 +7,10 @@ Pod::Spec.new do |s|
                        DESC
   	s.summary          = "A Swift library for interacting with the Micro.blog platform"
 
-  	s.homepage         = "https://github.com/riverfold/snippets-example"
+  	s.homepage         = "https://github.com/microdotblog/snippets"
   	s.author           = "Micro.blog"
   	s.license          = { :type => 'MIT' }
-  	s.source           = { :git => "https://github.com/riverfold/snippets-example.git", :tag => s.version.to_s }
+  	s.source           = { :git => "https://github.com/microdotblog/snippets.git", :tag => s.version.to_s }
 
 #s.platform = :ios
 	s.ios.deployment_target = "8.0"

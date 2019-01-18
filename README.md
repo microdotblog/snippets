@@ -8,7 +8,10 @@ This library requires a deployment target of iOS 10.0 or greater, OSX 10.10 or g
 ### Swift and Objective-C
 This library is written entirely in Swift but has been made compatible with Objective-C calling applications. 
 
-### Cocoapods
+
+## Installation
+
+### - Cocoapods
 
 The Snippets framework is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your `Podfile`:
 
@@ -16,13 +19,22 @@ The Snippets framework is available through [CocoaPods](http://cocoapods.org). T
 pod 'Snippets'
 ```
 
+### - Carthage
+
+UUSwift may be installed via [Carthage](https://github.com/Carthage/Carthage). To install it, simply add the following line to your `Cartfile`:
+
+```
+github "microdotblog/snippets"
+```
+
+
 ## Contributing
 and
 Please **open pull requests against the `develop` branch**
 
 ## License
 
-The Micro.blog framework is available under the Apache 2.0 license. See [`LICENSE.md`](https://github.com/microdotblog/snippets/blob/develop/LICENSE.md) for more information.
+The Snippets framework is available under the MIT license. See [`LICENSE.md`](https://github.com/microdotblog/snippets/blob/develop/LICENSE.md) for more information.
 
 ## Contributors
 
