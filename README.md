@@ -25,7 +25,7 @@ pod 'Snippets'
 
 ### - Carthage
 
-UUSwift may be installed via [Carthage](https://github.com/Carthage/Carthage). To install it, simply add the following line to your `Cartfile`:
+Snippets may be installed via [Carthage](https://github.com/Carthage/Carthage). To install it, simply add the following line to your `Cartfile`:
 
 ```
 github "microdotblog/snippets"
@@ -35,6 +35,3 @@ github "microdotblog/snippets"
 
 The Snippets framework is available under the MIT license. See [`LICENSE.md`](https://github.com/microdotblog/snippets/blob/develop/LICENSE.md) for more information.
 
-## Contributors
-
-[A list of contributors is available through GitHub.](https://github.com/microdotblog/snippets/graphs/contributors)
