@@ -13,18 +13,15 @@ import Snippets
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
 	// User display elements
-	@IBOutlet var userImage : UIImageView!
-	@IBOutlet var userName : UILabel!
+	//@IBOutlet var profileButton : UIButton!
+	@IBOutlet var profileImage : UIImageView!
+	
+	@IBOutlet var loadingView : UIView!
 
 	// Login elements
 	@IBOutlet var loginErrorLabel : UILabel!
 	@IBOutlet var emailAddressField : UITextField!
 	@IBOutlet var loginPopUpView : UIView!
-	
-	// Post elements
-	@IBOutlet var postView : UIView!
-	@IBOutlet var postTextField : UITextField!
-	@IBOutlet var postButton : UIButton!
 	
 	// Feed display elements
 	@IBOutlet var tableView : UITableView!
@@ -34,57 +31,79 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	{
 		super.viewDidLoad()
 		
-		self.loginPopUpView.layer.cornerRadius = 8.0
-		self.userImage.layer.cornerRadius = 8.0
-		
-		NotificationCenter.default.addObserver(self, selector: #selector(handleImageLoadedNotification(_:)), name: NSNotification.Name(rawValue: "UserAvatarImageLoaded"), object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(handleImageLoadedNotification(_:)), name: NSNotification.Name(rawValue: "ImageLoadedNotification"), object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(handleTemporaryTokenReceivedNotification(_:)), name: NSNotification.Name("TemporaryTokenReceivedNotification"), object: nil)
+		
+		self.loadingView.isHidden = true
+		self.loadingView.superview?.bringSubviewToFront(self.loadingView)
+		self.loginPopUpView.superview?.bringSubviewToFront(self.loginPopUpView)
 		
 		// If we have a valid token, we don't need to show the login popup
 		if self.permanentToken() != nil
 		{
 			Snippets.shared.configure(permanentToken: self.permanentToken()!, blogUid: nil)
 			
-			self.postView.isHidden = false
 			self.loginPopUpView.isHidden = true
-			self.updateUserTimeline()
 			self.updateUserConfiguration()
+			self.onTimeline()
+		}
+		else {
+			self.emailAddressField.becomeFirstResponder()
+		}
+	}
+	
+	@IBAction func onTimeline() {
+
+		self.loadingView.isHidden = false
+		Snippets.shared.fetchUserTimeline { (error, items) in
+			self.processTimelineItems(items)
 		}
 	}
 
-	func updateUserTimeline()
-	{
-		//Snippets.shared.fetchUserTimeline { (error, items) in
-		//Snippets.shared.fetchUserFavorites { (error, items) in
+	@IBAction func onBookmarks() {
+		self.loadingView.isHidden = false
+		Snippets.shared.fetchUserFavorites { (error, items) in
+			self.processTimelineItems(items)
+		}
+	}
 
+	@IBAction func onPhotos() {
+		self.loadingView.isHidden = false
+		Snippets.shared.fetchUserPhotoTimeline { (error, items) in
+			self.processTimelineItems(items)
+		}
+	}
 
-		//let user = SnippetsUser()
-		//user.userHandle = "manton"
-		//Snippets.shared.fetchUserPosts(user: user) { (error, items) in
-
-		//let post = SnippetsPost()
-		//post.identifier = "984880"
-		//Snippets.shared.fetchConversation(post: post) { (error, items) in
-		
+	@IBAction func onDiscover() {
+		self.loadingView.isHidden = false
 		Snippets.shared.fetchDiscoverTimeline(collection: "books") { (error, items) in
-			
-			var parsedItems : [[String : Any]] = []
-			
-			for item in items {
-				var dictionary = self.extractImages(html: item.htmlText)
-				dictionary["post"] = item
-				
-				parsedItems.append(dictionary)
-			}
-			
-			self.feedItems = parsedItems
-			
-			DispatchQueue.main.async {
-				self.tableView.reloadData()
-			}
+			self.processTimelineItems(items)
 		}
 	}
 
+	@IBAction func onProfile() {
+		
+	}
+
+	func processTimelineItems(_ items : [SnippetsPost]) {
+		
+		var parsedItems : [[String : Any]] = []
+		
+		for item in items {
+			var dictionary = self.extractImages(html: item.htmlText)
+			dictionary["post"] = item
+			
+			parsedItems.append(dictionary)
+		}
+		
+		self.feedItems = parsedItems
+		
+		DispatchQueue.main.async {
+			self.tableView.reloadData()
+			self.loadingView.isHidden = true
+		}
+	}
+	
 	func extractImages(html : String) -> [String : Any]
 	{
 		var content : NSString = html as NSString
@@ -214,11 +233,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		Snippets.shared.fetchUserInfo { (error, user) in
 			
 			DispatchQueue.main.async {
-				self.userName.text = user?.userHandle
-				
 				user?.loadUserImage {
 					DispatchQueue.main.async {
-						self.userImage.image = user?.userImage
+						self.profileImage.image = user?.userImage
+						//self.profileButton.setImage(user?.userImage, for: .normal)
 					}
 				}
 			}
@@ -241,10 +259,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 					
 					DispatchQueue.main.async {
 						self.loginPopUpView.isHidden = true
-						self.postView.isHidden = false
-						self.loginPopUpView.isHidden = true
-						self.updateUserTimeline()
 						self.updateUserConfiguration()
+						self.onTimeline()
 					}
 				}
 			}
@@ -282,16 +298,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	{
 		self.loginErrorLabel.isHidden = true
 		let loginString = self.emailAddressField.text
-		
+
+		self.emailAddressField.resignFirstResponder()
+
 		if loginString!.contains(".") {
+			
 			Snippets.shared.requestUserLoginEmail(email: self.emailAddressField.text!, appName: "SnipIt", redirect: "blog.micro.snipit://login/")
 			{ (err) in
 		
-				if let error = err
-				{
-					DispatchQueue.main.async {
+				DispatchQueue.main.async {
+					if let error = err
+					{
 						self.loginErrorLabel.isHidden = false
 						self.loginErrorLabel.text = error.localizedDescription
+					}
+					else {
+						self.emailAddressField.text = ""
+						let alert = UIAlertController(title: nil, message: "Check your email on this device and tap the \"Open with SnipIt\" button.", preferredStyle: .alert)
+						alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+						self.present(alert, animated: true, completion: nil)
 					}
 				}
 			}
@@ -305,10 +330,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 					
 					DispatchQueue.main.async {
 						self.loginPopUpView.isHidden = true
-						self.postView.isHidden = false
-						self.loginPopUpView.isHidden = true
-						self.updateUserTimeline()
 						self.updateUserConfiguration()
+						self.onTimeline()
 					}
 				}
 			}
@@ -316,28 +339,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		}
 	}
 
-
-	@IBAction func onPostImage()
-	{
-		if let image = UIImage(named: "scissors")
-		{
-			Snippets.shared.uploadImage(image: image) { (error, path) in
-			}
-		}
-	}
-
-
-	@IBAction func onPost()
-	{
-		if let textToPost = self.postTextField.text
-		{
-			self.postTextField.text = nil
-			Snippets.shared.postText(title: "", content: textToPost, photos: [], altTags: []) { (error, pathToPost) in
-			}
-		}
-	}
-	
-	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// MARK: - Token management
 	// Ideally this token would be saved to the keychain or some place more secure. For reference purposes, we will just save to UserDefaults
