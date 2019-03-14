@@ -67,7 +67,7 @@ extension SnippetsUser {
 		{
 			self.userHandle = userName
 		}
-		else if let SnippetsDictionary = authorDictionary["_Snippets"] as? [String : Any]
+		else if let SnippetsDictionary = authorDictionary["_microblog"] as? [String : Any]
 		{
 			if let userName = SnippetsDictionary["username"] as? String
 			{

@@ -33,7 +33,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(handleImageLoadedNotification(_:)), name: NSNotification.Name(rawValue: "ImageLoadedNotification"), object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(handleTemporaryTokenReceivedNotification(_:)), name: NSNotification.Name("TemporaryTokenReceivedNotification"), object: nil)
-		
+		NotificationCenter.default.addObserver(self, selector: #selector(handleLoadUserProfile(_:)), name: NSNotification.Name(rawValue: "ShowUserProfileNotification"), object: nil)
 		self.loadingView.isHidden = true
 		self.loadingView.superview?.bringSubviewToFront(self.loadingView)
 		self.loginPopUpView.superview?.bringSubviewToFront(self.loginPopUpView)
@@ -84,7 +84,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	@IBAction func onProfile() {
 		
 	}
-
+	
 	func processTimelineItems(_ items : [SnippetsPost]) {
 		
 		var parsedItems : [[String : Any]] = []
@@ -102,6 +102,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 			self.tableView.reloadData()
 			self.loadingView.isHidden = true
 		}
+	}
+	
+	func displayUserProfile(_ user : SnippetsUser) {
+		
 	}
 	
 	func extractImages(html : String) -> [String : Any]
@@ -248,6 +252,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	// MARK: - Notifications
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	@objc func handleLoadUserProfile(_ notification : Notification) {
+		let user : SnippetsUser = notification.object as! SnippetsUser
+		self.displayUserProfile(user)
+	}
+	
 	@objc func handleTemporaryTokenReceivedNotification(_ notification : Notification)
 	{
 		if let temporaryToken = notification.object as? String
