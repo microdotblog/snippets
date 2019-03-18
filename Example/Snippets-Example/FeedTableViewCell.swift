@@ -19,23 +19,34 @@ class FeedTableViewCell: UITableViewCell {
 	@IBOutlet var imageStackView : UIStackView!
 	@IBOutlet var stackViewHeightConstraint : NSLayoutConstraint!
 	
+	var snippetsPost : SnippetsPost? = nil
+	
     override func awakeFromNib() {
         super.awakeFromNib()
         self.selectionStyle = .none
 		self.userImage.layer.cornerRadius = 8.0
+		
+		self.userImage.isUserInteractionEnabled = true
+		self.userImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleAvatarTapped)))
     }
 
 	func configure(_ dictionary : [String : Any])
 	{
-		let post : SnippetsPost = dictionary["post"] as! SnippetsPost
-		
-		let images : [String] = dictionary["images"] as? [String] ?? []
-		
 		self.fullName.text = nil
 		self.userName.text = nil
 		self.userImage.image = nil
 		self.textView.text = nil
+		self.stackViewHeightConstraint.constant = 0.0
+		self.imageStackView.isHidden = true
+		for view in self.imageStackView.arrangedSubviews {
+			self.imageStackView.removeArrangedSubview(view)
+		}
 
+		let post : SnippetsPost = dictionary["post"] as! SnippetsPost
+		
+		self.snippetsPost = post
+		
+		let images : [String] = dictionary["images"] as? [String] ?? []
 		let attributedString : NSAttributedString = dictionary["attributedString"] as? NSAttributedString ?? NSAttributedString(string: "")
 		
 		self.textView.attributedText = attributedString
@@ -43,11 +54,6 @@ class FeedTableViewCell: UITableViewCell {
 		self.userName.text = "@\(post.owner.userHandle)"
 		self.fullName.text = post.owner.fullName
 
-		self.stackViewHeightConstraint.constant = 0.0
-		self.imageStackView.isHidden = true
-		for view in self.imageStackView.arrangedSubviews {
-			self.imageStackView.removeArrangedSubview(view)
-		}
 
 		for imagePath in images {
 			self.loadImage(imagePath)
@@ -61,7 +67,9 @@ class FeedTableViewCell: UITableViewCell {
 		{
 			post.owner.loadUserImage {
 				DispatchQueue.main.async {
-					NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ImageLoadedNotification"), object: nil, userInfo: nil)
+					if post.owner.userImage != nil {
+						NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ImageLoadedNotification"), object: nil, userInfo: nil)
+					}
 				}
 			}
 		}
@@ -103,29 +111,10 @@ class FeedTableViewCell: UITableViewCell {
 
 	}
 	
-	func loadUserImage(_ userImagePath : String)
-	{
-		if let imageData = UUDataCache.shared.data(for: userImagePath)
-		{
-			if let image = UIImage(data: imageData)
-			{
-				self.userImage.image = image
-				return
-			}
-		}
-
-		// If we have gotten here, then there is no image available to display so we need to fetch it...
-		UUHttpSession.get(userImagePath, [:]) { (parsedServerResponse) in
-			if let image = parsedServerResponse.parsedResponse as? UIImage
-			{
-				if let imageData = image.pngData()
-				{
-					UUDataCache.shared.set(data: imageData, for: userImagePath)
-					
-				}
-			}
+	@IBAction func handleAvatarTapped() {
+		DispatchQueue.main.async {
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ShowUserProfileNotification"), object: self.snippetsPost?.owner, userInfo: nil)
 		}
 	}
-	
 	
 }

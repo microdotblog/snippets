@@ -10,7 +10,7 @@ import UIKit
 import UUSwift
 import Snippets
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
 	// User display elements
 	//@IBOutlet var profileButton : UIButton!
@@ -23,9 +23,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	@IBOutlet var emailAddressField : UITextField!
 	@IBOutlet var loginPopUpView : UIView!
 	
+	@IBOutlet var timelineButton : UIButton!
+	@IBOutlet var discoverButton : UIButton!
+	@IBOutlet var photosButton : UIButton!
+	@IBOutlet var bookmarksButton : UIButton!
+	
 	// Feed display elements
 	@IBOutlet var tableView : UITableView!
 	var feedItems : [[String : Any]] = []
+	var loggedInUser : SnippetsUser?
 
 	override func viewDidLoad()
 	{
@@ -52,8 +58,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 		}
 	}
 	
+	func selectButton(_ button : UIButton) {
+		self.timelineButton.isSelected = false
+		self.discoverButton.isSelected = false
+		self.photosButton.isSelected = false
+		self.bookmarksButton.isSelected = false
+		
+		button.isSelected = true
+	}
+	
 	@IBAction func onTimeline() {
-
+		
+		self.selectButton(self.timelineButton)
+		
 		self.loadingView.isHidden = false
 		Snippets.shared.fetchUserTimeline { (error, items) in
 			self.processTimelineItems(items)
@@ -61,6 +78,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	}
 
 	@IBAction func onBookmarks() {
+		
+		self.selectButton(self.bookmarksButton)
+		
 		self.loadingView.isHidden = false
 		Snippets.shared.fetchUserFavorites { (error, items) in
 			self.processTimelineItems(items)
@@ -68,6 +88,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	}
 
 	@IBAction func onPhotos() {
+		
+		self.selectButton(self.photosButton)
+		
 		self.loadingView.isHidden = false
 		Snippets.shared.fetchUserPhotoTimeline { (error, items) in
 			self.processTimelineItems(items)
@@ -75,6 +98,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	}
 
 	@IBAction func onDiscover() {
+		
+		self.selectButton(self.discoverButton)
+		
 		self.loadingView.isHidden = false
 		Snippets.shared.fetchDiscoverTimeline(collection: "books") { (error, items) in
 			self.processTimelineItems(items)
@@ -82,21 +108,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	}
 
 	@IBAction func onProfile() {
-		
+		self.displayUserProfile(self.loggedInUser!)
 	}
 	
 	func processTimelineItems(_ items : [SnippetsPost]) {
 		
-		var parsedItems : [[String : Any]] = []
-		
-		for item in items {
-			var dictionary = self.extractImages(html: item.htmlText)
-			dictionary["post"] = item
-			
-			parsedItems.append(dictionary)
-		}
-		
-		self.feedItems = parsedItems
+		self.feedItems = SnippetsParsingTools.convertPostsToTimelineDictionaries(items)
 		
 		DispatchQueue.main.async {
 			self.tableView.reloadData()
@@ -105,142 +122,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 	}
 	
 	func displayUserProfile(_ user : SnippetsUser) {
-		
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let controller = storyboard.instantiateViewController(withIdentifier: "UserProfileViewController") as! UserProfileViewController
+		controller.user = user
+		let navController = UINavigationController(rootViewController: controller)
+		self.present(navController, animated: true, completion: nil)
 	}
 	
-	func extractImages(html : String) -> [String : Any]
-	{
-		var content : NSString = html as NSString
-		var images : [String] = []
-		var dictionary : [String : Any] = [:]
-
-		if content.contains("<img")
-		{
-			var aspectRatio : CGFloat = 0.0
-			
-			while (content.contains("<img"))
-			{
-				var width : CGFloat = 0.0
-				var height : CGFloat = 0.0
-				
-				// Extract the entire image tag...
-				var image : NSString = content.substring(from: content.range(of: "<img").location) as NSString
-
-				if (image.contains("width=") && image.contains("height=")) {
-					var widthString : NSString = image.substring(from: image.range(of: "width=").location + 7) as NSString
-					var heightString: NSString = image.substring(from: image.range(of: "height=").location + 8) as NSString
-
-					widthString = widthString.substring(to: widthString.range(of: "\"").location) as NSString
-					heightString = heightString.substring(to: heightString.range(of: "\"").location) as NSString
-
-					width = CGFloat(widthString.floatValue);
-					height = CGFloat(heightString.floatValue);
-					
-					if (width > 0.0 && height > 0.0)
-					{
-						let currentAspectRatio = height / width
-						if (currentAspectRatio > aspectRatio) {
-							aspectRatio = currentAspectRatio
-						}
-					}
-				}
-				
-				image = image.substring(to: image.range(of: ">").location + 1) as NSString
-
-				let shouldIgnore = image.contains("1em;")
-
-				var replacement : NSString = ""
-
-				if (shouldIgnore)
-				{
-					if image.contains("alt=") {
-						var altTag : NSString = image.substring(from: image.range(of: "alt=").location + 4) as NSString
-						altTag = altTag.substring(from: altTag.range(of: "\"").location + 1) as NSString
-						altTag = altTag.substring(to: altTag.range(of: "\"").location) as NSString
-						replacement = altTag
-					}
-				}
-				
-				// Remove the image tag from the content...
-				content = content.replacingOccurrences(of: image as String, with: replacement as String) as NSString
-
-				// Pull just the actual URL from the image tag...
-				if (!shouldIgnore && image.contains("src=")) {
-					image = image.substring(from: image.range(of: "src=").location + 5) as NSString
-					image = image.substring(to: image.range(of: "\"").location) as NSString
-
-					//Because we are coming from HTML land, we need to be careful with & symbols
-					image = image.replacingOccurrences(of: "&amp;", with: "&") as NSString
-					
-					images.append(image as String)
-				}
-			}
-		}
-		
-		/*
-		// Remove trailing new lines and carriage returns
-		var hasTrailingWhitespace = content.hasSuffix("\n") ||
-									content.hasSuffix("\r") ||
-									content.hasSuffix("<p></p>")
-		
-		while hasTrailingWhitespace {
-
-			if content.hasSuffix("\n") || content.hasSuffix("\r") {
-				content = content.substring(to: content.length - 1) as NSString
-			}
-			else if content.hasSuffix("<p></p>") {
-				content = content.substring(to: content.length - 7) as NSString
-			}
-			
-			hasTrailingWhitespace = content.hasSuffix("\n") ||
-									content.hasSuffix("\r") ||
-									content.hasSuffix("<p></p>")
-		}
-		*/
-		
-		let htmlString = content as String;
-		let htmlData = htmlString.data(using: .utf16, allowLossyConversion: false)!
-		
-		let options : [NSAttributedString.DocumentReadingOptionKey : Any] = [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue]
-		var attributedString = try? NSAttributedString(data: htmlData, options: options, documentAttributes: nil)
-		
-		// After conversion from html, there are occassionally trailing carriage returns
-		if var attribString = attributedString {
-			while attribString.string.hasSuffix("\n") || attribString.string.hasSuffix("\r") {
-				attribString = attribString.attributedSubstring(from: NSRange(location: 0, length: attribString.length - 1))
-			}
-			
-			while attribString.string.hasPrefix("\n") || attribString.string.hasPrefix("\r") {
-				attribString = attribString.attributedSubstring(from: NSRange(location: 1, length: attribString.length - 1))
-			}
-			
-			attributedString = attribString
-		}
-		else {
-			attributedString = NSAttributedString(string:"")
-		}
-		
-		let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString!)
-		mutableAttributedString.addAttributes([.font : UIFont(name: "AvenirNext-Regular", size: 14.0) as Any], range: NSRange(location: 0, length: attributedString!.length))
-		attributedString = mutableAttributedString
-		
-
-		dictionary["attributedString"] = attributedString
-		dictionary["images"] = images
-		dictionary["content"] = content
-		
-		return dictionary
-	}
 	
 	func updateUserConfiguration()
 	{
 		Snippets.shared.fetchUserInfo { (error, user) in
+			self.loggedInUser = user
 			
 			DispatchQueue.main.async {
 				user?.loadUserImage {
 					DispatchQueue.main.async {
 						self.profileImage.image = user?.userImage
-						//self.profileButton.setImage(user?.userImage, for: .normal)
 					}
 				}
 			}

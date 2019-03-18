@@ -7,18 +7,38 @@
 //
 
 import UIKit
+import Snippets
 
 class ProfileHeaderTableViewCell: UITableViewCell {
 
+	@IBOutlet var userImage : UIImageView!
+	@IBOutlet var fullNameLabel : UILabel!
+	@IBOutlet var userNameLabel : UILabel!
+	@IBOutlet var blogAddressLabel : UILabel!
+	@IBOutlet var userDetailsLabel : UILabel!
+	@IBOutlet var userFollowingLabel : UILabel!
+	@IBOutlet var busyIndicator : UIActivityIndicatorView!
+	
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
+	
+	func updateFromUser(_ user : SnippetsUser) {
+		self.userFollowingLabel.text = ""
+		self.fullNameLabel.text = user.fullName
+		self.userNameLabel.text = user.userHandle
+		
+		self.blogAddressLabel.text = user.pathToWebSite
+		self.userDetailsLabel.text = user.bio
+		if user.followingCount > 0 {
+			self.userFollowingLabel.text = "Following \(user.followingCount) micro-bloggers"
+		}
+		
+		user.loadUserImage {
+			DispatchQueue.main.async {
+				self.userImage.image = user.userImage
+			}
+		}
+	}
 
 }

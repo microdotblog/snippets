@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C51B9CD4223A1F4D002D2DDD /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51B9CD3223A1F4D002D2DDD /* UserProfileViewController.swift */; };
+		C51B9CD8223B2177002D2DDD /* ProfileHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51B9CD7223B2177002D2DDD /* ProfileHeaderTableViewCell.swift */; };
+		C51B9CDA223B24C7002D2DDD /* ParsingTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51B9CD9223B24C7002D2DDD /* ParsingTools.swift */; };
 		C52CFA4121F16B5F00D52676 /* Snippets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52CFA3F21F16B2100D52676 /* Snippets.framework */; };
 		C5AD83C421E687D600BB2D74 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AD83C321E687D600BB2D74 /* AppDelegate.swift */; };
 		C5AD83CB21E687D700BB2D74 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5AD83CA21E687D700BB2D74 /* Assets.xcassets */; };
-		C5AD83D821E6882900BB2D74 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056C821BF1D6300E502DF /* ViewController.swift */; };
+		C5AD83D821E6882900BB2D74 /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056C821BF1D6300E502DF /* TimelineViewController.swift */; };
 		C5AD83D921E6883500BB2D74 /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056DE21BF1EE100E502DF /* FeedTableViewCell.swift */; };
 		C5AD83E121E6BC7300BB2D74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5AD83C721E687D600BB2D74 /* Main.storyboard */; };
 		C5CD1FF121F245FC0024708F /* Snippets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52CFA3B21F16B2100D52676 /* Snippets.framework */; };
@@ -18,7 +21,7 @@
 		C5CD1FF621F246200024708F /* UUSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5AD83DB21E6886900BB2D74 /* UUSwift.framework */; };
 		C5CD1FF721F246200024708F /* UUSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C5AD83DB21E6886900BB2D74 /* UUSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C5F056C721BF1D6300E502DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056C621BF1D6300E502DF /* AppDelegate.swift */; };
-		C5F056C921BF1D6300E502DF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056C821BF1D6300E502DF /* ViewController.swift */; };
+		C5F056C921BF1D6300E502DF /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056C821BF1D6300E502DF /* TimelineViewController.swift */; };
 		C5F056CC21BF1D6300E502DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5F056CA21BF1D6300E502DF /* Main.storyboard */; };
 		C5F056CE21BF1D6400E502DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5F056CD21BF1D6400E502DF /* Assets.xcassets */; };
 		C5F056D121BF1D6400E502DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5F056CF21BF1D6400E502DF /* LaunchScreen.storyboard */; };
@@ -72,6 +75,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C51B9CD3223A1F4D002D2DDD /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		C51B9CD7223B2177002D2DDD /* ProfileHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		C51B9CD9223B24C7002D2DDD /* ParsingTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsingTools.swift; sourceTree = "<group>"; };
 		C52CFA3321F16B2100D52676 /* Snippets.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Snippets.xcodeproj; path = ../Snippets.xcodeproj; sourceTree = "<group>"; };
 		C5AD83C121E687D600BB2D74 /* Snippets-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Snippets-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5AD83C321E687D600BB2D74 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,7 +87,7 @@
 		C5AD83DB21E6886900BB2D74 /* UUSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UUSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5F056C321BF1D6300E502DF /* Snippets-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Snippets-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5F056C621BF1D6300E502DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C5F056C821BF1D6300E502DF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C5F056C821BF1D6300E502DF /* TimelineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
 		C5F056CB21BF1D6300E502DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C5F056CD21BF1D6400E502DF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C5F056D021BF1D6400E502DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -111,6 +117,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C51B9CDB223B5CEF002D2DDD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C5F056CA21BF1D6300E502DF /* Main.storyboard */,
+				C5F056CD21BF1D6400E502DF /* Assets.xcassets */,
+				C5F056CF21BF1D6400E502DF /* LaunchScreen.storyboard */,
+				C5F056D221BF1D6400E502DF /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		C52CFA3421F16B2100D52676 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,13 +172,13 @@
 		C5F056C521BF1D6300E502DF /* Snippets-Example */ = {
 			isa = PBXGroup;
 			children = (
-				C5F056DE21BF1EE100E502DF /* FeedTableViewCell.swift */,
 				C5F056C621BF1D6300E502DF /* AppDelegate.swift */,
-				C5F056C821BF1D6300E502DF /* ViewController.swift */,
-				C5F056CA21BF1D6300E502DF /* Main.storyboard */,
-				C5F056CD21BF1D6400E502DF /* Assets.xcassets */,
-				C5F056CF21BF1D6400E502DF /* LaunchScreen.storyboard */,
-				C5F056D221BF1D6400E502DF /* Info.plist */,
+				C51B9CD9223B24C7002D2DDD /* ParsingTools.swift */,
+				C5F056DE21BF1EE100E502DF /* FeedTableViewCell.swift */,
+				C51B9CD7223B2177002D2DDD /* ProfileHeaderTableViewCell.swift */,
+				C5F056C821BF1D6300E502DF /* TimelineViewController.swift */,
+				C51B9CD3223A1F4D002D2DDD /* UserProfileViewController.swift */,
+				C51B9CDB223B5CEF002D2DDD /* Resources */,
 			);
 			path = "Snippets-Example";
 			sourceTree = "<group>";
@@ -308,7 +325,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5AD83D821E6882900BB2D74 /* ViewController.swift in Sources */,
+				C5AD83D821E6882900BB2D74 /* TimelineViewController.swift in Sources */,
 				C5AD83D921E6883500BB2D74 /* FeedTableViewCell.swift in Sources */,
 				C5AD83C421E687D600BB2D74 /* AppDelegate.swift in Sources */,
 			);
@@ -318,9 +335,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5F056C921BF1D6300E502DF /* ViewController.swift in Sources */,
+				C51B9CDA223B24C7002D2DDD /* ParsingTools.swift in Sources */,
+				C5F056C921BF1D6300E502DF /* TimelineViewController.swift in Sources */,
+				C51B9CD4223A1F4D002D2DDD /* UserProfileViewController.swift in Sources */,
 				C5F056DF21BF1EE100E502DF /* FeedTableViewCell.swift in Sources */,
 				C5F056C721BF1D6300E502DF /* AppDelegate.swift in Sources */,
+				C51B9CD8223B2177002D2DDD /* ProfileHeaderTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

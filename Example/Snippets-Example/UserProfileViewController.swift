@@ -7,24 +7,65 @@
 //
 
 import UIKit
+import Snippets
 
-class UserProfileViewController: UIViewController {
-
+class UserProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+	
+	@IBOutlet var tableView : UITableView!
+	var user : SnippetsUser!
+	var posts : [[String : Any]] = []
+	
     override func viewDidLoad() {
+		
+		self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem:.done, target: self, action: #selector(onDone))
+		
         super.viewDidLoad()
+		
+		Snippets.shared.fetchUserDetails(user: self.user) { (error, updatedUser, posts) in
+			self.user = updatedUser
+			self.posts = SnippetsParsingTools.convertPostsToTimelineDictionaries(posts)
 
-        // Do any additional setup after loading the view.
+			DispatchQueue.main.async {
+				self.tableView.reloadData()
+			}
+		}
+		
     }
-    
+	
+	@objc func onDone() {
+		self.navigationController?.dismiss(animated: true, completion: nil)
+	}
+	
+	func numberOfSections(in tableView: UITableView) -> Int {
+		return 2
+	}
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		if (section == 0) {
+			return 1
+		}
+		
+		return self.posts.count
+	}
+	
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		if indexPath.section == 0 {
+			let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileHeaderTableViewCell", for: indexPath) as! ProfileHeaderTableViewCell
+			cell.updateFromUser(self.user)
+			if self.posts.count > 0 {
+				cell.busyIndicator.isHidden = true
+			}
+			else {
+				cell.busyIndicator.isHidden = false
+			}
+			return cell
+		}
+		
+		let cell = tableView.dequeueReusableCell(withIdentifier: "FeedTableViewCell", for: indexPath) as! FeedTableViewCell
+		let dictionary = self.posts[indexPath.row]
+		
+		cell.configure(dictionary)
+		return cell
+	}
+	
 }
