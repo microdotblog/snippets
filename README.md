@@ -5,7 +5,7 @@
 
 Snippets is a framework for microblogging on iOS, OSX, and tvOS
 
-![alt tag](https://raw.github.com/microdotblog/snippets/Screenshots/Snippets01.jpg)
+![alt tag](https://raw.githubusercontent.com/microdotblog/snippets/master/Screenshots/Snippets01.jpg)
 
 ## Requirements
 
