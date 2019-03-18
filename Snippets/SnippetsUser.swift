@@ -52,7 +52,7 @@ extension SnippetsUser {
 		}
 
 		// If we have gotten here, then there is no image available to display so we need to fetch it...
-		UUHttpSession.get(self.pathToUserImage, [:]) { (parsedServerResponse) in
+		UUHttpSession.get(url:self.pathToUserImage) { (parsedServerResponse) in
 			if let image = parsedServerResponse.parsedResponse as? SnippetsImage
 			{
 				if let imageData = image.uuPngData()

@@ -95,7 +95,7 @@ class FeedTableViewCell: UITableViewCell {
 			}
 		}
 
-		UUHttpSession.get(path, [:]) { (parsedServerResponse) in
+		UUHttpSession.get(url: path) { (parsedServerResponse) in
 			if let image = parsedServerResponse.parsedResponse as? UIImage
 			{
 				if let imageData = image.pngData()

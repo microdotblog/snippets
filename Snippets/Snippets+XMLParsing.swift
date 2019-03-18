@@ -262,7 +262,7 @@ public class SnippetsRPCDiscovery: NSObject {
 	func getPath(_ path : String, completion: @escaping(UUHttpResponse) -> ()) {
 		var full_url : NSString = self.url as NSString
 		full_url = full_url.appendingPathComponent(path) as NSString
-		let request = UUHttpRequest.getRequest(full_url as String, [:])
+		let request = UUHttpRequest(url:full_url as String, method: .get)
 		_ = UUHttpSession.executeRequest(request, completion)
 	}
 	
@@ -333,7 +333,7 @@ public class SnippetsRPCDiscovery: NSObject {
 		s += "</methodCall>"
 		
 		let d = s.data(using: .utf8)
-		let request = UUHttpRequest.postRequest(self.url, [:], d, "text/xml")
+		let request = UUHttpRequest(url:self.url, method: .post, body: d, contentType: "text/xml")
 		request.processMimeTypes = false
 		
 		return UUHttpSession.executeRequest(request, completion)
