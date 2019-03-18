@@ -40,6 +40,16 @@ public class SnippetsXMLLinkParser: NSObject {
 				string = string.substring(from: startingPosition.location + startingPosition.length) as NSString
 				startingPosition = string.range(of: "<link", options: .caseInsensitive)
 			}
+
+			// Grab the last one found, which occurs outside of the loop...
+			if string.length > 0 {
+				let rel = self.extractTagValue("rel", sourceString: string)
+				if (relValue.count == 0 || rel == relValue) {
+					if let href = self.extractTagValue("href", sourceString: string) {
+						foundURLs.append(href)
+					}
+				}
+			}
 			
 		}
 		
@@ -272,20 +282,18 @@ public class SnippetsRPCDiscovery: NSObject {
 	{
 		var requestString = ""
 		
-		if param is MBBoolean {
-			requestString += "<value><boolean>\(param)</boolan></value>"
+		if let boolParam = param as? MBBoolean {
+			requestString += "<value><boolean>\(boolParam.boolValue)</boolean></value>"
 		}
-		else if param is NSNumber {
-			requestString += "<value><int>\(param)</int></value>"
+		else if let numberParam = param as? NSNumber {
+			requestString += "<value><int>\(numberParam.intValue)</int></value>"
 		}
-		else if param is NSString {
-			let stringParam = param as! String
+		else if let stringParam = param as? String {
 			let escapedParam = self.escapeParam(stringParam)
 			requestString += "<value><string>\(escapedParam)</string></value>"
 		}
-		else if param is NSDictionary {
+		else if let dictionary = param as? NSDictionary {
 			requestString += "<value><struct>"
-			let dictionary = param as! NSDictionary
 			let keys = dictionary.allKeys
 			for k in keys {
 				if let val = dictionary.object(forKey: k) {
@@ -296,16 +304,14 @@ public class SnippetsRPCDiscovery: NSObject {
 			}
 			requestString += "</struct></value>"
 		}
-		else if param is NSArray {
+		else if let array = param as? NSArray {
 			requestString += "<value><array><data>"
-			let array = param as! NSArray
 			for val : Any in array {
 				requestString += paramString(param: val)
 			}
 			requestString += "</data></array></value>"
 		}
-		else if param is NSData {
-			let d = param as! NSData
+		else if let d = param as? NSData {
 			requestString += "<value><base64>\(d.base64EncodedString(options: .init(rawValue: 0)))</base64></value>"
 		}
 		

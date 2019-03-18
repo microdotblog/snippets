@@ -280,6 +280,9 @@ extension Snippets {
 						completion(error, url)
 						return
 					}
+					else {
+						completion(error, nil)
+					}
 				})
 			}
 			else {
@@ -297,14 +300,19 @@ extension Snippets {
 	{
 		var error = NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey:"Unknown error received from XMLRPC request"])
 		
-		if let faultString = responseFault["faultString"] as? String,
-			let faultCode = responseFault["faultCode"] as? Int {
-			let composedString = faultString + "(error: \(faultCode))"
+		if let faultString = responseFault["faultString"] as? String
+		{
+			var faultCode = responseFault["faultCode"] as? String ?? ""
 			
-			error = NSError(domain: faultString, code: Int(faultCode), userInfo: [NSLocalizedDescriptionKey:composedString,
-																				  NSLocalizedFailureReasonErrorKey : composedString])
+			if let faultValue = responseFault["faultCode"] as? Int {
+				faultCode = "error: \(faultValue)"
+			}
+			let composedString = faultString + "(\(faultCode))"
+			let errorCode = 311 // cfErrorHTTPParseFailure
+			error = NSError(domain: faultString, code: errorCode, userInfo: [NSLocalizedDescriptionKey:composedString,
+																			 NSLocalizedFailureReasonErrorKey : composedString])
 		}
-
+		
 		return error
 	}
 	

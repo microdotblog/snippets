@@ -29,6 +29,10 @@ public class SnippetsUser : NSObject
 	@objc public var userHandle = ""
 	@objc public var pathToUserImage = ""
 	@objc public var pathToWebSite = ""
+	@objc public var bio = ""
+	@objc public var followingCount : Int = 0
+	@objc public var discoverCount : Int = 0
+	@objc public var isFollowing = false
 	@objc public var userImage : SnippetsImage? = nil
 }
 
@@ -61,20 +65,41 @@ extension SnippetsUser {
 		}
 	}
 	
+	func loadFromMicroblogDictionary(_ snippetsDictionary : [String : Any])
+	{
+		if let userName = snippetsDictionary["username"] as? String
+		{
+			self.userHandle = userName
+		}
+		if let bio = snippetsDictionary["bio"] as? String
+		{
+			self.bio = bio
+		}
+		if let followingCount = snippetsDictionary["following_count"] as? Int
+		{
+			self.followingCount = followingCount
+		}
+		if let discoverCount = snippetsDictionary["discover_count"] as? Int
+		{
+			self.discoverCount = discoverCount
+		}
+		if let isFollowing = snippetsDictionary["is_following"] as? Int
+		{
+			self.isFollowing = (isFollowing > 0)
+		}
+	}
+	
 	func loadFromDictionary(_ authorDictionary : [String : Any])
 	{
 		if let userName = authorDictionary["username"] as? String
 		{
 			self.userHandle = userName
 		}
-		else if let SnippetsDictionary = authorDictionary["_Snippets"] as? [String : Any]
-		{
-			if let userName = SnippetsDictionary["username"] as? String
-			{
-				self.userHandle = userName
-			}
-		}
 		
+		if let snippetsDictionary = authorDictionary["_microblog"] as? [String : Any]
+		{
+			self.loadFromMicroblogDictionary(snippetsDictionary)
+		}
 			
 		if let fullName = authorDictionary["name"] as? String
 		{
@@ -89,8 +114,11 @@ extension SnippetsUser {
 		{
 			self.pathToUserImage = userImagePath
 		}
-		
-		if let site = authorDictionary["default_site"] as? String
+		if let site = authorDictionary["url"] as? String
+		{
+			self.pathToWebSite = site
+		}
+		else if let site = authorDictionary["default_site"] as? String
 		{
 			self.pathToWebSite = site
 		}
