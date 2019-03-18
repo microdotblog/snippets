@@ -5,6 +5,8 @@
 
 Snippets is a framework for microblogging on iOS, OSX, and tvOS
 
+![alt tag](https://raw.github.com/microdotblog/snippets/Screenshots/Snippets01.jpg)
+
 ## Requirements
 
 This library requires a deployment target of iOS 10.0 or greater, OSX 10.10 or greater or tvOS 10.0 or greater.
