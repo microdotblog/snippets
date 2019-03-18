@@ -40,6 +40,16 @@ public class SnippetsXMLLinkParser: NSObject {
 				string = string.substring(from: startingPosition.location + startingPosition.length) as NSString
 				startingPosition = string.range(of: "<link", options: .caseInsensitive)
 			}
+
+			// Grab the last one found, which occurs outside of the loop...
+			if string.length > 0 {
+				let rel = self.extractTagValue("rel", sourceString: string)
+				if (relValue.count == 0 || rel == relValue) {
+					if let href = self.extractTagValue("href", sourceString: string) {
+						foundURLs.append(href)
+					}
+				}
+			}
 			
 		}
 		
