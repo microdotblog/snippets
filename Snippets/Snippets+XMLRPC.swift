@@ -280,6 +280,9 @@ extension Snippets {
 						completion(error, url)
 						return
 					}
+					else {
+						completion(error, nil)
+					}
 				})
 			}
 			else {
