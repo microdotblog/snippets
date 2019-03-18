@@ -283,7 +283,7 @@ public class SnippetsRPCDiscovery: NSObject {
 		var requestString = ""
 		
 		if let boolParam = param as? MBBoolean {
-			requestString += "<value><boolean>\(boolParam.boolValue)</boolan></value>"
+			requestString += "<value><boolean>\(boolParam.boolValue)</boolean></value>"
 		}
 		else if let numberParam = param as? NSNumber {
 			requestString += "<value><int>\(numberParam.intValue)</int></value>"
