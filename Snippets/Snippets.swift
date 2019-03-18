@@ -212,6 +212,43 @@ public class Snippets : NSObject {
 	// MARK: - Follow Interface
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	@objc public func fetchUserDetails(user : SnippetsUser, completion: @escaping(Error?, SnippetsUser?, [SnippetsPost]) -> ())
+	{
+		let route = "posts/\(user.userHandle)"
+
+		let request = self.secureGet(path: self.pathForRoute(route), arguments: [:])
+	
+		_ = UUHttpSession.executeRequest(request) { (parsedServerResponse) in
+			if let feedDictionary = parsedServerResponse.parsedResponse as? [String : Any]
+			{
+				var updatedUser = user
+				var posts : [ SnippetsPost ] = []
+				if let author = feedDictionary["author"] as? [String : Any]
+				{
+					updatedUser = SnippetsUser(author)
+				}
+				if let microblogExtension = feedDictionary["_microblog"] as? [String : Any]
+				{
+					updatedUser.loadFromMicroblogDictionary(microblogExtension)
+				}
+				if let items = feedDictionary["items"] as? [[String : Any]]
+				{
+					for dictionary : [String : Any] in items
+					{
+						let post = SnippetsPost(dictionary)
+						posts.append(post)
+					}
+				}
+				
+				completion(parsedServerResponse.httpError, updatedUser, posts)
+			}
+			else
+			{
+				completion(parsedServerResponse.httpError, user, [])
+			}
+		}
+	}
+	
 	@objc public func follow(user : SnippetsUser, completion: @escaping(Error?) -> ())
 	{
 		let arguments : [ String : String ] = [ "username" : user.userHandle ]
