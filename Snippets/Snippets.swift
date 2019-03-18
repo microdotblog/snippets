@@ -534,25 +534,19 @@ public class Snippets : NSObject {
 
 	private func secureGet(path : String, arguments : [String : String]) -> UUHttpRequest
 	{
-		let request = UUHttpRequest(url:path, queryArguments: arguments)
-		request.headerFields["Authorization"] = "Bearer \(self.token)"
-		
+		let request = UUHttpRequest(url:path, method: .get, queryArguments: arguments, headers : ["Authorization" : "Bearer \(self.token)"])
 		return request
 	}
 
 	private func securePut(path : String, arguments : [String : String], body : Data? = nil) -> UUHttpRequest
 	{
-		let request = UUHttpRequest(url:path, method: .put, body:body)
-		request.headerFields["Authorization"] = "Bearer \(self.token)"
-		
+		let request = UUHttpRequest(url:path, method: .put,  queryArguments:arguments, headers : ["Authorization" : "Bearer \(self.token)"], body:body)
 		return request
 	}
 
 	private func securePost(path : String, arguments : [String : String], body : Data? = nil) -> UUHttpRequest
 	{
-		let request = UUHttpRequest(url:path, method: .post, body:body)
-		request.headerFields["Authorization"] = "Bearer \(self.token)"
-		
+		let request = UUHttpRequest(url:path, method: .post, queryArguments:arguments, headers : ["Authorization" : "Bearer \(self.token)"], body:body)
 		return request
 	}
 	
