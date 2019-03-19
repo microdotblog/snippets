@@ -580,6 +580,18 @@
                                     <outlet property="delegate" destination="lfZ-Eq-ABJ" id="DKb-K7-0BO"/>
                                 </connections>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OI0-ip-W15">
+                                <rect key="frame" x="317" y="28" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="adX-eX-ge4"/>
+                                    <constraint firstAttribute="width" constant="50" id="wDr-Gp-aCc"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="14"/>
+                                <state key="normal" title="+Photo"/>
+                                <connections>
+                                    <action selector="onAddPhoto" destination="lfZ-Eq-ABJ" eventType="touchUpInside" id="Ocq-mZ-kSg"/>
+                                </connections>
+                            </button>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fyG-7n-TfL">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
@@ -599,15 +611,18 @@
                             <constraint firstItem="fyG-7n-TfL" firstAttribute="leading" secondItem="NHg-at-FrD" secondAttribute="leading" id="7DM-ZM-cDL"/>
                             <constraint firstAttribute="trailing" secondItem="fyG-7n-TfL" secondAttribute="trailing" id="9fN-bq-DtX"/>
                             <constraint firstAttribute="bottom" secondItem="fyG-7n-TfL" secondAttribute="bottom" id="B3r-N1-axx"/>
+                            <constraint firstItem="NHg-at-FrD" firstAttribute="trailing" secondItem="OI0-ip-W15" secondAttribute="trailing" constant="8" id="J6f-8z-HV4"/>
                             <constraint firstItem="zHG-op-2Mc" firstAttribute="leading" secondItem="NHg-at-FrD" secondAttribute="leading" id="Jqp-aX-FhM"/>
                             <constraint firstItem="zHG-op-2Mc" firstAttribute="bottom" secondItem="NHg-at-FrD" secondAttribute="bottom" id="ORj-sX-48q"/>
                             <constraint firstItem="zHG-op-2Mc" firstAttribute="top" secondItem="NHg-at-FrD" secondAttribute="top" id="b5A-lP-s8v"/>
                             <constraint firstItem="fyG-7n-TfL" firstAttribute="top" secondItem="NHg-at-FrD" secondAttribute="top" id="cwV-K1-FWI"/>
+                            <constraint firstItem="OI0-ip-W15" firstAttribute="top" secondItem="NHg-at-FrD" secondAttribute="top" constant="8" id="kHB-OE-cGT"/>
                             <constraint firstItem="zHG-op-2Mc" firstAttribute="trailing" secondItem="NHg-at-FrD" secondAttribute="trailing" id="uGm-XB-ukd"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NHg-at-FrD"/>
                     </view>
                     <connections>
+                        <outlet property="addPhotoButton" destination="OI0-ip-W15" id="mBm-3s-a4s"/>
                         <outlet property="busyView" destination="fyG-7n-TfL" id="ivg-WG-RRy"/>
                         <outlet property="textView" destination="zHG-op-2Mc" id="5eG-9F-kiP"/>
                     </connections>
