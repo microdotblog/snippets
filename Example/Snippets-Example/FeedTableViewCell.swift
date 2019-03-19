@@ -91,6 +91,9 @@ class FeedTableViewCell: UITableViewCell {
 				view.layer.cornerRadius = 2
 				view.addSubview(imageView)
 				self.imageStackView.addArrangedSubview(view)
+				
+				imageView.isUserInteractionEnabled = true
+				imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(openImageNotification(_:))))
 				return
 			}
 		}
@@ -109,6 +112,14 @@ class FeedTableViewCell: UITableViewCell {
 			}
 		}
 
+	}
+	
+	@objc func openImageNotification(_ gesture : UITapGestureRecognizer) {
+		if let imageView = gesture.view as? UIImageView {
+			DispatchQueue.main.async {
+				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "DisplayImageNotification"), object: imageView.image, userInfo: nil)
+			}
+		}
 	}
 	
 	@IBAction func handleAvatarTapped() {

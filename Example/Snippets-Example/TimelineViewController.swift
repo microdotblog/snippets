@@ -36,10 +36,9 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 	override func viewDidLoad()
 	{
 		super.viewDidLoad()
+
+		self.setupNotifications()
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(handleImageLoadedNotification(_:)), name: NSNotification.Name(rawValue: "ImageLoadedNotification"), object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(handleTemporaryTokenReceivedNotification(_:)), name: NSNotification.Name("TemporaryTokenReceivedNotification"), object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(handleLoadUserProfile(_:)), name: NSNotification.Name(rawValue: "ShowUserProfileNotification"), object: nil)
 		self.loadingView.isHidden = true
 		self.loadingView.superview?.bringSubviewToFront(self.loadingView)
 		self.loginPopUpView.superview?.bringSubviewToFront(self.loginPopUpView)
@@ -56,6 +55,13 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 		else {
 			self.emailAddressField.becomeFirstResponder()
 		}
+	}
+	
+	func setupNotifications() {
+		NotificationCenter.default.addObserver(self, selector: #selector(handleImageLoadedNotification(_:)), name: NSNotification.Name(rawValue: "ImageLoadedNotification"), object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(handleTemporaryTokenReceivedNotification(_:)), name: NSNotification.Name("TemporaryTokenReceivedNotification"), object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(handleLoadUserProfile(_:)), name: NSNotification.Name(rawValue: "ShowUserProfileNotification"), object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(handleDisplayImageNotification(_:)), name: NSNotification.Name(rawValue: "DisplayImageNotification"), object: nil)
 	}
 	
 	func selectButton(_ button : UIButton) {
@@ -129,6 +135,13 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 		self.present(navController, animated: true, completion: nil)
 	}
 	
+	func compose(_ replyPost : SnippetsPost?) {
+		
+	}
+	
+	func displayConversation(_ post : SnippetsPost) {
+		
+	}
 	
 	func updateUserConfiguration()
 	{
@@ -153,6 +166,15 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 	@objc func handleLoadUserProfile(_ notification : Notification) {
 		let user : SnippetsUser = notification.object as! SnippetsUser
 		self.displayUserProfile(user)
+	}
+	
+	@objc func handleDisplayImageNotification(_ notification : Notification) {
+		let image = notification.object as! UIImage
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let controller = storyboard.instantiateViewController(withIdentifier: "ImageViewerViewController") as! ImageViewerViewController
+		controller.image = image
+		let navController = UINavigationController(rootViewController: controller)
+		self.present(navController, animated: true, completion: nil)
 	}
 	
 	@objc func handleTemporaryTokenReceivedNotification(_ notification : Notification)
@@ -195,6 +217,26 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 		cell.configure(post)
 		
     	return cell
+	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+	{
+		let dictionary = self.feedItems[indexPath.row]
+		let post = dictionary["post"] as! SnippetsPost
+		
+		let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+		alert.addAction(UIAlertAction(title: "Reply", style: .default, handler: { (action) in
+			self.compose(post)
+		}))
+		
+		alert.addAction(UIAlertAction(title: "View Conversation", style: .default, handler: { (action) in
+			self.displayConversation(post)
+		}))
+		
+		alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+		}))
+		
+		self.present(alert, animated: true, completion: nil)
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
