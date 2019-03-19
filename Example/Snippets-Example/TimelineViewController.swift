@@ -116,11 +116,17 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 		self.displayUserProfile(self.loggedInUser!)
 	}
 	
+	@IBAction func onCompose() {
+		self.compose(nil)
+	}
+	
 	func processTimelineItems(_ items : [SnippetsPost]) {
-		
+
 		self.feedItems = SnippetsParsingTools.convertPostsToTimelineDictionaries(items)
 		
 		DispatchQueue.main.async {
+			self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+			
 			self.tableView.reloadData()
 			self.loadingView.isHidden = true
 		}
@@ -135,7 +141,11 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 	}
 	
 	func compose(_ replyPost : SnippetsPost?) {
-		
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let controller = storyboard.instantiateViewController(withIdentifier: "ComposeViewController") as! ComposeViewController
+		controller.originalPost = replyPost
+		let navController = UINavigationController(rootViewController: controller)
+		self.present(navController, animated: true, completion: nil)
 	}
 	
 	func displayConversation(_ post : SnippetsPost) {

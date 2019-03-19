@@ -34,10 +34,13 @@ public class SnippetsUser : NSObject
 	@objc public var discoverCount : Int = 0
 	@objc public var isFollowing = false
 	@objc public var userImage : SnippetsImage? = nil
+
+	private var avatarDownloadHttpSession : UUHttpRequest?
 }
 
 
 extension SnippetsUser {
+	
 
 	@objc public func loadUserImage(completion: @escaping()-> ())
 	{
@@ -51,17 +54,20 @@ extension SnippetsUser {
 			}
 		}
 
-		// If we have gotten here, then there is no image available to display so we need to fetch it...
-		UUHttpSession.get(url:self.pathToUserImage) { (parsedServerResponse) in
-			if let image = parsedServerResponse.parsedResponse as? SnippetsImage
-			{
-				if let imageData = image.uuPngData()
+		if self.avatarDownloadHttpSession == nil {
+			// If we have gotten here, then there is no image available to display so we need to fetch it...
+			let request = UUHttpRequest(url: self.pathToUserImage)
+			self.avatarDownloadHttpSession = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
+				if let image = parsedServerResponse.parsedResponse as? SnippetsImage
 				{
-					UUDataCache.shared.set(data: imageData, for: self.pathToUserImage)
-					self.userImage = image
-					completion()
+					if let imageData = image.uuPngData()
+					{
+						UUDataCache.shared.set(data: imageData, for: self.pathToUserImage)
+						self.userImage = image
+						completion()
+					}
 				}
-			}
+			})
 		}
 	}
 	

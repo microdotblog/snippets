@@ -41,6 +41,7 @@ class ConversationViewController: UIViewController, UITableViewDataSource, UITab
 	func processTimelineItems(_ items : [SnippetsPost]) {
 		
 		self.feedItems = SnippetsParsingTools.convertPostsToTimelineDictionaries(items)
+		self.feedItems.reverse()
 		
 		DispatchQueue.main.async {
 			self.tableView.reloadData()
@@ -57,10 +58,11 @@ class ConversationViewController: UIViewController, UITableViewDataSource, UITab
 	}
 	
 	func compose(_ replyPost : SnippetsPost?) {
-		
-	}
-	
-	func displayConversation(_ post : SnippetsPost) {
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let controller = storyboard.instantiateViewController(withIdentifier: "ComposeViewController") as! ComposeViewController
+		controller.originalPost = replyPost
+		let navController = UINavigationController(rootViewController: controller)
+		self.present(navController, animated: true, completion: nil)
 	}
 
 	@objc func onDone() {
