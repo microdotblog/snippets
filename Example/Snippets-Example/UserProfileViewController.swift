@@ -27,10 +27,47 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
 
 			DispatchQueue.main.async {
 				self.tableView.reloadData()
+				self.updateFollowingStatus()
 			}
 		}
 		
     }
+
+	func updateFollowingStatus() {
+		if self.user.isFollowing {
+			self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Unfollow", style: .plain, target: self, action: #selector(toggleFollowing))
+		}
+		else {
+			self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Follow", style: .plain, target: self, action: #selector(toggleFollowing))
+		}
+	}
+	
+	@objc func toggleFollowing() {
+		
+		let spinner = UIActivityIndicatorView(style: .gray)
+		spinner.startAnimating()
+		
+		self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
+		
+		if self.user.isFollowing {
+			Snippets.shared.unfollow(user: self.user) { (error) in
+				self.user.isFollowing = !self.user.isFollowing
+				
+				DispatchQueue.main.async {
+					 self.updateFollowingStatus()
+				}
+			}
+		}
+		else {
+			Snippets.shared.follow(user: self.user) { (error) in
+				self.user.isFollowing = !self.user.isFollowing
+				
+				DispatchQueue.main.async {
+					self.updateFollowingStatus()
+				}
+			}
+		}
+	}
 	
 	@objc func onDone() {
 		self.navigationController?.dismiss(animated: true, completion: nil)
