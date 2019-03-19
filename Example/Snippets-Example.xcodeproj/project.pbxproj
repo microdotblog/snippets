@@ -17,6 +17,7 @@
 		C5AD83D921E6883500BB2D74 /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F056DE21BF1EE100E502DF /* FeedTableViewCell.swift */; };
 		C5AD83E121E6BC7300BB2D74 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5AD83C721E687D600BB2D74 /* Main.storyboard */; };
 		C5BE875F22406604009DA0F9 /* ImageViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BE875E22406604009DA0F9 /* ImageViewerViewController.swift */; };
+		C5BE876B22413777009DA0F9 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BE876A22413777009DA0F9 /* ConversationViewController.swift */; };
 		C5CD1FF121F245FC0024708F /* Snippets.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52CFA3B21F16B2100D52676 /* Snippets.framework */; };
 		C5CD1FF221F245FC0024708F /* Snippets.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C52CFA3B21F16B2100D52676 /* Snippets.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C5CD1FF621F246200024708F /* UUSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5AD83DB21E6886900BB2D74 /* UUSwift.framework */; };
@@ -87,6 +88,7 @@
 		C5AD83CC21E687D700BB2D74 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C5AD83DB21E6886900BB2D74 /* UUSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UUSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5BE875E22406604009DA0F9 /* ImageViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewerViewController.swift; sourceTree = "<group>"; };
+		C5BE876A22413777009DA0F9 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		C5F056C321BF1D6300E502DF /* Snippets-Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Snippets-Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5F056C621BF1D6300E502DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5F056C821BF1D6300E502DF /* TimelineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				C51B9CD7223B2177002D2DDD /* ProfileHeaderTableViewCell.swift */,
 				C5F056C821BF1D6300E502DF /* TimelineViewController.swift */,
 				C51B9CD3223A1F4D002D2DDD /* UserProfileViewController.swift */,
+				C5BE876A22413777009DA0F9 /* ConversationViewController.swift */,
 				C5BE875E22406604009DA0F9 /* ImageViewerViewController.swift */,
 				C51B9CDB223B5CEF002D2DDD /* Resources */,
 			);
@@ -340,6 +343,7 @@
 			files = (
 				C51B9CDA223B24C7002D2DDD /* ParsingTools.swift in Sources */,
 				C5F056C921BF1D6300E502DF /* TimelineViewController.swift in Sources */,
+				C5BE876B22413777009DA0F9 /* ConversationViewController.swift in Sources */,
 				C5BE875F22406604009DA0F9 /* ImageViewerViewController.swift in Sources */,
 				C51B9CD4223A1F4D002D2DDD /* UserProfileViewController.swift in Sources */,
 				C5F056DF21BF1EE100E502DF /* FeedTableViewCell.swift in Sources */,

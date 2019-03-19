@@ -13,7 +13,6 @@ import Snippets
 class TimelineViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
 	// User display elements
-	//@IBOutlet var profileButton : UIButton!
 	@IBOutlet var profileImage : UIImageView!
 	
 	@IBOutlet var loadingView : UIView!
@@ -140,7 +139,12 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 	}
 	
 	func displayConversation(_ post : SnippetsPost) {
+		let storyboard = UIStoryboard(name: "Main", bundle: nil)
+		let controller = storyboard.instantiateViewController(withIdentifier: "ConversationViewController") as! ConversationViewController
+		controller.originalPost = post
 		
+		let navController = UINavigationController(rootViewController: controller)
+		self.present(navController, animated: true, completion: nil)
 	}
 	
 	func updateUserConfiguration()
