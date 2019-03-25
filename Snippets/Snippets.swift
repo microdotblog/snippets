@@ -536,8 +536,8 @@ public class Snippets : NSObject {
 		}
 		
 		formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
-		formData.append(String("Content-Disposition: form-data; name=\"\(imageName)\"; filename=\"image.jpg\"\r\n").data(using: String.Encoding.utf8)!)
-		formData.append(String("Content-Type: image/jpeg\r\n\r\n").data(using: String.Encoding.utf8)!)
+		formData.append(String("Content-Disposition: form-data; name=\"\(imageName)\"; filename=\"video.mov\"\r\n").data(using: String.Encoding.utf8)!)
+		formData.append(String("Content-Type: video/mov\r\n\r\n").data(using: String.Encoding.utf8)!)
 		formData.append(data)
 		formData.append(String("\r\n").data(using: String.Encoding.utf8)!)
 		formData.append(String("--\(boundary)--\r\n").data(using: String.Encoding.utf8)!)
