@@ -232,6 +232,54 @@ extension Snippets {
 			}
 		}
 	}
+
+	@objc public func uploadVideo(data : Data, 	request : SnippetsXMLRPCRequest,
+								  completion: @escaping(Error?, String?, String?) -> ())
+	{
+		
+		let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + ".mp4"
+		let params : [Any] = [ request.identity.blogId,
+							   request.identity.blogUsername,
+							   request.identity.blogPassword, [ "name" : filename,
+																"type" : "video/mp4",
+																"bits": data ]]
+		
+		self.executeRPC(request: request, params: params) { (error, responseData) in
+			if let data : Data = responseData {
+				SnippetsXMLRPCParser.parsedResponseFromData(data, completion: { (responseFault, responseParams) in
+					
+					if responseFault == nil {
+						var imageUrl : String? = nil
+						var imageIdentifier : String? = nil
+						
+						if let imageDictionary = responseParams.first as? NSDictionary {
+							imageUrl = imageDictionary.object(forKey: "url") as? String
+							if (imageUrl == nil) {
+								imageUrl = imageDictionary.object(forKey: "link") as? String
+							}
+							
+							imageIdentifier = imageDictionary.object(forKey: "id") as? String
+							
+							if imageUrl != nil && imageIdentifier == nil {
+								imageIdentifier = ""
+							}
+						}
+						
+						
+						completion(error, imageUrl, imageIdentifier)
+						return
+					}
+					else {
+						let error = self.buildCustomErrorFromResponseFault(responseFault!)
+						completion(error, nil, nil)
+					}
+				})
+			}
+			else {
+				completion(error, nil, nil)
+			}
+		}
+	}
 	
 	@objc public func unpublish(postIdentifier : String, request : SnippetsXMLRPCRequest, completion: @escaping(Error?) -> ()) {
 

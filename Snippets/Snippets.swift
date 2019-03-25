@@ -518,6 +518,41 @@ public class Snippets : NSObject {
 		
 	}
 
+	@objc public func uploadVideo(data : Data, completion: @escaping(Error?, String?)->())
+	{
+		var formData : Data = Data()
+		let imageName = "file"
+		let boundary = ProcessInfo.processInfo.globallyUniqueString
+		
+		var arguments : [ String : String ] = [:]
+		
+		if let blogUid = self.uid
+		{
+			arguments["mp-destination"] = blogUid
+			
+			formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
+			formData.append(String("Content-Disposition: form-data; name=\"mp-destination\"\r\n\r\n").data(using: String.Encoding.utf8)!)
+			formData.append(String("\(blogUid)\r\n").data(using:String.Encoding.utf8)!)
+		}
+		
+		formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
+		formData.append(String("Content-Disposition: form-data; name=\"\(imageName)\"; filename=\"image.jpg\"\r\n").data(using: String.Encoding.utf8)!)
+		formData.append(String("Content-Type: image/jpeg\r\n\r\n").data(using: String.Encoding.utf8)!)
+		formData.append(data)
+		formData.append(String("\r\n").data(using: String.Encoding.utf8)!)
+		formData.append(String("--\(boundary)--\r\n").data(using: String.Encoding.utf8)!)
+		
+		let request = self.securePost(path: self.pathForRoute("micropub/media"), arguments: arguments, body: formData)
+		request.headerFields["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
+		
+		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
+			
+			let publishedPath = parsedServerResponse.httpResponse?.allHeaderFields["Location"] as? String
+			completion(parsedServerResponse.httpError, publishedPath)
+		})
+		
+	}
+	
 	private func pathForRoute(_ route : String) -> String
 	{
 		let fullPath : NSString = self.serverPath as NSString
