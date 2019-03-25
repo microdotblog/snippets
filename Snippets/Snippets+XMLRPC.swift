@@ -237,11 +237,11 @@ extension Snippets {
 								  completion: @escaping(Error?, String?, String?) -> ())
 	{
 		
-		let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + ".mp4"
+		let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + ".mov"
 		let params : [Any] = [ request.identity.blogId,
 							   request.identity.blogUsername,
 							   request.identity.blogPassword, [ "name" : filename,
-																"type" : "video/mp4",
+																"type" : "video/mov",
 																"bits": data ]]
 		
 		self.executeRPC(request: request, params: params) { (error, responseData) in
