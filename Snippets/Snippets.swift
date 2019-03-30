@@ -353,7 +353,7 @@ public class Snippets : NSObject {
 	// MARK: - Post/Reply Interface
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	@objc public func postText(title : String, content : String, photos : [String], altTags : [String], completion: @escaping(Error?, String?) -> ())
+	@objc public func postText(title : String, content : String, photos : [String], altTags : [String], videos : [String], videoAltTags : [String], completion: @escaping(Error?, String?) -> ())
 	{
 		var bodyText = ""
 		bodyText = self.appendParameter(body: bodyText, name: "name", content: title)
@@ -373,6 +373,16 @@ public class Snippets : NSObject {
 		for altTag in altTags
 		{
 			bodyText = self.appendParameter(body: bodyText, name: "mp-photo-alt[]", content: altTag)
+		}
+		
+		for videoPath in videos
+		{
+			bodyText = self.appendParameter(body: bodyText, name: "video[]", content: videoPath)
+		}
+		
+		for altTag in videoAltTags
+		{
+			bodyText = self.appendParameter(body: bodyText, name: "mp-video-alt[]", content: altTag)
 		}
 
 		let body : Data = bodyText.data(using: .utf8)!
