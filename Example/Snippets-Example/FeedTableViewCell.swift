@@ -17,6 +17,7 @@ class FeedTableViewCell: UITableViewCell {
 	@IBOutlet var userImage : UIImageView!
 	@IBOutlet var textView : UITextView!
 	@IBOutlet var imageStackView : UIStackView!
+	@IBOutlet var draftStatusLabel : UILabel!
 	@IBOutlet var stackViewHeightConstraint : NSLayoutConstraint!
 	
 	var snippetsPost : SnippetsPost? = nil
@@ -45,6 +46,8 @@ class FeedTableViewCell: UITableViewCell {
 		let post : SnippetsPost = dictionary["post"] as! SnippetsPost
 		
 		self.snippetsPost = post
+		
+		self.draftStatusLabel.isHidden = !post.isDraft
 		
 		let images : [String] = dictionary["images"] as? [String] ?? []
 		let attributedString : NSAttributedString = dictionary["attributedString"] as? NSAttributedString ?? NSAttributedString(string: "")

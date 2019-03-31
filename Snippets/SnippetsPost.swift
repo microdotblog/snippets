@@ -38,8 +38,31 @@ extension SnippetsPost {
 	func loadFromDictionary(_ sourceDictionary : [String : Any])
 	{
 		var dictionary = sourceDictionary
+		
+		// Test to see if we have the micropub version of this dictionary
 		if let properties = dictionary["properties"] as? [String : Any] {
+			
 			dictionary = properties
+			
+			if let urlArray = dictionary["url"] as? [String]{
+				self.path = urlArray[0]
+			}
+			
+			if let contentArray = dictionary["content"] as? [String] {
+				self.htmlText = contentArray[0]
+			}
+			
+			if let publishedArray = dictionary["published"] as? [String] {
+				let dateString = publishedArray[0]
+				
+				self.publishedDate = dateString.uuParseDate(format: "yyyy-MM-dd'T'HH:mm:ssZ")
+			}
+			
+			if let draftStatusArray = dictionary["post-status"] as? [String] {
+				let draftStatus = draftStatusArray[0]
+				self.isDraft = (draftStatus == "draft")
+			}
+			
 		}
 		
 		if let identifier = dictionary["id"] as? String
