@@ -353,7 +353,7 @@ public class Snippets : NSObject {
 	// MARK: - Post/Reply Interface
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	@objc public func postText(title : String, content : String, photos : [String], altTags : [String], videos : [String], videoAltTags : [String], completion: @escaping(Error?, String?) -> ())
+	@objc public func postText(title : String, content : String, photos : [String] = [], altTags : [String] = [], videos : [String] = [], videoAltTags : [String] = [], completion: @escaping(Error?, String?) -> ())
 	{
 		var bodyText = ""
 		bodyText = self.appendParameter(body: bodyText, name: "name", content: title)
