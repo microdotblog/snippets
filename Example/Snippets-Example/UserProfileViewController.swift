@@ -20,9 +20,12 @@ class UserProfileViewController: UIViewController, UITableViewDataSource, UITabl
 		self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem:.done, target: self, action: #selector(onDone))
 		
         super.viewDidLoad()
+
 		
-		Snippets.shared.fetchUserDetails(user: self.user) { (error, updatedUser, posts) in
-			self.user = updatedUser
+		
+		//Snippets.shared.fetchUserDetails(user: self.user) { (error, updatedUser, posts) in
+		Snippets.shared.fetchCurrentUserPosts { (error, posts) in
+			//self.user = updatedUser
 			self.posts = SnippetsParsingTools.convertPostsToTimelineDictionaries(posts)
 
 			DispatchQueue.main.async {

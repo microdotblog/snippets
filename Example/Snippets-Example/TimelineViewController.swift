@@ -77,7 +77,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 		self.selectButton(self.timelineButton)
 		
 		self.loadingView.isHidden = false
-		Snippets.shared.fetchUserTimeline { (error, items) in
+		Snippets.shared.fetchCurrentUserTimeline { (error, items) in
 			self.processTimelineItems(items)
 		}
 	}
@@ -87,7 +87,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 		self.selectButton(self.bookmarksButton)
 		
 		self.loadingView.isHidden = false
-		Snippets.shared.fetchUserFavorites { (error, items) in
+		Snippets.shared.fetchCurrentUserFavorites { (error, items) in
 			self.processTimelineItems(items)
 		}
 	}
@@ -97,7 +97,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 		self.selectButton(self.photosButton)
 		
 		self.loadingView.isHidden = false
-		Snippets.shared.fetchUserPhotoTimeline { (error, items) in
+		Snippets.shared.fetchCurrentUserPhotoTimeline { (error, items) in
 			self.processTimelineItems(items)
 		}
 	}
@@ -159,7 +159,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 	
 	func updateUserConfiguration()
 	{
-		Snippets.shared.fetchUserInfo { (error, user) in
+		Snippets.shared.fetchCurrentUserInfo { (error, user) in
 			self.loggedInUser = user
 			
 			DispatchQueue.main.async {

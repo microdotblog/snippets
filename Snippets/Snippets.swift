@@ -72,7 +72,7 @@ public class Snippets : NSObject {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Returns a SnippetsUser for the currently signed-in user
-	@objc public func fetchUserInfo(completion: @escaping(Error?, SnippetsUser?)-> ())
+	@objc public func fetchCurrentUserInfo(completion: @escaping(Error?, SnippetsUser?)-> ())
 	{
 		let arguments : [String : String] = [ "token" : token ]
 		let request = self.securePost(path: self.pathForRoute("account/verify"), arguments: arguments)
@@ -92,7 +92,7 @@ public class Snippets : NSObject {
 
 	// User configuration pertains to the configuration of the Micro.blog account. For example, if a user has multiple micro.blogs,
 	// fetching the configuration will return the list of configured micro.blogs for the signed-in user.
-	@objc public func fetchUserConfiguration(completion: @escaping(Error?, [String : Any])-> ())
+	@objc public func fetchCurrentUserConfiguration(completion: @escaping(Error?, [String : Any])-> ())
 	{
 		let request = self.secureGet(path: self.pathForRoute("micropub?q=config"), arguments: [:])
 		
@@ -115,52 +115,41 @@ public class Snippets : NSObject {
 	// MARK: - Timeline interface for the signed-in user
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	private func fetchTimeline(_ path : String, completion: @escaping(Error?, [SnippetsPost]) -> ())
+	// Fetch all posts by the current logged in user, including draft posts.
+	@objc public func fetchCurrentUserPosts(completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
-		let request = self.secureGet(path: path, arguments: [:])
-		
-		_ = UUHttpSession.executeRequest(request) { (parsedServerResponse) in
-			if let feedDictionary = parsedServerResponse.parsedResponse as? [String : Any]
-			{
-				if let items = feedDictionary["items"] as? [[String : Any]]
-				{
-					var posts : [ SnippetsPost ] = []
-					
-					for dictionary : [String : Any] in items
-					{
-						let post = SnippetsPost(dictionary)
-						posts.append(post)
-					}
-					
-					completion(parsedServerResponse.httpError, posts)
-				}
-			}
-			else
-			{
-				completion(parsedServerResponse.httpError, [])
-			}
+		var arguments = [ "q" : "source" ]
+		if let blogUid = self.uid {
+			arguments["mp-destination"] = blogUid
 		}
+		
+		self.fetchTimeline(self.pathForRoute("micropub"), arguments:arguments, completion: completion)
 	}
 	
-	@objc public func fetchUserTimeline(completion: @escaping(Error?, [SnippetsPost]) -> ())
+	@objc public func fetchCurrentUserTimeline(completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/all"), completion: completion)
 	}
 	
-	@objc public func fetchUserPhotoTimeline(completion: @escaping(Error?, [SnippetsPost]) -> ())
+	@objc public func fetchCurrentUserPhotoTimeline(completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/photos"), completion: completion)
 	}
 
-	@objc public func fetchUserMentions(completion: @escaping(Error?, [SnippetsPost]) -> ())
+	@objc public func fetchCurrentUserMentions(completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/mentions"), completion: completion)
 	}
 
-	@objc public func fetchUserFavorites(completion: @escaping(Error?, [SnippetsPost]) -> ())
+	@objc public func fetchCurrentUserFavorites(completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/favorites"), completion: completion)
 	}
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// MARK: - Interface for querying other items outside the logged-in user
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	@objc public func fetchDiscoverTimeline(collection : String? = nil, completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
@@ -353,36 +342,38 @@ public class Snippets : NSObject {
 	// MARK: - Post/Reply Interface
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	@objc public func postText(title : String, content : String, photos : [String] = [], altTags : [String] = [], videos : [String] = [], videoAltTags : [String] = [], completion: @escaping(Error?, String?) -> ())
+	@objc public func postText(title : String, content : String, isDraft : Bool = false, photos : [String] = [], altTags : [String] = [], videos : [String] = [], videoAltTags : [String] = [], completion: @escaping(Error?, String?) -> ())
 	{
 		var bodyText = ""
 		bodyText = self.appendParameter(body: bodyText, name: "name", content: title)
 		bodyText = self.appendParameter(body: bodyText, name: "content", content: content)
 		bodyText = self.appendParameter(body: bodyText, name: "h", content: "entry")
 
-		if let blogUid = self.uid
-		{
+		if let blogUid = self.uid {
 			bodyText = self.appendParameter(body: bodyText, name: "mp-destination", content: blogUid)
 		}
 
-		for photoPath in photos
-		{
+		for photoPath in photos {
 			bodyText = self.appendParameter(body: bodyText, name: "photo[]", content: photoPath)
 		}
 
-		for altTag in altTags
-		{
+		for altTag in altTags {
 			bodyText = self.appendParameter(body: bodyText, name: "mp-photo-alt[]", content: altTag)
 		}
 		
-		for videoPath in videos
-		{
+		for videoPath in videos {
 			bodyText = self.appendParameter(body: bodyText, name: "video[]", content: videoPath)
 		}
 		
-		for altTag in videoAltTags
-		{
+		for altTag in videoAltTags {
 			bodyText = self.appendParameter(body: bodyText, name: "mp-video-alt[]", content: altTag)
+		}
+		
+		if isDraft {
+			bodyText = self.appendParameter(body: bodyText, name: "post-status", content: "draft")
+		}
+		else {
+			bodyText = self.appendParameter(body: bodyText, name: "post-status", content: "published")
 		}
 
 		let body : Data = bodyText.data(using: .utf8)!
@@ -393,7 +384,7 @@ public class Snippets : NSObject {
 		})
 	}
 	
-	@objc public func postHtml(title : String, content : String, completion: @escaping(Error?, String?) -> ())
+	@objc public func postHtml(title : String, content : String, isDraft : Bool = false, completion: @escaping(Error?, String?) -> ())
 	{
 		let properties : [ String : Any ] = [ "name" 	: [ title ],
 											  "content" : [ [ "html" : content ] ],
@@ -404,8 +395,15 @@ public class Snippets : NSObject {
 												"properties" : properties
 											]
 		
-		if let blogUid = self.uid
-		{
+		if isDraft {
+			arguments["post-status"] = "draft"
+		}
+		else {
+			arguments["post-status"] = "published"
+		}
+
+		
+		if let blogUid = self.uid {
 			arguments["mp-destination"] = blogUid
 		}
 		
@@ -429,8 +427,7 @@ public class Snippets : NSObject {
 		var bodyText = ""
 		bodyText = self.appendParameter(body: bodyText, name: "action", content: "delete")
 		bodyText = self.appendParameter(body: bodyText, name: "url", content: path)
-		if let blogUid = self.uid
-		{
+		if let blogUid = self.uid {
 			bodyText = self.appendParameter(body: bodyText, name: "mp-destination", content: blogUid)
 		}
 
@@ -570,7 +567,7 @@ public class Snippets : NSObject {
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// MARK: - Http setup helper functions
+	// MARK: - Private/internal helper functions
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private var uid : String?
@@ -619,6 +616,32 @@ public class Snippets : NSObject {
 		return newBody
 	}
 
+	private func fetchTimeline(_ path : String, arguments : [String : String] = [:], completion: @escaping(Error?, [SnippetsPost]) -> ())
+	{
+		let request = self.secureGet(path: path, arguments: arguments)
+		
+		_ = UUHttpSession.executeRequest(request) { (parsedServerResponse) in
+			if let feedDictionary = parsedServerResponse.parsedResponse as? [String : Any]
+			{
+				if let items = feedDictionary["items"] as? [[String : Any]]
+				{
+					var posts : [ SnippetsPost ] = []
+					
+					for dictionary : [String : Any] in items
+					{
+						let post = SnippetsPost(dictionary)
+						posts.append(post)
+					}
+					
+					completion(parsedServerResponse.httpError, posts)
+				}
+			}
+			else
+			{
+				completion(parsedServerResponse.httpError, [])
+			}
+		}
+	}
 }
 
 

@@ -29,14 +29,18 @@ public class SnippetsPost : NSObject
 	@objc public var path = ""
 	@objc public var publishedDate : Date?
 	@objc public var replies : [SnippetsPost] = []
+	@objc public var isDraft : Bool = false
 }
 
 
 extension SnippetsPost {
 
-	func loadFromDictionary(_ dictionary : [String : Any])
+	func loadFromDictionary(_ sourceDictionary : [String : Any])
 	{
-		print(dictionary)
+		var dictionary = sourceDictionary
+		if let properties = dictionary["properties"] as? [String : Any] {
+			dictionary = properties
+		}
 		
 		if let identifier = dictionary["id"] as? String
 		{
@@ -61,6 +65,11 @@ extension SnippetsPost {
 		if let dateString = dictionary["date_published"] as? String
 		{
 			self.publishedDate = dateString.uuParseDate(format: "yyyy-MM-dd'T'HH:mm:ssZ")
+		}
+		
+		if let draftStatus = dictionary["post-status"] as? String
+		{
+			self.isDraft = (draftStatus == "draft")
 		}
 	}
 }
