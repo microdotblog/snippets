@@ -97,7 +97,9 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 		self.selectButton(self.photosButton)
 		
 		self.loadingView.isHidden = false
-		Snippets.shared.fetchCurrentUserPhotoTimeline { (error, items) in
+		
+		//Snippets.shared.fetchCurrentUserPhotoTimeline { (error, items) in
+		Snippets.shared.fetchCurrentUserMediaTimeline { (error, items) in
 			self.processTimelineItems(items)
 		}
 	}

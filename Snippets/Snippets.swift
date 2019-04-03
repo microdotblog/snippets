@@ -136,6 +136,11 @@ public class Snippets : NSObject {
 		self.fetchTimeline(self.pathForRoute("posts/photos"), completion: completion)
 	}
 
+	@objc public func fetchCurrentUserMediaTimeline(completion: @escaping(Error?, [SnippetsPost]) -> ())
+	{
+		self.fetchTimeline(self.pathForRoute("posts/media"), completion: completion)
+	}
+
 	@objc public func fetchCurrentUserMentions(completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		self.fetchTimeline(self.pathForRoute("posts/mentions"), completion: completion)
