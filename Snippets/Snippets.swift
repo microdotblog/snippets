@@ -530,7 +530,7 @@ public class Snippets : NSObject {
 		
 	}
 
-	@objc public func uploadVideo(data : Data, completion: @escaping(Error?, String?)->())
+	@objc public func uploadVideo(data : Data, completion: @escaping(Error?, String?, String?)->())
 	{
 		var formData : Data = Data()
 		let imageName = "file"
@@ -559,8 +559,14 @@ public class Snippets : NSObject {
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			
-			let publishedPath = parsedServerResponse.httpResponse?.allHeaderFields["Location"] as? String
-			completion(parsedServerResponse.httpError, publishedPath)
+            var publishedPath : String? = nil
+            var posterPath : String? = nil
+            
+            if let dictionary = parsedServerResponse.parsedResponse as? [String : Any] {
+                publishedPath = dictionary["url"] as? String
+                posterPath = dictionary["poster"] as? String
+            }
+			completion(parsedServerResponse.httpError, publishedPath, posterPath)
 		})
 		
 	}
