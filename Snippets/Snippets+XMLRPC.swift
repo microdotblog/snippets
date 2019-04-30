@@ -180,7 +180,7 @@ extension Snippets {
 	@objc public func uploadImage(image : SnippetsImage, 	request : SnippetsXMLRPCRequest,
 													completion: @escaping(Error?, String?, String?) -> ())
 	{
-		let d = image.uuJpegData(1.0)
+		let d = image.uuJpegData(0.8)
 		
 		let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + ".jpg"
 		let params : [Any] = [ request.identity.blogId,
