@@ -156,18 +156,56 @@ public class Snippets : NSObject {
 	// MARK: - Interface for querying other items outside the logged-in user
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@objc public func fetchDiscoverTimeline(collection : String? = nil, completion: @escaping(Error?, [SnippetsPost]) -> ())
+    @objc public func fetchDiscoverTimeline(collection : String? = nil, completion: @escaping(Error?, [SnippetsPost], [[String : Any]]?) -> ())
 	{
-		if let validCollection = collection
-		{
-			let route = "posts/discover/\(validCollection)"
-			self.fetchTimeline(self.pathForRoute(route), completion: completion)
-		}
-		else
-		{
-			self.fetchTimeline(self.pathForRoute("posts/discover"), completion: completion)
-		}
+        var route = "posts/discover"
+        if let validCollection = collection {
+            route = "posts/discover/\(validCollection)"
+        }
+        
+        let path = self.pathForRoute(route)
+        
+        let request = self.secureGet(path: path, arguments: [ : ])
+        
+        _ = UUHttpSession.executeRequest(request) { (parsedServerResponse) in
+            if let feedDictionary = parsedServerResponse.parsedResponse as? [String : Any]
+            {
+                if let items = feedDictionary["items"] as? [[String : Any]]
+                {
+                    var posts : [ SnippetsPost ] = []
+                    var tagmoji : [[String : Any]]? = nil
+                    
+                    for dictionary : [String : Any] in items
+                    {
+                        let post = SnippetsPost(dictionary)
+                        posts.append(post)
+                    }
+
+                    if let microblogExtension = feedDictionary["_microblog"] as? [String : Any] {
+                        tagmoji = microblogExtension["tagmoji"] as? [[String : Any]]
+                    }
+
+                    completion(parsedServerResponse.httpError, posts, tagmoji)
+                }
+            }
+            else
+            {
+                completion(parsedServerResponse.httpError, [], nil)
+            }
+        }
 	}
+    
+    @objc public func fetchTagmojiCategories(completion: @escaping(Error?, [[String : Any]]) -> ())
+    {
+        self.fetchDiscoverTimeline { (error, posts, tagmoji) in
+            var categories : [[String : Any]] = [ ]
+            if let tagmojiList = tagmoji {
+                categories = tagmojiList
+            }
+            
+            completion(error, categories)
+        }
+    }
 
 	@objc public func fetchUserPosts(user : SnippetsUser, completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{

@@ -109,7 +109,7 @@ class TimelineViewController: UIViewController, UITableViewDataSource, UITableVi
 		self.selectButton(self.discoverButton)
 		
 		self.loadingView.isHidden = false
-		Snippets.shared.fetchDiscoverTimeline(collection: "books") { (error, items) in
+		Snippets.shared.fetchDiscoverTimeline(collection: nil) { (error, items, tagmoji) in
 			self.processTimelineItems(items)
 		}
 	}
