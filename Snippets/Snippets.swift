@@ -19,12 +19,21 @@ public class Snippets : NSObject {
 
 	@objc public static let shared = Snippets()
 	
-	@objc public func configure(permanentToken : String, blogUid : String?)
+	@objc public func configure(permanentToken : String, blogUid : String?, mediaEndPoint : String? = nil)
 	{
 		self.uid = blogUid
 		self.token = permanentToken
+		
+		if (mediaEndPoint) {
+			self.mediaEndPoint = mediaEndPoint
+		}
 	}
-	
+
+	@objc public func setMediaEndPoint(_ path : String)
+	{
+		self.mediaEndPoint = path
+	}
+
 	@objc public func setServerPath(_ path : String)
 	{
 		self.serverPath = path
@@ -557,7 +566,7 @@ public class Snippets : NSObject {
 		formData.append(String("\r\n").data(using: String.Encoding.utf8)!)
 		formData.append(String("--\(boundary)--\r\n").data(using: String.Encoding.utf8)!)
 		
-		let request = self.securePost(path: self.pathForRoute("micropub/media"), arguments: arguments, body: formData)
+		let request = self.securePost(path: self.mediaEndPoint, arguments: arguments, body: formData)
 		request.headerFields["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
 
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
@@ -592,7 +601,7 @@ public class Snippets : NSObject {
 		formData.append(String("\r\n").data(using: String.Encoding.utf8)!)
 		formData.append(String("--\(boundary)--\r\n").data(using: String.Encoding.utf8)!)
 		
-		let request = self.securePost(path: self.pathForRoute("micropub/media"), arguments: arguments, body: formData)
+		let request = self.securePost(path: self.mediaEndPoint, arguments: arguments, body: formData)
 		request.headerFields["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
@@ -622,6 +631,7 @@ public class Snippets : NSObject {
 	private var uid : String?
 	private var token : String = ""
 	private var serverPath = "http://micro.blog/"
+	private var mediaEndPoint = "http://micro.blog/micropub/media"
 
 	private func secureGet(path : String, arguments : [String : String]) -> UUHttpRequest
 	{
