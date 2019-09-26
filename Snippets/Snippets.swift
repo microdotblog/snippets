@@ -24,8 +24,8 @@ public class Snippets : NSObject {
 		self.uid = blogUid
 		self.token = permanentToken
 		
-		if (mediaEndPoint) {
-			self.mediaEndPoint = mediaEndPoint
+		if let endPoint = mediaEndPoint {
+			self.mediaEndPoint = endPoint
 		}
 	}
 
