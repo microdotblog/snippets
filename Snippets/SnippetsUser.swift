@@ -102,6 +102,11 @@ extension SnippetsUser {
 			self.userHandle = userName
 		}
 		
+		if let bio = authorDictionary["bio"] as? String
+		{
+			self.bio = bio
+		}
+		
 		if let snippetsDictionary = authorDictionary["_microblog"] as? [String : Any]
 		{
 			self.loadFromMicroblogDictionary(snippetsDictionary)
@@ -112,21 +117,25 @@ extension SnippetsUser {
 			self.fullName = fullName
 		}
 		
-		if let userImagePath = authorDictionary["avatar"] as? String
+		if let fullName = authorDictionary["full_name"] as? String
 		{
+			self.fullName = fullName
+		}
+		
+		if let userImagePath = authorDictionary["avatar"] as? String {
 			self.pathToUserImage = userImagePath
 		}
-		else if let userImagePath = authorDictionary["gravatar_url"] as? String
-		{
+		else if let userImagePath = authorDictionary["gravatar_url"] as? String {
 			self.pathToUserImage = userImagePath
 		}
-		if let site = authorDictionary["url"] as? String
-		{
+		if let site = authorDictionary["url"] as? String {
 			self.pathToWebSite = site
 		}
-		else if let site = authorDictionary["default_site"] as? String
-		{
-			self.pathToWebSite = site
+		
+		if self.pathToWebSite.count <=  0 {
+			if let site = authorDictionary["default_site"] as? String{
+				self.pathToWebSite = site
+			}
 		}
 	}
 }
