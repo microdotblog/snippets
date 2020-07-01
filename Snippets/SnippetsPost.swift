@@ -15,7 +15,7 @@ import UUSwift
 #endif
 
 
-public class SnippetsPost : NSObject
+open class SnippetsPost : NSObject
 {
 	public convenience init(_ dictionary : [String : Any])
 	{
