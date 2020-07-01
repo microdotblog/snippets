@@ -3,3 +3,5 @@ Example/Snippets-Example.xcodeproj/xcuserdata/*
 Snippets.xcodeproj/project.xcworkspace/*
 Snippets.xcodeproj/xcuserdata/*
 .DS_Store
+/.DS_Store
+/Example/.DS_Store
