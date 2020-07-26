@@ -16,30 +16,9 @@ import UUSwift
 
 
 public class Snippets : NSObject {
-
+    
 	@objc public static let shared = Snippets()
-	
-	@objc public func configure(permanentToken : String, blogUid : String?, mediaEndPoint : String? = nil) {
-		self.uid = blogUid
-		self.token = permanentToken
-		
-		if let endPoint = mediaEndPoint {
-			self.mediaEndPoint = endPoint
-		}
-	}
-
-	@objc public func setMediaEndPoint(_ path : String) {
-		self.mediaEndPoint = path
-	}
-
-	@objc public func setServerPath(_ path : String) {
-		self.serverPath = path
-	}
-	
-	@objc public func setBlogIdentifier(_ blogUid : String) {
-		self.uid = blogUid
-	}
-	
+    
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// MARK: - Signin
 	// Sign-in is generally a 2-step process. First, request an email with a temporary token. Then exchange the temporary token for a permanent token
@@ -51,7 +30,7 @@ public class Snippets : NSObject {
 												"app_name" : appName,
 												"redirect_url" : redirect ]
 	
-		_ = UUHttpSession.post(url: self.pathForRoute("account/signin"), queryArguments: arguments, body: nil, contentType: nil) { (parsedServerResponse) in
+		UUHttpSession.post(url: self.pathForTimelineRoute("account/signin"), queryArguments: arguments, body: nil, contentType: nil) { (parsedServerResponse) in
 			completion(parsedServerResponse.httpError)
 		}
 	}
@@ -60,15 +39,15 @@ public class Snippets : NSObject {
 	{
 		let arguments : [String : String] = [ "token" : token ]
 		
-		_ = UUHttpSession.post(url: self.pathForRoute("account/verify"), queryArguments: arguments, body: nil, contentType: nil) { (parsedServerResponse) in
+		UUHttpSession.post(url: self.pathForTimelineRoute("account/verify"), queryArguments: arguments, body: nil, contentType: nil) { (parsedServerResponse) in
 			if let dictionary = parsedServerResponse.parsedResponse as? [ String : Any ]
 			{
 				if let permanentToken = dictionary["token"] as? String
 				{
-					self.token = permanentToken
+                    self.timelineConfiguration.token = permanentToken
 				}
 				
-				completion(parsedServerResponse.httpError, self.token)
+				completion(parsedServerResponse.httpError, self.timelineConfiguration.token)
 			}
 			else
 			{
@@ -85,13 +64,13 @@ public class Snippets : NSObject {
 	@objc public func fetchCurrentUserInfo(completion: @escaping(Error?, SnippetsUser?)-> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.timelineConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken, nil)
 			return
 		}
 		
-		let arguments : [String : String] = [ "token" : self.token ]
-		let request = self.securePost(path: self.pathForRoute("account/verify"), arguments: arguments)
+        let arguments : [String : String] = [ "token" : self.timelineConfiguration.token ]
+		let request = self.securePost(self.timelineConfiguration, path: self.pathForTimelineRoute("account/verify"), arguments: arguments)
 		
 		_ = UUHttpSession.executeRequest(request) { (parsedServerResponse) in
 			if let dictionary = parsedServerResponse.parsedResponse as? [String : Any]
@@ -111,12 +90,12 @@ public class Snippets : NSObject {
 	@objc public func fetchCurrentUserConfiguration(completion: @escaping(Error?, [String : Any])-> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.timelineConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken, [:])
 			return
 		}
 
-		let request = self.secureGet(path: self.pathForRoute("micropub?q=config"), arguments: [:])
+		let request = self.secureGet(self.timelineConfiguration, path: self.pathForTimelineRoute("micropub?q=config"), arguments: [:])
 		
 		_ = UUHttpSession.executeRequest(request) { (parsedServerResponse) in
 			
@@ -141,42 +120,42 @@ public class Snippets : NSObject {
 	@objc public func fetchCurrentUserPosts(completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.timelineConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken, [])
 			return
 		}
 		
 		var arguments = [ "q" : "source" ]
-		if let blogUid = self.uid {
+		if let blogUid = self.publishingConfiguration.uid {
 			arguments["mp-destination"] = blogUid
 		}
 		
-		self.fetchTimeline(self.pathForRoute("micropub"), arguments:arguments, completion: completion)
+		self.fetchTimeline(self.pathForTimelineRoute("micropub"), arguments:arguments, completion: completion)
 	}
 	
 	@objc public func fetchCurrentUserTimeline(parameters : [String : String] = [:], completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
-		self.fetchTimeline(self.pathForRoute("posts/all"), arguments:parameters, completion: completion)
+		self.fetchTimeline(self.pathForTimelineRoute("posts/all"), arguments:parameters, completion: completion)
 	}
 	
 	@objc public func fetchCurrentUserPhotoTimeline(parameters : [String : String] = [:], completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
-		self.fetchTimeline(self.pathForRoute("posts/photos"), arguments:parameters, completion: completion)
+		self.fetchTimeline(self.pathForTimelineRoute("posts/photos"), arguments:parameters, completion: completion)
 	}
 
 	@objc public func fetchCurrentUserMediaTimeline(parameters : [String : String] = [:], completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
-		self.fetchTimeline(self.pathForRoute("posts/media"), arguments: parameters, completion: completion)
+		self.fetchTimeline(self.pathForTimelineRoute("posts/media"), arguments: parameters, completion: completion)
 	}
 
 	@objc public func fetchCurrentUserMentions(parameters : [String : String] = [:], completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
-		self.fetchTimeline(self.pathForRoute("posts/mentions"), arguments: parameters, completion: completion)
+		self.fetchTimeline(self.pathForTimelineRoute("posts/mentions"), arguments: parameters, completion: completion)
 	}
 
 	@objc public func fetchCurrentUserFavorites(parameters : [String : String] = [:], completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
-		self.fetchTimeline(self.pathForRoute("posts/favorites"), arguments: parameters, completion: completion)
+		self.fetchTimeline(self.pathForTimelineRoute("posts/favorites"), arguments: parameters, completion: completion)
 	}
 	
 	
@@ -191,8 +170,8 @@ public class Snippets : NSObject {
             route = "posts/discover/\(validCollection)"
         }
         
-        let path = self.pathForRoute(route)
-        let request = self.secureGet(path: path, arguments: parameters)
+        let path = self.pathForTimelineRoute(route)
+        let request = self.secureGet(self.timelineConfiguration, path: path, arguments: parameters)
         
         _ = UUHttpSession.executeRequest(request) { (parsedServerResponse) in
             if let feedDictionary = parsedServerResponse.parsedResponse as? [String : Any]
@@ -237,25 +216,25 @@ public class Snippets : NSObject {
 	@objc public func fetchUserPosts(user : SnippetsUser, completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		let route = "posts/\(user.userName)"
-		self.fetchTimeline(self.pathForRoute(route), completion: completion)
+		self.fetchTimeline(self.pathForTimelineRoute(route), completion: completion)
 	}
 	
 	@objc public func fetchUserMediaPosts(user : SnippetsUser, completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		let route = "/posts/\(user.userName)/photos"
-		self.fetchTimeline(self.pathForRoute(route), completion: completion)
+		self.fetchTimeline(self.pathForTimelineRoute(route), completion: completion)
 	}
 	
 	@objc public func fetchConversation(post : SnippetsPost, completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
 		let route = "posts/conversation?id=\(post.identifier)"
-		self.fetchTimeline(self.pathForRoute(route), completion: completion)
+		self.fetchTimeline(self.pathForTimelineRoute(route), completion: completion)
 	}
 
 	@objc public func checkForPostsSince(post : SnippetsPost, completion: @escaping(Error?, NSInteger, TimeInterval) -> ())
 	{
 		let route = "posts/check?since_id=\(post.identifier)"
-		let request = self.secureGet(path: self.pathForRoute(route), arguments: [:])
+		let request = self.secureGet(self.timelineConfiguration, path: self.pathForTimelineRoute(route), arguments: [:])
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			
@@ -281,7 +260,7 @@ public class Snippets : NSObject {
 	{
 		let route = "posts/\(user.userName)"
 
-		let request = self.secureGet(path: self.pathForRoute(route), arguments: [:])
+		let request = self.secureGet(self.timelineConfiguration, path: self.pathForTimelineRoute(route), arguments: [:])
 	
 		_ = UUHttpSession.executeRequest(request) { (parsedServerResponse) in
 			if let feedDictionary = parsedServerResponse.parsedResponse as? [String : Any]
@@ -317,14 +296,14 @@ public class Snippets : NSObject {
 	@objc public func follow(user : SnippetsUser, completion: @escaping(Error?) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.timelineConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken)
 			return
 		}
 
 		let arguments : [ String : String ] = [ "username" : user.userName ]
 		
-		let request = self.securePost(path: self.pathForRoute("users/follow"), arguments: arguments)
+		let request = self.securePost(self.timelineConfiguration, path: self.pathForTimelineRoute("users/follow"), arguments: arguments)
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			completion(parsedServerResponse.httpError)
@@ -334,14 +313,14 @@ public class Snippets : NSObject {
 	@objc public func unfollow(user : SnippetsUser, completion: @escaping(Error?) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.timelineConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken)
 			return
 		}
 
 		let arguments : [ String : String ] = [ "username" : user.userName ]
 		
-		let request = self.securePost(path: self.pathForRoute("users/unfollow"), arguments: arguments)
+		let request = self.securePost(self.timelineConfiguration, path: self.pathForTimelineRoute("users/unfollow"), arguments: arguments)
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			completion(parsedServerResponse.httpError)
@@ -351,13 +330,13 @@ public class Snippets : NSObject {
 	@objc public func checkFollowingStatus(user : SnippetsUser, completion: @escaping(Error?, Bool) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.timelineConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken, false)
 			return
 		}
 		
 		let route = "users/is_following?username=\(user.userName)"
-		let request = self.secureGet(path: self.pathForRoute(route), arguments: [:])
+		let request = self.secureGet(self.timelineConfiguration, path: self.pathForTimelineRoute(route), arguments: [:])
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			
@@ -377,7 +356,7 @@ public class Snippets : NSObject {
 	@objc public func listFollowers(user : SnippetsUser, completeList : Bool, completion: @escaping(Error?, [SnippetsUser]) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.timelineConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken, [])
 			return
 		}
@@ -388,7 +367,7 @@ public class Snippets : NSObject {
 			route = "users/discover/\(user.userName)"
 		}
 		
-		let request = self.secureGet(path: self.pathForRoute(route), arguments: [:])
+		let request = self.secureGet(self.timelineConfiguration, path: self.pathForTimelineRoute(route), arguments: [:])
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			
 			if let userDictionaryList = parsedServerResponse.parsedResponse as? [[String : Any]]
@@ -418,14 +397,14 @@ public class Snippets : NSObject {
 	@objc public func favorite(post : SnippetsPost, completion: @escaping(Error?) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.timelineConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken)
 			return
 		}
 		
 		let arguments : [ String : String ] = [ "id" : post.identifier ]
 
-		let request = self.securePost(path: self.pathForRoute("favorites"), arguments: arguments)
+		let request = self.securePost(self.timelineConfiguration, path: self.pathForTimelineRoute("favorites"), arguments: arguments)
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			completion(parsedServerResponse.httpError)
@@ -435,14 +414,14 @@ public class Snippets : NSObject {
 	@objc public func unfavorite(post : SnippetsPost, completion: @escaping(Error?) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.timelineConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken)
 			return
 		}
 		
 		let arguments : [ String : String ] = [ "id" : post.identifier ]
 		let route = "favorites/\(post.identifier)"
-		let request = self.secureDelete(path: self.pathForRoute(route), arguments: arguments)
+        let request = self.secureDelete(self.timelineConfiguration, path: self.pathForTimelineRoute(route), arguments: arguments)
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			completion(parsedServerResponse.httpError)
@@ -457,7 +436,7 @@ public class Snippets : NSObject {
 	@objc public func postText(title : String, content : String, isDraft : Bool = false, photos : [String] = [], altTags : [String] = [], videos : [String] = [], videoAltTags : [String] = [], completion: @escaping(Error?, String?) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.publishingConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken, nil)
 			return
 		}
@@ -467,7 +446,7 @@ public class Snippets : NSObject {
 		bodyText = self.appendParameter(body: bodyText, name: "content", content: content)
 		bodyText = self.appendParameter(body: bodyText, name: "h", content: "entry")
 
-		if let blogUid = self.uid {
+		if let blogUid = self.publishingConfiguration.uid {
 			bodyText = self.appendParameter(body: bodyText, name: "mp-destination", content: blogUid)
 		}
 
@@ -495,7 +474,7 @@ public class Snippets : NSObject {
 		}
 
 		let body : Data = bodyText.data(using: .utf8)!
-		let request = self.securePost(path: self.pathForRoute("micropub"), arguments: [:], body: body)
+		let request = self.securePost(self.publishingConfiguration, path: self.pathForPublishingRoute(), arguments: [:], body: body)
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			let publishedPath = parsedServerResponse.httpResponse?.allHeaderFields["Location"] as? String
 			completion(parsedServerResponse.httpError, publishedPath)
@@ -505,7 +484,7 @@ public class Snippets : NSObject {
 	@objc public func postHtml(title : String, content : String, isDraft : Bool = false, completion: @escaping(Error?, String?) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.publishingConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken, nil)
 			return
 		}
@@ -528,14 +507,14 @@ public class Snippets : NSObject {
 		}
 
 		
-		if let blogUid = self.uid {
+		if let blogUid = self.publishingConfiguration.uid {
 			arguments["mp-destination"] = blogUid
 		}
 		
 		do {
 			let body = try JSONSerialization.data(withJSONObject: arguments, options: .prettyPrinted)
 			
-			let request = self.securePost(path: self.pathForRoute("micropub"), arguments: [:], body: body)
+			let request = self.securePost(self.publishingConfiguration, path: self.pathForPublishingRoute(), arguments: [:], body: body)
 			
 			_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 				let publishedPath = parsedServerResponse.httpResponse?.allHeaderFields["Location"] as? String
@@ -552,12 +531,12 @@ public class Snippets : NSObject {
 		var bodyText = ""
 		bodyText = self.appendParameter(body: bodyText, name: "action", content: "delete")
 		bodyText = self.appendParameter(body: bodyText, name: "url", content: path)
-		if let blogUid = self.uid {
+		if let blogUid = self.publishingConfiguration.uid {
 			bodyText = self.appendParameter(body: bodyText, name: "mp-destination", content: blogUid)
 		}
 
 		let body : Data = bodyText.data(using: .utf8)!
-		let request = self.securePost(path: self.pathForRoute("micropub"), arguments: [:], body: body)
+		let request = self.securePost(self.publishingConfiguration, path: self.pathForPublishingRoute(), arguments: [:], body: body)
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			completion(parsedServerResponse.httpError)
 		})
@@ -568,7 +547,7 @@ public class Snippets : NSObject {
 		let arguments : [ String : String ] = [ "id" : identifier ]
 		let route = "posts/\(identifier)"
 
-		let request = self.secureDelete(path: self.pathForRoute(route), arguments: arguments)
+        let request = self.secureDelete(self.publishingConfiguration, path: self.pathForPublishingRoute(route), arguments: arguments)
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			completion(parsedServerResponse.httpError)
@@ -578,7 +557,7 @@ public class Snippets : NSObject {
 	@objc public func deletePost(post : SnippetsPost, completion: @escaping(Error?) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.publishingConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken)
 			return
 		}
@@ -600,12 +579,12 @@ public class Snippets : NSObject {
 		var bodyText = ""
 		bodyText = self.appendParameter(body: bodyText, name: "action", content: "update")
 		bodyText = self.appendParameter(body: bodyText, name: "url", content: path)
-		if let blogUid = self.uid {
+		if let blogUid = self.publishingConfiguration.uid {
 			bodyText = self.appendParameter(body: bodyText, name: "mp-destination", content: blogUid)
 		}
 
 		let body : Data = bodyText.data(using: .utf8)!
-		let request = self.securePost(path: self.pathForRoute("micropub"), arguments: [:], body: body)
+        let request = self.securePost(self.publishingConfiguration, path: self.pathForPublishingRoute(), arguments: [:], body: body)
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			completion(parsedServerResponse.httpError)
 		})
@@ -614,7 +593,7 @@ public class Snippets : NSObject {
 	@objc public func updatePost(post : SnippetsPost, completion: @escaping(Error?) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.publishingConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken)
 			return
 		}
@@ -625,7 +604,7 @@ public class Snippets : NSObject {
 	@objc public func reply(originalPost : SnippetsPost, content : String, completion: @escaping(Error?) -> ())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.timelineConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken)
 			return
 		}
@@ -633,12 +612,11 @@ public class Snippets : NSObject {
 		var arguments : [ String : String ] = [ "id" : originalPost.identifier,
 											    "text" : content ]
 		
-		if let blogUid = self.uid
-		{
+		if let blogUid = self.publishingConfiguration.uid {
 			arguments["mp-destination"] = blogUid
 		}
 		
-		let request = self.securePost(path: self.pathForRoute("posts/reply"), arguments: arguments)
+        let request = self.securePost(self.timelineConfiguration, path: self.pathForTimelineRoute("posts/reply"), arguments: arguments)
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
 			completion(parsedServerResponse.httpError)
@@ -649,7 +627,7 @@ public class Snippets : NSObject {
 	@objc public func uploadImage(image : SnippetsImage, completion: @escaping(Error?, String?)->())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.publishingConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken, nil)
 			return
 		}
@@ -668,8 +646,7 @@ public class Snippets : NSObject {
 		
 		var arguments : [ String : String ] = [:]
 
-		if let blogUid = self.uid
-		{
+		if let blogUid = self.publishingConfiguration.uid {
 			arguments["mp-destination"] = blogUid
 			
 			formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
@@ -684,7 +661,7 @@ public class Snippets : NSObject {
 		formData.append(String("\r\n").data(using: String.Encoding.utf8)!)
 		formData.append(String("--\(boundary)--\r\n").data(using: String.Encoding.utf8)!)
 		
-		let request = self.securePost(path: self.mediaEndPoint, arguments: arguments, body: formData)
+        let request = self.securePost(self.publishingConfiguration, path: self.publishingConfiguration.mediaEndpoint, arguments: arguments, body: formData)
 		request.headerFields["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
 
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
@@ -698,7 +675,7 @@ public class Snippets : NSObject {
 	@objc public func uploadVideo(data : Data, completion: @escaping(Error?, String?, String?)->())
 	{
 		// Pre-flight check to see if we are even configured...
-		if self.token.count == 0 {
+        if self.publishingConfiguration.token.count == 0 {
 			completion(SnippetsError.invalidOrMissingToken, nil, nil)
 			return
 		}
@@ -709,8 +686,7 @@ public class Snippets : NSObject {
 		
 		var arguments : [ String : String ] = [:]
 		
-		if let blogUid = self.uid
-		{
+		if let blogUid = self.publishingConfiguration.uid {
 			arguments["mp-destination"] = blogUid
 			
 			formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
@@ -725,7 +701,7 @@ public class Snippets : NSObject {
 		formData.append(String("\r\n").data(using: String.Encoding.utf8)!)
 		formData.append(String("--\(boundary)--\r\n").data(using: String.Encoding.utf8)!)
 		
-		let request = self.securePost(path: self.mediaEndPoint, arguments: arguments, body: formData)
+        let request = self.securePost(self.publishingConfiguration, path: self.publishingConfiguration.mediaEndpoint, arguments: arguments, body: formData)
 		request.headerFields["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
 		
 		_ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
@@ -742,43 +718,51 @@ public class Snippets : NSObject {
 		
 	}
 	
-	private func pathForRoute(_ route : String) -> String
+	private func pathForTimelineRoute(_ route : String) -> String
 	{
-		let fullPath : NSString = self.serverPath as NSString
+        let fullPath : NSString = self.timelineConfiguration.endpoint as NSString
 		return fullPath.appendingPathComponent(route) as String
 	}
 
+    private func pathForPublishingRoute(_ route : String = "") -> String
+    {
+		var fullPath: NSString = self.publishingConfiguration.micropubEndpoint as NSString
+		if route.count > 0 {
+			fullPath = fullPath.appendingPathComponent(route) as NSString
+		}
+		return fullPath as String
+    }
+
+    
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// MARK: - Private/internal helper functions
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	private var uid : String?
-	private var token : String = ""
-	private var serverPath = "http://micro.blog/"
-	private var mediaEndPoint = "http://micro.blog/micropub/media"
+    private var internalTimelineConfiguration = Snippets.Configuration()
+	private var internalPublishingConfiguration : Snippets.Configuration? = nil
 
-	private func secureGet(path : String, arguments : [String : String]) -> UUHttpRequest
+    private func secureGet(_ configuration: Snippets.Configuration, path : String, arguments : [String : String]) -> UUHttpRequest
 	{
-		let request = UUHttpRequest(url:path, method: .get, queryArguments: arguments, headers : ["Authorization" : "Bearer \(self.token)"])
+        let request = UUHttpRequest(url:path, method: .get, queryArguments: arguments, headers : ["Authorization" : "Bearer \(configuration.token)"])
 		return request
 	}
 
-	private func securePut(path : String, arguments : [String : String], body : Data? = nil) -> UUHttpRequest
+	private func securePut(_ configuration: Snippets.Configuration, path : String, arguments : [String : String], body : Data? = nil) -> UUHttpRequest
 	{
-		let request = UUHttpRequest(url:path, method: .put,  queryArguments:arguments, headers : ["Authorization" : "Bearer \(self.token)"], body:body)
+        let request = UUHttpRequest(url:path, method: .put,  queryArguments:arguments, headers : ["Authorization" : "Bearer \(configuration.token)"], body:body)
 		return request
 	}
 
-	private func securePost(path : String, arguments : [String : String], body : Data? = nil) -> UUHttpRequest
+	private func securePost(_ configuration: Snippets.Configuration, path : String, arguments : [String : String], body : Data? = nil) -> UUHttpRequest
 	{
-		let request = UUHttpRequest(url:path, method: .post, queryArguments:arguments, headers : ["Authorization" : "Bearer \(self.token)"], body:body)
+        let request = UUHttpRequest(url:path, method: .post, queryArguments:arguments, headers : ["Authorization" : "Bearer \(configuration.token)"], body:body)
 		return request
 	}
 	
-	private func secureDelete(path : String, arguments : [String : String]) -> UUHttpRequest
+	private func secureDelete(_ configuration: Snippets.Configuration, path : String, arguments : [String : String]) -> UUHttpRequest
 	{
 		let request = UUHttpRequest(url: path, method: .delete, queryArguments: arguments)
-		request.headerFields["Authorization"] = "Bearer \(self.token)"
+        request.headerFields["Authorization"] = "Bearer \(configuration.token)"
 		
 		return request
 	}
@@ -801,7 +785,7 @@ public class Snippets : NSObject {
 
 	private func fetchTimeline(_ path : String, arguments : [String : String] = [:], completion: @escaping(Error?, [SnippetsPost]) -> ())
 	{
-		let request = self.secureGet(path: path, arguments: arguments)
+        let request = self.secureGet(self.timelineConfiguration, path: path, arguments: arguments)
 		
 		_ = UUHttpSession.executeRequest(request) { (parsedServerResponse) in
 			if let feedDictionary = parsedServerResponse.parsedResponse as? [String : Any]
@@ -835,5 +819,57 @@ extension Snippets {
 
 }
 
+extension Snippets {
+    
+    @objc public func configureTimeline(_ configuration : Snippets.Configuration) {
+        self.timelineConfiguration = configuration
+    }
+
+    @objc public func configurePublishing(_ configuration : Snippets.Configuration) {
+        self.publishingConfiguration = configuration
+    }
+    
+    @objc public var publishingConfiguration : Configuration {
+        get {
+            if let config = self.internalPublishingConfiguration {
+                return config
+            }
+            
+            return self.internalTimelineConfiguration
+        }
+        set(configuration) {
+            self.internalPublishingConfiguration = configuration
+        }
+    }
+
+    @objc public var timelineConfiguration : Configuration {
+        get {
+            return self.internalTimelineConfiguration
+        }
+        set(configuration) {
+            self.internalTimelineConfiguration = configuration
+        }
+    }
+   
+    public class Configuration : NSObject {
+        
+		public var token = ""
+		public var endpoint = "http://micro.blog/"
+		public var micropubEndpoint = "http://micro.blog/micropub"
+		public var mediaEndpoint = "http://micro.blog/micropub/media"
+		public var uid : String? = nil
+        
+        public static func reset() {
+            Snippets.shared.timelineConfiguration.token = ""
+            Snippets.shared.timelineConfiguration.endpoint = "http://micro.blog/"
+            Snippets.shared.timelineConfiguration.micropubEndpoint = "http://micro.blog/micropub"
+            Snippets.shared.timelineConfiguration.mediaEndpoint = "http://micro.blog/micropub/media"
+            Snippets.shared.timelineConfiguration.uid = nil
+            
+            Snippets.shared.internalPublishingConfiguration = nil
+        }
+    }
+
+}
 
 
