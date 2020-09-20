@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "UUSwift",
+        "repositoryURL": "https://github.com/SilverPineSoftware/UUSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "1d96b8f9e8b2c405dee60418bd076e729fcf55ca",
+          "version": "1.0.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

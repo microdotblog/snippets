@@ -5,3 +5,4 @@ Snippets.xcodeproj/xcuserdata/*
 .DS_Store
 /.DS_Store
 /Example/.DS_Store
+.swiftpm

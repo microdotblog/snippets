@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   	s.name             = "SnippetsFramework"
 	s.module_name	   = "Snippets"
-  	s.version          = "0.1.0"
+  	s.version          = "1.0.0"
 
   	s.description      = <<-DESC
                        The Snippets framework enables drop-in functionality to interact with the Micro.blog platform.
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   	s.source           = { :git => "https://github.com/microdotblog/snippets.git", :tag => s.version.to_s }
 
 	s.platform = :ios
-	s.ios.deployment_target = "8.0"
+	s.ios.deployment_target = "10.0"
 	s.osx.deployment_target = "10.10"
 
 	s.swift_version = "5.0"

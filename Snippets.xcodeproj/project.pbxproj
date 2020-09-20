@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C51E28292516DF6300E110B0 /* Snippets+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51E28202516DF6300E110B0 /* Snippets+Error.swift */; };
+		C51E282A2516DF6300E110B0 /* Snippets+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51E28262516DF6300E110B0 /* Snippets+Configuration.swift */; };
+		C51E282B2516DF6300E110B0 /* Snippets+Microblog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51E28272516DF6300E110B0 /* Snippets+Microblog.swift */; };
+		C51E282C2516DF6300E110B0 /* Snippets+Micropub.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51E28282516DF6300E110B0 /* Snippets+Micropub.swift */; };
 		C52CF9E721F1667900D52676 /* Snippets.h in Headers */ = {isa = PBXBuildFile; fileRef = C52CF9E521F1667900D52676 /* Snippets.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C52CF9FE21F1676200D52676 /* UUSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52CF9F421F1672F00D52676 /* UUSwift.framework */; };
 		C52CFA0421F1678E00D52676 /* Snippets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CF9FF21F1678E00D52676 /* Snippets.swift */; };
@@ -14,13 +18,11 @@
 		C52CFA0621F1678E00D52676 /* Snippets+XMLRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0121F1678E00D52676 /* Snippets+XMLRPC.swift */; };
 		C52CFA0721F1678E00D52676 /* SnippetsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0221F1678E00D52676 /* SnippetsPost.swift */; };
 		C52CFA0821F1678E00D52676 /* SnippetsUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0321F1678E00D52676 /* SnippetsUser.swift */; };
-		C52CFA1621F168E900D52676 /* UUSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52CF9F621F1672F00D52676 /* UUSwift.framework */; };
 		C52CFA1721F169AB00D52676 /* Snippets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CF9FF21F1678E00D52676 /* Snippets.swift */; };
 		C52CFA1821F169AB00D52676 /* Snippets+XMLParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0021F1678E00D52676 /* Snippets+XMLParsing.swift */; };
 		C52CFA1921F169AB00D52676 /* Snippets+XMLRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0121F1678E00D52676 /* Snippets+XMLRPC.swift */; };
 		C52CFA1A21F169AB00D52676 /* SnippetsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0221F1678E00D52676 /* SnippetsPost.swift */; };
 		C52CFA1B21F169AB00D52676 /* SnippetsUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0321F1678E00D52676 /* SnippetsUser.swift */; };
-		C52CFA2921F16A2700D52676 /* UUSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52CF9F821F1672F00D52676 /* UUSwift.framework */; };
 		C52CFA2A21F16A4800D52676 /* Snippets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CF9FF21F1678E00D52676 /* Snippets.swift */; };
 		C52CFA2B21F16A4800D52676 /* Snippets+XMLParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0021F1678E00D52676 /* Snippets+XMLParsing.swift */; };
 		C52CFA2C21F16A4800D52676 /* Snippets+XMLRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0121F1678E00D52676 /* Snippets+XMLRPC.swift */; };
@@ -36,6 +38,13 @@
 			remoteGlobalIDString = 080769B42220738D0037BB52;
 			remoteInfo = UUSwiftTests;
 		};
+		C51E28242516DF6300E110B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C52CF9ED21F1672F00D52676 /* UUSwift.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 08301E9523AB35B1009CBEE4;
+			remoteInfo = UUSwiftTestHostContainer;
+		};
 		C52CF9F321F1672F00D52676 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C52CF9ED21F1672F00D52676 /* UUSwift.xcodeproj */;
@@ -43,23 +52,13 @@
 			remoteGlobalIDString = C5CB4E9521B611F0002FE35E;
 			remoteInfo = UUSwift;
 		};
-		C52CF9F521F1672F00D52676 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C52CF9ED21F1672F00D52676 /* UUSwift.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C51B99E221DEEAA9007077E0;
-			remoteInfo = UUSwiftMac;
-		};
-		C52CF9F721F1672F00D52676 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C52CF9ED21F1672F00D52676 /* UUSwift.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = C5FE238821E56B8400A3BB23;
-			remoteInfo = UUSwiftTV;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C51E28202516DF6300E110B0 /* Snippets+Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Snippets+Error.swift"; sourceTree = "<group>"; };
+		C51E28262516DF6300E110B0 /* Snippets+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Snippets+Configuration.swift"; sourceTree = "<group>"; };
+		C51E28272516DF6300E110B0 /* Snippets+Microblog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Snippets+Microblog.swift"; sourceTree = "<group>"; };
+		C51E28282516DF6300E110B0 /* Snippets+Micropub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Snippets+Micropub.swift"; sourceTree = "<group>"; };
 		C52CF9E221F1667900D52676 /* Snippets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Snippets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C52CF9E521F1667900D52676 /* Snippets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snippets.h; sourceTree = "<group>"; };
 		C52CF9E621F1667900D52676 /* SnippetsInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SnippetsInfo.plist; sourceTree = "<group>"; };
@@ -89,7 +88,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C52CFA1621F168E900D52676 /* UUSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,7 +95,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C52CFA2921F16A2700D52676 /* UUSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +127,10 @@
 		C52CF9E421F1667900D52676 /* Snippets */ = {
 			isa = PBXGroup;
 			children = (
+				C51E28262516DF6300E110B0 /* Snippets+Configuration.swift */,
+				C51E28202516DF6300E110B0 /* Snippets+Error.swift */,
+				C51E28272516DF6300E110B0 /* Snippets+Microblog.swift */,
+				C51E28282516DF6300E110B0 /* Snippets+Micropub.swift */,
 				C52CF9FF21F1678E00D52676 /* Snippets.swift */,
 				C52CFA0021F1678E00D52676 /* Snippets+XMLParsing.swift */,
 				C52CFA0121F1678E00D52676 /* Snippets+XMLRPC.swift */,
@@ -145,9 +146,8 @@
 			isa = PBXGroup;
 			children = (
 				C52CF9F421F1672F00D52676 /* UUSwift.framework */,
-				C52CF9F621F1672F00D52676 /* UUSwift.framework */,
-				C52CF9F821F1672F00D52676 /* UUSwift.framework */,
 				C51030B7233D692900E61AEE /* UUSwiftTests.xctest */,
+				C51E28252516DF6300E110B0 /* UUSwiftTestHostContainer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -247,7 +247,7 @@
 		C52CF9D921F1667900D52676 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Micro.blog, LLC";
 				TargetAttributes = {
 					C52CF9E121F1667900D52676 = {
@@ -295,25 +295,18 @@
 			remoteRef = C51030B6233D692900E61AEE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		C51E28252516DF6300E110B0 /* UUSwiftTestHostContainer.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = UUSwiftTestHostContainer.app;
+			remoteRef = C51E28242516DF6300E110B0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		C52CF9F421F1672F00D52676 /* UUSwift.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = UUSwift.framework;
 			remoteRef = C52CF9F321F1672F00D52676 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		C52CF9F621F1672F00D52676 /* UUSwift.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = UUSwift.framework;
-			remoteRef = C52CF9F521F1672F00D52676 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		C52CF9F821F1672F00D52676 /* UUSwift.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = UUSwift.framework;
-			remoteRef = C52CF9F721F1672F00D52676 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -347,11 +340,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C51E282A2516DF6300E110B0 /* Snippets+Configuration.swift in Sources */,
 				C52CFA0821F1678E00D52676 /* SnippetsUser.swift in Sources */,
+				C51E282B2516DF6300E110B0 /* Snippets+Microblog.swift in Sources */,
 				C52CFA0421F1678E00D52676 /* Snippets.swift in Sources */,
+				C51E28292516DF6300E110B0 /* Snippets+Error.swift in Sources */,
 				C52CFA0521F1678E00D52676 /* Snippets+XMLParsing.swift in Sources */,
 				C52CFA0721F1678E00D52676 /* SnippetsPost.swift in Sources */,
 				C52CFA0621F1678E00D52676 /* Snippets+XMLRPC.swift in Sources */,
+				C51E282C2516DF6300E110B0 /* Snippets+Micropub.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,6 +405,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -434,7 +432,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -473,6 +472,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -493,7 +493,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
