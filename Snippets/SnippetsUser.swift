@@ -73,9 +73,9 @@ extension SnippetsUser {
 	
 	func loadFromMicroblogDictionary(_ snippetsDictionary : [String : Any])
 	{
-		if let userName = snippetsDictionary["username"] as? String
+		if let username = snippetsDictionary["username"] as? String
 		{
-			self.userName = userName
+			self.username = username
 		}
 		if let bio = snippetsDictionary["bio"] as? String
 		{
@@ -97,9 +97,9 @@ extension SnippetsUser {
 	
 	func loadFromDictionary(_ authorDictionary : [String : Any])
 	{
-		if let userName = authorDictionary["username"] as? String
+		if let username = authorDictionary["username"] as? String
 		{
-			self.userName = userName
+			self.username = username
 		}
 		
 		if let bio = authorDictionary["bio"] as? String
