@@ -249,13 +249,13 @@ extension Snippets {
 
         @objc static public func fetchUserPosts(user : SnippetsUser, parameters : [String : String] = [:], completion: @escaping(Error?, [SnippetsPost]) -> ())
         {
-            let route = "posts/\(user.userName)"
+            let route = "posts/\(user.username)"
             self.fetchTimeline(Snippets.Configuration.timeline.microBlogPathForRoute(route), arguments: parameters, completion: completion)
         }
         
         @objc static public func fetchUserMediaPosts(user : SnippetsUser, parameters : [String : String] = [:], completion: @escaping(Error?, [SnippetsPost]) -> ())
         {
-            let route = "/posts/\(user.userName)/photos"
+            let route = "/posts/\(user.username)/photos"
             self.fetchTimeline(Snippets.Configuration.pathForTimelineRoute(route), arguments: parameters, completion: completion)
         }
         
@@ -314,7 +314,7 @@ extension Snippets {
 
         @objc static public func fetchUserDetails(user : SnippetsUser, completion: @escaping(Error?, SnippetsUser?, [SnippetsPost]) -> ())
         {
-            let route = "posts/\(user.userName)"
+            let route = "posts/\(user.username)"
 
             let request = Snippets.secureGet(Snippets.Configuration.timeline, path: Snippets.Configuration.pathForTimelineRoute(route), arguments: [:])
         
@@ -357,7 +357,7 @@ extension Snippets {
                 return
             }
 
-            let arguments : [ String : String ] = [ "username" : user.userName ]
+            let arguments : [ String : String ] = [ "username" : user.username ]
             
             let request = Snippets.securePost(Snippets.Configuration.timeline, path: Snippets.Configuration.pathForTimelineRoute("users/follow"), arguments: arguments)
             
@@ -374,7 +374,7 @@ extension Snippets {
                 return
             }
 
-            let arguments : [ String : String ] = [ "username" : user.userName ]
+            let arguments : [ String : String ] = [ "username" : user.username ]
             
             let request = Snippets.securePost(Snippets.Configuration.timeline, path: Snippets.Configuration.pathForTimelineRoute("users/unfollow"), arguments: arguments)
             
@@ -391,7 +391,7 @@ extension Snippets {
                 return
             }
             
-            let route = "users/is_following?username=\(user.userName)"
+            let route = "users/is_following?username=\(user.username)"
             let request = Snippets.secureGet(Snippets.Configuration.timeline, path: Snippets.Configuration.pathForTimelineRoute(route), arguments: [:])
             
             _ = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
@@ -417,10 +417,10 @@ extension Snippets {
                 return
             }
             
-            var route = "users/following/\(user.userName)"
+            var route = "users/following/\(user.username)"
             if (!completeList)
             {
-                route = "users/discover/\(user.userName)"
+                route = "users/discover/\(user.username)"
             }
             
             let request = Snippets.secureGet(Snippets.Configuration.timeline, path: Snippets.Configuration.pathForTimelineRoute(route), arguments: [:])

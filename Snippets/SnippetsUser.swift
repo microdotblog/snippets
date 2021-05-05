@@ -26,7 +26,7 @@ open class SnippetsUser : NSObject
 	}
 	
 	@objc public var fullName = ""
-	@objc public var userName = ""
+	@objc public var username = ""
 	@objc public var avatarURL = ""
 	@objc public var siteURL = ""
 	@objc public var bio = ""
