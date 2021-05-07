@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   	s.name             = "SnippetsFramework"
 	s.module_name	   = "Snippets"
-  	s.version          = "1.0.1"
+  	s.version          = "1.0.2"
 
   	s.description      = <<-DESC
                        The Snippets framework enables drop-in functionality to interact with the Micro.blog platform.

@@ -40,6 +40,16 @@ public class Snippets : NSObject {
             }
         }
     }
+
+	@objc public func uploadAudio(data : Data, completion: @escaping(Error?, String?, String?)->()) -> UUHttpRequest? {
+		if Snippets.Configuration.publishing.type == .micropub {
+			return Snippets.Micropub.uploadAudio(Snippets.Configuration.publishing, data: data, completion: completion)
+		}
+		else { //XMLRPC currently doesn't support audio upload
+			return nil
+		}
+	}
+
     
     @objc public func updatePost(post : SnippetsPost, completion: @escaping(Error?) -> ()) -> UUHttpRequest? {
         if Snippets.Configuration.publishing.type == .micropub {
