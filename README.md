@@ -31,14 +31,6 @@ This library is written entirely in Swift but has been made compatible with Obje
 
 Snippets supports native integration with the Swift Package Manager.
 
-### - Cocoapods
-
-The Snippets framework is available through [CocoaPods](http://cocoapods.org). To install it, simply add the following line to your `Podfile`:
-
-```
-pod 'SnippetsFramework'
-```
-
 ### - Carthage
 
 Snippets may be installed via [Carthage](https://github.com/Carthage/Carthage). To install it, simply add the following line to your `Cartfile`:
