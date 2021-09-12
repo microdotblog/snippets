@@ -1,7 +1,4 @@
 # snippets
-[![Platform](http://cocoapod-badges.herokuapp.com/p/SnippetsFramework/badge.png)](http://cocoadocs.org/docsets/SnippetsFramework)
-[![Version](http://cocoapod-badges.herokuapp.com/v/SnippetsFramework/badge.png)](http://cocoadocs.org/docsets/SnippetsFramework)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 ## Overview
 Snippets is a framework for microblogging on iOS, OSX, and tvOS. 
