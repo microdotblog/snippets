@@ -16,9 +16,31 @@ import UUSwift
 
 extension Snippets {
   
-    class Micropub {
+    public class Micropub {
 
-        static func postText(_ identity : Snippets.Configuration, title : String, content : String, isDraft : Bool = false, photos : [String] = [], altTags : [String] = [], videos : [String] = [], videoAltTags : [String] = [], completion: @escaping(Error?, String?) -> ()) -> UUHttpRequest?
+        static public func fetchPublishedMedia(_ identity : Snippets.Configuration, completion: @escaping(Error?, [[String : Any]]?)->()) -> UUHttpRequest? {
+
+            let fullPath : NSString = identity.micropubMediaEndpoint as NSString
+            var arguments : [ String : String ] = [ "q" : "source" ]
+
+			if let blogUid = identity.micropubUid {
+				if blogUid.count > 0 {
+					arguments["mp-destination"] = blogUid
+				}
+			}
+
+            let request = Snippets.secureGet(identity, path: fullPath as String, arguments: arguments)
+
+            return UUHttpSession.executeRequest(request, { (parsedServerResponse) in
+                if let dictionary = parsedServerResponse.parsedResponse as? [String : Any] {
+                    let items = dictionary["items"] as? [ [String : Any] ]
+                    completion(parsedServerResponse.httpError, items)
+                }
+            })
+        }
+
+        
+		static public func postText(_ identity : Snippets.Configuration, title : String, content : String, isDraft : Bool = false, photos : [String] = [], altTags : [String] = [], videos : [String] = [], videoAltTags : [String] = [], completion: @escaping(Error?, String?) -> ()) -> UUHttpRequest?
         {
             // Pre-flight check to see if we are even configured...
             if identity.micropubToken.count == 0 {
@@ -69,7 +91,7 @@ extension Snippets {
             })
         }
         
-        static func postHtml(_ identity : Snippets.Configuration, title : String, content : String, isDraft : Bool = false, completion: @escaping(Error?, String?) -> ()) -> UUHttpRequest?
+        static public func postHtml(_ identity : Snippets.Configuration, title : String, content : String, isDraft : Bool = false, location : SnippetsLocation? = nil, completion: @escaping(Error?, String?) -> ()) -> UUHttpRequest?
         {
             // Pre-flight check to see if we are even configured...
             if identity.micropubToken.count == 0 {
@@ -89,6 +111,33 @@ extension Snippets {
                 properties["post-status"] = [ "published" ]
             }
 
+			if let location = location {
+				if location.name.count > 0 {
+					properties["checkin"] = [
+						[
+							"type": [ "h-card" ],
+							"properties": [
+								"longitude": [ location.longitude ],
+								"latitude": [ location.latitude ],
+								"name": [ location.name ],
+								"url": [ location.url ]
+							]
+						]
+					]
+				}
+				else {
+					properties["location"] = [
+						[
+							"type": [ "h-adr" ],
+							"properties": [
+								"longitude": [ location.longitude ],
+								"latitude": [ location.latitude ]
+							]
+						]
+					]
+				}
+			}
+			
             var arguments : [ String : Any ] =     [    "type" : [ "h-entry" ],
                                                     "properties" : properties
                                                 ]
@@ -116,12 +165,19 @@ extension Snippets {
             
             return nil
         }
+
         
-        static func deletePostByUrl(_ identity : Snippets.Configuration, path : String, completion: @escaping(Error?) -> ()) -> UUHttpRequest?
+        static func delete(_ identity : Snippets.Configuration, post : SnippetsPost, completion: @escaping(Error?) -> ()) -> UUHttpRequest?
         {
+            // Pre-flight check to see if we are even configured...
+            if identity.micropubToken.count == 0 {
+                completion(SnippetsError.invalidOrMissingToken)
+                return nil
+            }
+            
             var bodyText = ""
             bodyText = Snippets.appendParameter(body: bodyText, name: "action", content: "delete")
-            bodyText = Snippets.appendParameter(body: bodyText, name: "url", content: path)
+            bodyText = Snippets.appendParameter(body: bodyText, name: "url", content: post.path)
             if let blogUid = identity.micropubUid {
                 if blogUid.count > 0 {
                     bodyText = Snippets.appendParameter(body: bodyText, name: "mp-destination", content: blogUid)
@@ -135,37 +191,7 @@ extension Snippets {
             })
         }
         
-        static func deletePostByIdentifier(_ identity : Snippets.Configuration, identifier : String, completion: @escaping(Error?) -> ()) -> UUHttpRequest?
-        {
-            let route = "posts/\(identifier)"
 
-            let request = Snippets.secureDelete(identity, path: identity.micropubPathForRoute(route), arguments: [:])
-            
-            return UUHttpSession.executeRequest(request, { (parsedServerResponse) in
-                completion(parsedServerResponse.httpError)
-            })
-        }
-        
-        static func deletePost(_ identity : Snippets.Configuration, post : SnippetsPost, completion: @escaping(Error?) -> ()) -> UUHttpRequest?
-        {
-            // Pre-flight check to see if we are even configured...
-            if identity.micropubToken.count == 0 {
-                completion(SnippetsError.invalidOrMissingToken)
-                return nil
-            }
-            
-            // There are actually two ways to delete posts. The safer way is if you have the post identifier
-            // The other way is more of the "micropub" way in which you just have the path to the post
-            if (post.identifier.count > 0)
-            {
-                return self.deletePostByIdentifier(identity, identifier: post.identifier, completion: completion)
-            }
-            else
-            {
-                return self.deletePostByUrl(identity, path: post.path, completion: completion)
-            }
-        }
-        
         static func updatePostByUrl(_ identity : Snippets.Configuration, path : String, completion: @escaping(Error?) -> ()) -> UUHttpRequest?
         {
             var bodyText = ""
@@ -184,7 +210,7 @@ extension Snippets {
             })
         }
         
-        static func updatePost(_ identity : Snippets.Configuration, post : SnippetsPost, completion: @escaping(Error?) -> ()) -> UUHttpRequest?
+        static public func updatePost(_ identity : Snippets.Configuration, post : SnippetsPost, completion: @escaping(Error?) -> ()) -> UUHttpRequest?
         {
             // Pre-flight check to see if we are even configured...
             if identity.micropubToken.count == 0 {
@@ -196,7 +222,7 @@ extension Snippets {
         }
         
         
-        static func uploadImage(_ identity : Snippets.Configuration, image : SnippetsImage, completion: @escaping(Error?, String?)->()) -> UUHttpRequest?
+        static public func uploadImage(_ identity : Snippets.Configuration, image : SnippetsImage, completion: @escaping(Error?, String?)->()) -> UUHttpRequest?
         {
             // Pre-flight check to see if we are even configured...
             if identity.micropubToken.count == 0 {
@@ -205,15 +231,16 @@ extension Snippets {
             }
             
             var resizedImage = image
-            if image.size.width > 1800.0
+			if image.size.width > 1800.0 && image.size.height > 1800.0
             {
-                resizedImage = resizedImage.uuScaleToWidth(targetWidth: 1800.0 )
+				resizedImage = resizedImage.uuScaleSmallestDimensionToSize(size: 1800.0, ignoringScale: true)
             }
 
-            let imageData = resizedImage.uuJpegData(0.9)!
+            let imageData = resizedImage.uuJpegData(0.7)!
             var formData : Data = Data()
             let imageName = "file"
             let boundary = ProcessInfo.processInfo.globallyUniqueString
+            let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + ".jpg"
 
             if let blogUid = identity.micropubUid {
                 if blogUid.count > 0 {
@@ -224,7 +251,7 @@ extension Snippets {
             }
             
             formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
-            formData.append(String("Content-Disposition: form-data; name=\"\(imageName)\"; filename=\"image.jpg\"\r\n").data(using: String.Encoding.utf8)!)
+            formData.append(String("Content-Disposition: form-data; name=\"\(imageName)\"; filename=\"\(filename)\"\r\n").data(using: String.Encoding.utf8)!)
             formData.append(String("Content-Type: image/jpeg\r\n\r\n").data(using: String.Encoding.utf8)!)
             formData.append(imageData)
             formData.append(String("\r\n").data(using: String.Encoding.utf8)!)
@@ -241,7 +268,7 @@ extension Snippets {
             
         }
 
-        static func uploadVideo(_ identity : Snippets.Configuration, data : Data, completion: @escaping(Error?, String?, String?)->()) -> UUHttpRequest?
+        static public func uploadVideo(_ identity : Snippets.Configuration, data : Data, completion: @escaping(Error?, String?, String?)->()) -> UUHttpRequest?
         {
             // Pre-flight check to see if we are even configured...
             if identity.micropubToken.count == 0 {
@@ -252,6 +279,7 @@ extension Snippets {
             var formData : Data = Data()
             let imageName = "file"
             let boundary = ProcessInfo.processInfo.globallyUniqueString
+            let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + ".mov"
                     
             if let blogUid = identity.micropubUid {
                 if blogUid.count > 0 {
@@ -262,7 +290,7 @@ extension Snippets {
             }
             
             formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
-            formData.append(String("Content-Disposition: form-data; name=\"\(imageName)\"; filename=\"video.mov\"\r\n").data(using: String.Encoding.utf8)!)
+            formData.append(String("Content-Disposition: form-data; name=\"\(imageName)\"; filename=\"\(filename)\"\r\n").data(using: String.Encoding.utf8)!)
             formData.append(String("Content-Type: video/mov\r\n\r\n").data(using: String.Encoding.utf8)!)
             formData.append(data)
             formData.append(String("\r\n").data(using: String.Encoding.utf8)!)
@@ -284,49 +312,6 @@ extension Snippets {
             })
             
         }
-
-		static func uploadAudio(_ identity : Snippets.Configuration, data : Data, completion: @escaping(Error?, String?, String?)->()) -> UUHttpRequest?
-		{
-			// Pre-flight check to see if we are even configured...
-			if identity.micropubToken.count == 0 {
-				completion(SnippetsError.invalidOrMissingToken, nil, nil)
-				return nil
-			}
-
-			var formData : Data = Data()
-			let name = "file"
-			let boundary = ProcessInfo.processInfo.globallyUniqueString
-
-			if let blogUid = identity.micropubUid {
-				if blogUid.count > 0 {
-					formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
-					formData.append(String("Content-Disposition: form-data; name=\"mp-destination\"\r\n\r\n").data(using: String.Encoding.utf8)!)
-					formData.append(String("\(blogUid)\r\n").data(using:String.Encoding.utf8)!)
-				}
-			}
-
-			formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
-			formData.append(String("Content-Disposition: form-data; name=\"\(name)\"; filename=\"audio.mp3\"\r\n").data(using: String.Encoding.utf8)!)
-			formData.append(String("Content-Type: audio/mpeg\r\n\r\n").data(using: String.Encoding.utf8)!)
-			formData.append(data)
-			formData.append(String("\r\n").data(using: String.Encoding.utf8)!)
-			formData.append(String("--\(boundary)--\r\n").data(using: String.Encoding.utf8)!)
-
-			let request = Snippets.securePost(identity, path: identity.micropubMediaEndpoint, arguments: [:], body: formData)
-			request.headerFields["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
-
-			return UUHttpSession.executeRequest(request, { (parsedServerResponse) in
-
-				var publishedPath : String? = nil
-				var posterPath : String? = nil
-
-				if let dictionary = parsedServerResponse.parsedResponse as? [String : Any] {
-					publishedPath = dictionary["url"] as? String
-					posterPath = dictionary["poster"] as? String
-				}
-				completion(parsedServerResponse.httpError, publishedPath, posterPath)
-			})
-
-		}
     }
+
 }
