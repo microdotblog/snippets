@@ -8,10 +8,14 @@
 
 #if os(macOS)
 import AppKit
-import UUSwift
+import UUSwiftCore
+import UUSwiftNetworking
+import UUSwiftImage
 #else
 import UIKit
-import UUSwift
+import UUSwiftCore
+import UUSwiftNetworking
+import UUSwiftImage
 #endif
 
 extension Snippets {

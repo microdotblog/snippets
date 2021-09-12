@@ -8,10 +8,12 @@
 
 #if os(macOS)
 import AppKit
-import UUSwift
+import UUSwiftCore
+import UUSwiftNetworking
 #else
 import UIKit
-import UUSwift
+import UUSwiftCore
+import UUSwiftNetworking
 #endif
 
 extension Snippets {
@@ -233,7 +235,7 @@ extension Snippets {
             var resizedImage = image
 			if image.size.width > 1800.0 && image.size.height > 1800.0
             {
-				resizedImage = resizedImage.uuScaleSmallestDimensionToSize(size: 1800.0, ignoringScale: true)
+				resizedImage = resizedImage.uuScaleSmallestDimensionToSize(size: 1800.0)
             }
 
             let imageData = resizedImage.uuJpegData(0.7)!
@@ -312,6 +314,49 @@ extension Snippets {
             })
             
         }
-    }
 
+		static public func uploadAudio(_ identity : Snippets.Configuration, data : Data, completion: @escaping(Error?, String?, String?)->()) -> UUHttpRequest?
+		{
+			// Pre-flight check to see if we are even configured...
+			if identity.micropubToken.count == 0 {
+				completion(SnippetsError.invalidOrMissingToken, nil, nil)
+				return nil
+			}
+
+			var formData : Data = Data()
+			let name = "file"
+			let boundary = ProcessInfo.processInfo.globallyUniqueString
+
+			if let blogUid = identity.micropubUid {
+				if blogUid.count > 0 {
+					formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
+					formData.append(String("Content-Disposition: form-data; name=\"mp-destination\"\r\n\r\n").data(using: String.Encoding.utf8)!)
+					formData.append(String("\(blogUid)\r\n").data(using:String.Encoding.utf8)!)
+				}
+			}
+
+			formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
+			formData.append(String("Content-Disposition: form-data; name=\"\(name)\"; filename=\"audio.mp3\"\r\n").data(using: String.Encoding.utf8)!)
+			formData.append(String("Content-Type: audio/mpeg\r\n\r\n").data(using: String.Encoding.utf8)!)
+			formData.append(data)
+			formData.append(String("\r\n").data(using: String.Encoding.utf8)!)
+			formData.append(String("--\(boundary)--\r\n").data(using: String.Encoding.utf8)!)
+
+			let request = Snippets.securePost(identity, path: identity.micropubMediaEndpoint, arguments: [:], body: formData)
+			request.headerFields["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
+
+			return UUHttpSession.executeRequest(request, { (parsedServerResponse) in
+
+				var publishedPath : String? = nil
+				var posterPath : String? = nil
+
+				if let dictionary = parsedServerResponse.parsedResponse as? [String : Any] {
+					publishedPath = dictionary["url"] as? String
+					posterPath = dictionary["poster"] as? String
+				}
+				completion(parsedServerResponse.httpError, publishedPath, posterPath)
+			})
+		}
+		
+	}
 }

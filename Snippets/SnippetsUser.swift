@@ -8,11 +8,15 @@
 
 #if os(macOS)
 import AppKit
-import UUSwift
+import UUSwiftCore
+import UUSwiftNetworking
+import UUSwiftImage
 public typealias SnippetsImage = NSImage
 #else
 import UIKit
-import UUSwift
+import UUSwiftCore
+import UUSwiftNetworking
+import UUSwiftImage
 public typealias SnippetsImage = UIImage
 #endif
 

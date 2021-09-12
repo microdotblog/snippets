@@ -8,10 +8,12 @@
 
 #if os(macOS)
 import AppKit
-import UUSwift
+import UUSwiftCore
+import UUSwiftNetworking
 #else
 import UIKit
-import UUSwift
+import UUSwiftCore
+import UUSwiftNetworking
 #endif
 
 
@@ -65,7 +67,7 @@ public class Snippets : NSObject {
     
     @objc public func deletePost(post : SnippetsPost, completion: @escaping(Error?) -> ()) -> UUHttpRequest? {
         if Snippets.Configuration.publishing.type == .micropub {
-            return Snippets.Micropub.deletePost(Snippets.Configuration.publishing, post: post, completion: completion)
+            return Snippets.Micropub.delete(Snippets.Configuration.publishing, post: post, completion: completion)
         }
         else {
             let request = Snippets.XMLRPC.Request.unpublishRequest(identity: Snippets.Configuration.publishing)
