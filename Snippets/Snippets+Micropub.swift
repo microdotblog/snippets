@@ -224,7 +224,7 @@ extension Snippets {
         }
         
         
-        static public func uploadImage(_ identity : Snippets.Configuration, image : SnippetsImage, completion: @escaping(Error?, String?)->()) -> UUHttpRequest?
+        static public func uploadImage(_ identity : Snippets.Configuration, snippetsImage : SnippetsImage, completion: @escaping(Error?, String?)->()) -> UUHttpRequest?
         {
             // Pre-flight check to see if we are even configured...
             if identity.micropubToken.count == 0 {
@@ -232,17 +232,19 @@ extension Snippets {
                 return nil
             }
             
-            var resizedImage = image
-			if image.size.width > 1800.0 && image.size.height > 1800.0
+			var resizedImage = snippetsImage.systemImage
+			if resizedImage.size.width > 1800.0 && resizedImage.size.height > 1800.0
             {
 				resizedImage = resizedImage.uuScaleSmallestDimensionToSize(size: 1800.0)
             }
 
-            let imageData = resizedImage.uuJpegData(0.7)!
+			let mimeType = (snippetsImage.type == .jpeg) ? "image/jpeg" : "image/png"
+			let fileExtension = (snippetsImage.type == .jpeg) ? ".jpg" : ".png"
+			let imageData = (snippetsImage.type == .jpeg) ? resizedImage.uuJpegData(0.7)! : resizedImage.uuPngData()!
             var formData : Data = Data()
             let imageName = "file"
             let boundary = ProcessInfo.processInfo.globallyUniqueString
-            let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + ".jpg"
+            let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + fileExtension
 
             if let blogUid = identity.micropubUid {
                 if blogUid.count > 0 {
@@ -254,7 +256,7 @@ extension Snippets {
             
             formData.append(String("--\(boundary)\r\n").data(using: String.Encoding.utf8)!)
             formData.append(String("Content-Disposition: form-data; name=\"\(imageName)\"; filename=\"\(filename)\"\r\n").data(using: String.Encoding.utf8)!)
-            formData.append(String("Content-Type: image/jpeg\r\n\r\n").data(using: String.Encoding.utf8)!)
+            formData.append(String("Content-Type: \(mimeType)\r\n\r\n").data(using: String.Encoding.utf8)!)
             formData.append(imageData)
             formData.append(String("\r\n").data(using: String.Encoding.utf8)!)
             formData.append(String("--\(boundary)--\r\n").data(using: String.Encoding.utf8)!)

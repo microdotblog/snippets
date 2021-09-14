@@ -3,16 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C51051E026F0613500533E31 /* SnippetsImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51051DF26F0613400533E31 /* SnippetsImage.swift */; };
+		C51051E726F0641D00533E31 /* UUSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C51051E626F0641D00533E31 /* UUSwift */; };
+		C51051E926F0642A00533E31 /* UUSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C51051E826F0642A00533E31 /* UUSwift */; };
+		C51051EB26F0643400533E31 /* UUSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C51051EA26F0643400533E31 /* UUSwift */; };
+		C51051ED26F0652900533E31 /* SnippetsLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51051EC26F0652900533E31 /* SnippetsLocation.swift */; };
 		C51E28292516DF6300E110B0 /* Snippets+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51E28202516DF6300E110B0 /* Snippets+Error.swift */; };
 		C51E282A2516DF6300E110B0 /* Snippets+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51E28262516DF6300E110B0 /* Snippets+Configuration.swift */; };
 		C51E282B2516DF6300E110B0 /* Snippets+Microblog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51E28272516DF6300E110B0 /* Snippets+Microblog.swift */; };
 		C51E282C2516DF6300E110B0 /* Snippets+Micropub.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51E28282516DF6300E110B0 /* Snippets+Micropub.swift */; };
 		C52CF9E721F1667900D52676 /* Snippets.h in Headers */ = {isa = PBXBuildFile; fileRef = C52CF9E521F1667900D52676 /* Snippets.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C52CF9FE21F1676200D52676 /* UUSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C52CF9F421F1672F00D52676 /* UUSwift.framework */; };
 		C52CFA0421F1678E00D52676 /* Snippets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CF9FF21F1678E00D52676 /* Snippets.swift */; };
 		C52CFA0521F1678E00D52676 /* Snippets+XMLParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0021F1678E00D52676 /* Snippets+XMLParsing.swift */; };
 		C52CFA0621F1678E00D52676 /* Snippets+XMLRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0121F1678E00D52676 /* Snippets+XMLRPC.swift */; };
@@ -55,6 +59,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C51051DF26F0613400533E31 /* SnippetsImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsImage.swift; sourceTree = "<group>"; };
+		C51051EC26F0652900533E31 /* SnippetsLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnippetsLocation.swift; sourceTree = "<group>"; };
 		C51E28202516DF6300E110B0 /* Snippets+Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Snippets+Error.swift"; sourceTree = "<group>"; };
 		C51E28262516DF6300E110B0 /* Snippets+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Snippets+Configuration.swift"; sourceTree = "<group>"; };
 		C51E28272516DF6300E110B0 /* Snippets+Microblog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Snippets+Microblog.swift"; sourceTree = "<group>"; };
@@ -70,7 +76,6 @@
 		C52CFA0321F1678E00D52676 /* SnippetsUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnippetsUser.swift; sourceTree = "<group>"; };
 		C52CFA0E21F168DE00D52676 /* Snippets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Snippets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C52CFA2121F169FD00D52676 /* Snippets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Snippets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C52CFA2F21F16A7200D52676 /* SnippetsFramework.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SnippetsFramework.podspec; sourceTree = "<group>"; };
 		C52CFA3021F16A7200D52676 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C52CFA3121F16A7200D52676 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -80,7 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C52CF9FE21F1676200D52676 /* UUSwift.framework in Frameworks */,
+				C51051E726F0641D00533E31 /* UUSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C51051E926F0642A00533E31 /* UUSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C51051EB26F0643400533E31 /* UUSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,8 +113,6 @@
 			children = (
 				C52CFA3121F16A7200D52676 /* LICENSE.md */,
 				C52CFA3021F16A7200D52676 /* README.md */,
-				C52CFA2F21F16A7200D52676 /* SnippetsFramework.podspec */,
-				C52CF9ED21F1672F00D52676 /* UUSwift.xcodeproj */,
 				C52CF9E421F1667900D52676 /* Snippets */,
 				C52CF9E321F1667900D52676 /* Products */,
 				C52CF9FA21F1676200D52676 /* Frameworks */,
@@ -134,6 +139,8 @@
 				C52CF9FF21F1678E00D52676 /* Snippets.swift */,
 				C52CFA0021F1678E00D52676 /* Snippets+XMLParsing.swift */,
 				C52CFA0121F1678E00D52676 /* Snippets+XMLRPC.swift */,
+				C51051DF26F0613400533E31 /* SnippetsImage.swift */,
+				C51051EC26F0652900533E31 /* SnippetsLocation.swift */,
 				C52CFA0221F1678E00D52676 /* SnippetsPost.swift */,
 				C52CFA0321F1678E00D52676 /* SnippetsUser.swift */,
 				C52CF9E521F1667900D52676 /* Snippets.h */,
@@ -201,6 +208,9 @@
 			dependencies = (
 			);
 			name = Snippets;
+			packageProductDependencies = (
+				C51051E626F0641D00533E31 /* UUSwift */,
+			);
 			productName = Snippets;
 			productReference = C52CF9E221F1667900D52676 /* Snippets.framework */;
 			productType = "com.apple.product-type.framework";
@@ -219,6 +229,9 @@
 			dependencies = (
 			);
 			name = SnippetsMac;
+			packageProductDependencies = (
+				C51051E826F0642A00533E31 /* UUSwift */,
+			);
 			productName = SnippetsMac;
 			productReference = C52CFA0E21F168DE00D52676 /* Snippets.framework */;
 			productType = "com.apple.product-type.framework";
@@ -237,6 +250,9 @@
 			dependencies = (
 			);
 			name = SnippetsTV;
+			packageProductDependencies = (
+				C51051EA26F0643400533E31 /* UUSwift */,
+			);
 			productName = SnippetsTV;
 			productReference = C52CFA2121F169FD00D52676 /* Snippets.framework */;
 			productType = "com.apple.product-type.framework";
@@ -270,6 +286,9 @@
 				en,
 			);
 			mainGroup = C52CF9D821F1667900D52676;
+			packageReferences = (
+				C51051E526F0641D00533E31 /* XCRemoteSwiftPackageReference "UUSwift" */,
+			);
 			productRefGroup = C52CF9E321F1667900D52676 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
@@ -341,8 +360,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C51E282A2516DF6300E110B0 /* Snippets+Configuration.swift in Sources */,
+				C51051E026F0613500533E31 /* SnippetsImage.swift in Sources */,
 				C52CFA0821F1678E00D52676 /* SnippetsUser.swift in Sources */,
 				C51E282B2516DF6300E110B0 /* Snippets+Microblog.swift in Sources */,
+				C51051ED26F0652900533E31 /* SnippetsLocation.swift in Sources */,
 				C52CFA0421F1678E00D52676 /* Snippets.swift in Sources */,
 				C51E28292516DF6300E110B0 /* Snippets+Error.swift in Sources */,
 				C52CFA0521F1678E00D52676 /* Snippets+XMLParsing.swift in Sources */,
@@ -716,6 +737,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C51051E526F0641D00533E31 /* XCRemoteSwiftPackageReference "UUSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SilverPineSoftware/UUSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.7;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C51051E626F0641D00533E31 /* UUSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C51051E526F0641D00533E31 /* XCRemoteSwiftPackageReference "UUSwift" */;
+			productName = UUSwift;
+		};
+		C51051E826F0642A00533E31 /* UUSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C51051E526F0641D00533E31 /* XCRemoteSwiftPackageReference "UUSwift" */;
+			productName = UUSwift;
+		};
+		C51051EA26F0643400533E31 /* UUSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C51051E526F0641D00533E31 /* XCRemoteSwiftPackageReference "UUSwift" */;
+			productName = UUSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C52CF9D921F1667900D52676 /* Project object */;
 }

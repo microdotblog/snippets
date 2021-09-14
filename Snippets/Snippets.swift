@@ -33,11 +33,11 @@ public class Snippets : NSObject {
     
     @objc public func uploadImage(image : SnippetsImage, completion: @escaping(Error?, String?)->()) -> UUHttpRequest? {
         if Snippets.Configuration.publishing.type == .micropub {
-            return Snippets.Micropub.uploadImage(Snippets.Configuration.publishing, image: image, completion: completion)
+            return Snippets.Micropub.uploadImage(Snippets.Configuration.publishing, snippetsImage: image, completion: completion)
         }
         else {
             let request = Snippets.XMLRPC.Request.publishPhotoRequest(identity: Snippets.Configuration.publishing)
-            return Snippets.XMLRPC.uploadImage(image: image, request: request) { (error, imagePath, imageIdentifier) in
+            return Snippets.XMLRPC.uploadImage(snippetsImage: image, request: request) { (error, imagePath, imageIdentifier) in
                 completion(error, imagePath)
             }
         }

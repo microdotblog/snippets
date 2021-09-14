@@ -13,6 +13,7 @@ import UIKit
 #endif
 
 import UUSwiftCore
+import UUSwiftImage
 import UUSwiftNetworking
 
 extension Snippets {
@@ -154,13 +155,16 @@ extension Snippets {
         }
         
 
-        @objc public static func uploadImage(image : SnippetsImage, request : Snippets.XMLRPC.Request, completion: @escaping(Error?, String?, String?) -> ()) -> UUHttpRequest {
-            let d = image.uuJpegData(0.8)
-            let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + ".jpg"
+        @objc public static func uploadImage(snippetsImage : SnippetsImage, request : Snippets.XMLRPC.Request, completion: @escaping(Error?, String?, String?) -> ()) -> UUHttpRequest {
+
+			let mimeType = snippetsImage.type == .jpeg ? "image/jpeg" : "image/png"
+			let fileExtension = snippetsImage.type == .jpeg ? ".jpg" : ".png"
+			let d = snippetsImage.type == .jpeg ? snippetsImage.systemImage.uuJpegData(0.7) : snippetsImage.systemImage.uuPngData()
+            let filename = UUID().uuidString.replacingOccurrences(of: "-", with: "") + fileExtension
             let params : [Any] = [ request.identity.xmlRpcBlogId,
                                    request.identity.xmlRpcUsername,
                                    request.identity.xmlRpcPassword, [ "name" : filename,
-                                                           "type" : "image/jpeg",
+                                                           "type" : mimeType,
                                                            "bits": d! ]]
 
             return self.execute(request: request, params: params) { (error, responseData) in

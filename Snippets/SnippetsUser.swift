@@ -8,17 +8,13 @@
 
 #if os(macOS)
 import AppKit
-import UUSwiftCore
-import UUSwiftNetworking
-import UUSwiftImage
-public typealias SnippetsImage = NSImage
 #else
 import UIKit
+#endif
+
 import UUSwiftCore
 import UUSwiftNetworking
 import UUSwiftImage
-public typealias SnippetsImage = UIImage
-#endif
 
 
 open class SnippetsUser : NSObject
@@ -37,7 +33,7 @@ open class SnippetsUser : NSObject
 	@objc public var followingCount : Int = 0
 	@objc public var discoverCount : Int = 0
 	@objc public var isFollowing = false
-	@objc public var avatarImage : SnippetsImage? = nil
+	@objc public var avatarImage : SnippetsSystemImage? = nil
 
 	private var avatarDownloadHttpSession : UUHttpRequest?
 }
@@ -50,7 +46,7 @@ extension SnippetsUser {
 	{
 		if let imageData = UUDataCache.shared.data(for: self.avatarURL)
 		{
-			if let image = SnippetsImage(data: imageData)
+			if let image = SnippetsSystemImage(data: imageData)
 			{
 				self.avatarImage = image
 				completion()
@@ -62,7 +58,7 @@ extension SnippetsUser {
 			// If we have gotten here, then there is no image available to display so we need to fetch it...
 			let request = UUHttpRequest(url: self.avatarURL)
 			self.avatarDownloadHttpSession = UUHttpSession.executeRequest(request, { (parsedServerResponse) in
-				if let image = parsedServerResponse.parsedResponse as? SnippetsImage
+				if let image = parsedServerResponse.parsedResponse as? SnippetsSystemImage
 				{
 					if let imageData = image.uuPngData()
 					{
