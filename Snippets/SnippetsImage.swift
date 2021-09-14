@@ -14,19 +14,18 @@ import UIKit
 public typealias SnippetsSystemImage = UIImage
 #endif
 
+public enum SnippetsImageFileType {
+	case jpeg
+	case png
+}
 
 open class SnippetsImage : NSObject{
 
-	init(_ image : SnippetsSystemImage, type : fileType = .jpeg) {
+	public init(_ image : SnippetsSystemImage, type : SnippetsImageFileType = .jpeg) {
 		self.systemImage = image
 		self.type = type
 	}
 
-	enum fileType {
-		case jpeg
-		case png
-	}
-
 	let systemImage : SnippetsSystemImage
-	let type : fileType
+	let type : SnippetsImageFileType
 }
