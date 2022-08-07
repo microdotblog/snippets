@@ -177,17 +177,17 @@ extension Snippets.Configuration {
     }
     
     static public func fromDictionary(_ dictionary : [String : Any]) -> Snippets.Configuration {
-        let type : Int = dictionary.uuSafeGetInt("type") ?? 0
+        let type : Int = dictionary.uuSafeGetInt("type")
         let host = Snippets.Configuration.host(rawValue: type) ?? .micropub
-        let micropubEndpoint = dictionary.uuSafeGetString("micropubEndpoint") ?? ""
-        let micropubMediaEndpoint = dictionary.uuSafeGetString("micropubMediaEndpoint") ?? ""
-        let micropubToken = dictionary.uuSafeGetString("micropubToken") ?? ""
+        let micropubEndpoint = dictionary.uuSafeGetString("micropubEndpoint")
+        let micropubMediaEndpoint = dictionary.uuSafeGetString("micropubMediaEndpoint")
+        let micropubToken = dictionary.uuSafeGetString("micropubToken")
         let micropubUid = dictionary.uuSafeGetString("micropubUid")
         
-        let xmlRpcEndpoint = dictionary.uuSafeGetString("xmlRpcEndpoint") ?? ""
-        let xmlRpcUsername = dictionary.uuSafeGetString("xmlRpcUsername") ?? ""
-        let xmlRpcPassword = dictionary.uuSafeGetString("xmlRpcPassword") ?? ""
-        let xmlRpcBlogId = dictionary.uuSafeGetString("xmlRpcBlogId") ?? ""
+        let xmlRpcEndpoint = dictionary.uuSafeGetString("xmlRpcEndpoint")
+        let xmlRpcUsername = dictionary.uuSafeGetString("xmlRpcUsername")
+        let xmlRpcPassword = dictionary.uuSafeGetString("xmlRpcPassword")
+        let xmlRpcBlogId = dictionary.uuSafeGetString("xmlRpcBlogId")
 
         if host == .micropub {
             return Snippets.Configuration.micropubConfiguration(token: micropubToken, endpoint: micropubEndpoint, mediaEndPoint: micropubMediaEndpoint, uid: micropubUid)

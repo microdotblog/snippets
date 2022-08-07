@@ -334,7 +334,7 @@ public class SnippetsRPCDiscovery: NSObject {
 		
 		let d = s.data(using: .utf8)
 		let request = UUHttpRequest(url:self.url, method: .post, body: d, contentType: "text/xml")
-		request.processMimeTypes = false
+		//request.processMimeTypes = false
 		
 		return UUHttpSession.executeRequest(request, completion)
 	}

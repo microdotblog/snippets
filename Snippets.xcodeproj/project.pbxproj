@@ -10,7 +10,6 @@
 		C51051E026F0613500533E31 /* SnippetsImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51051DF26F0613400533E31 /* SnippetsImage.swift */; };
 		C51051E726F0641D00533E31 /* UUSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C51051E626F0641D00533E31 /* UUSwift */; };
 		C51051E926F0642A00533E31 /* UUSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C51051E826F0642A00533E31 /* UUSwift */; };
-		C51051EB26F0643400533E31 /* UUSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C51051EA26F0643400533E31 /* UUSwift */; };
 		C51051ED26F0652900533E31 /* SnippetsLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51051EC26F0652900533E31 /* SnippetsLocation.swift */; };
 		C51E28292516DF6300E110B0 /* Snippets+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51E28202516DF6300E110B0 /* Snippets+Error.swift */; };
 		C51E282A2516DF6300E110B0 /* Snippets+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51E28262516DF6300E110B0 /* Snippets+Configuration.swift */; };
@@ -27,11 +26,6 @@
 		C52CFA1921F169AB00D52676 /* Snippets+XMLRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0121F1678E00D52676 /* Snippets+XMLRPC.swift */; };
 		C52CFA1A21F169AB00D52676 /* SnippetsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0221F1678E00D52676 /* SnippetsPost.swift */; };
 		C52CFA1B21F169AB00D52676 /* SnippetsUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0321F1678E00D52676 /* SnippetsUser.swift */; };
-		C52CFA2A21F16A4800D52676 /* Snippets.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CF9FF21F1678E00D52676 /* Snippets.swift */; };
-		C52CFA2B21F16A4800D52676 /* Snippets+XMLParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0021F1678E00D52676 /* Snippets+XMLParsing.swift */; };
-		C52CFA2C21F16A4800D52676 /* Snippets+XMLRPC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0121F1678E00D52676 /* Snippets+XMLRPC.swift */; };
-		C52CFA2D21F16A4800D52676 /* SnippetsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0221F1678E00D52676 /* SnippetsPost.swift */; };
-		C52CFA2E21F16A4800D52676 /* SnippetsUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52CFA0321F1678E00D52676 /* SnippetsUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +69,6 @@
 		C52CFA0221F1678E00D52676 /* SnippetsPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnippetsPost.swift; sourceTree = "<group>"; };
 		C52CFA0321F1678E00D52676 /* SnippetsUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnippetsUser.swift; sourceTree = "<group>"; };
 		C52CFA0E21F168DE00D52676 /* Snippets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Snippets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C52CFA2121F169FD00D52676 /* Snippets.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Snippets.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C52CFA3021F16A7200D52676 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C52CFA3121F16A7200D52676 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,14 +87,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C51051E926F0642A00533E31 /* UUSwift in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C52CFA1E21F169FD00D52676 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C51051EB26F0643400533E31 /* UUSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,7 +109,6 @@
 			children = (
 				C52CF9E221F1667900D52676 /* Snippets.framework */,
 				C52CFA0E21F168DE00D52676 /* Snippets.framework */,
-				C52CFA2121F169FD00D52676 /* Snippets.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -184,13 +168,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C52CFA1C21F169FD00D52676 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -236,34 +213,13 @@
 			productReference = C52CFA0E21F168DE00D52676 /* Snippets.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		C52CFA2021F169FD00D52676 /* SnippetsTV */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C52CFA2621F169FD00D52676 /* Build configuration list for PBXNativeTarget "SnippetsTV" */;
-			buildPhases = (
-				C52CFA1C21F169FD00D52676 /* Headers */,
-				C52CFA1D21F169FD00D52676 /* Sources */,
-				C52CFA1E21F169FD00D52676 /* Frameworks */,
-				C52CFA1F21F169FD00D52676 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = SnippetsTV;
-			packageProductDependencies = (
-				C51051EA26F0643400533E31 /* UUSwift */,
-			);
-			productName = SnippetsTV;
-			productReference = C52CFA2121F169FD00D52676 /* Snippets.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		C52CF9D921F1667900D52676 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "Micro.blog, LLC";
 				TargetAttributes = {
 					C52CF9E121F1667900D52676 = {
@@ -271,9 +227,6 @@
 						LastSwiftMigration = 1010;
 					};
 					C52CFA0D21F168DE00D52676 = {
-						CreatedOnToolsVersion = 10.1;
-					};
-					C52CFA2021F169FD00D52676 = {
 						CreatedOnToolsVersion = 10.1;
 					};
 				};
@@ -301,7 +254,6 @@
 			targets = (
 				C52CF9E121F1667900D52676 /* Snippets */,
 				C52CFA0D21F168DE00D52676 /* SnippetsMac */,
-				C52CFA2021F169FD00D52676 /* SnippetsTV */,
 			);
 		};
 /* End PBXProject section */
@@ -345,13 +297,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C52CFA1F21F169FD00D52676 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -382,18 +327,6 @@
 				C52CFA1B21F169AB00D52676 /* SnippetsUser.swift in Sources */,
 				C52CFA1821F169AB00D52676 /* Snippets+XMLParsing.swift in Sources */,
 				C52CFA1721F169AB00D52676 /* Snippets.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C52CFA1D21F169FD00D52676 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C52CFA2C21F16A4800D52676 /* Snippets+XMLRPC.swift in Sources */,
-				C52CFA2D21F16A4800D52676 /* SnippetsPost.swift in Sources */,
-				C52CFA2E21F16A4800D52676 /* SnippetsUser.swift in Sources */,
-				C52CFA2B21F16A4800D52676 /* Snippets+XMLParsing.swift in Sources */,
-				C52CFA2A21F16A4800D52676 /* Snippets.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -453,7 +386,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -514,7 +447,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -541,7 +474,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Snippets/SnippetsInfo.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -569,7 +502,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Snippets/SnippetsInfo.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -641,62 +574,6 @@
 			};
 			name = Release;
 		};
-		C52CFA2721F169FD00D52676 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Snippets/SnippetsInfo.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.Snippets;
-				PRODUCT_MODULE_NAME = Snippets;
-				PRODUCT_NAME = Snippets;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 10.0;
-			};
-			name = Debug;
-		};
-		C52CFA2821F169FD00D52676 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 3F9MDJ6K4E;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Snippets/SnippetsInfo.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = blog.micro.Snippets;
-				PRODUCT_MODULE_NAME = Snippets;
-				PRODUCT_NAME = Snippets;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 10.0;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -727,15 +604,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C52CFA2621F169FD00D52676 /* Build configuration list for PBXNativeTarget "SnippetsTV" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C52CFA2721F169FD00D52676 /* Debug */,
-				C52CFA2821F169FD00D52676 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -756,11 +624,6 @@
 			productName = UUSwift;
 		};
 		C51051E826F0642A00533E31 /* UUSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C51051E526F0641D00533E31 /* XCRemoteSwiftPackageReference "UUSwift" */;
-			productName = UUSwift;
-		};
-		C51051EA26F0643400533E31 /* UUSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C51051E526F0641D00533E31 /* XCRemoteSwiftPackageReference "UUSwift" */;
 			productName = UUSwift;
