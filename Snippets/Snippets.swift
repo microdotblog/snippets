@@ -75,9 +75,9 @@ public class Snippets : NSObject {
         }
     }
     
-    @objc public func postHtml(title : String, content : String, isDraft : Bool = false, completion: @escaping(Error?, String?) -> ()) -> UUHttpRequest? {
+	@objc public func postHtml(title : String, content : String, category : String? = nil, isDraft : Bool = false, completion: @escaping(Error?, String?) -> ()) -> UUHttpRequest? {
         if Snippets.Configuration.publishing.type == .micropub {
-            return Snippets.Micropub.postHtml(Snippets.Configuration.publishing, title: title, content: content, completion: completion)
+			return Snippets.Micropub.postHtml(Snippets.Configuration.publishing, title: title, content: content, category: category, completion: completion)
         }
         else {
             let request = Snippets.XMLRPC.Request.publishPostRequest(identity: Snippets.Configuration.publishing, existingPost: false)

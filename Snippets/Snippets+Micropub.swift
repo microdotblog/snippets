@@ -93,7 +93,7 @@ extension Snippets {
             })
         }
         
-        static public func postHtml(_ identity : Snippets.Configuration, title : String, content : String, isDraft : Bool = false, location : SnippetsLocation? = nil, completion: @escaping(Error?, String?) -> ()) -> UUHttpRequest?
+		static public func postHtml(_ identity : Snippets.Configuration, title : String, content : String, category : String? = nil, isDraft : Bool = false, location : SnippetsLocation? = nil, completion: @escaping(Error?, String?) -> ()) -> UUHttpRequest?
         {
             // Pre-flight check to see if we are even configured...
             if identity.micropubToken.count == 0 {
@@ -113,6 +113,10 @@ extension Snippets {
                 properties["post-status"] = [ "published" ]
             }
 
+			if let category = category {
+				properties["category"] = [ category ]
+			}
+			
 			if let location = location {
 				if location.name.count > 0 {
 					properties["checkin"] = [
